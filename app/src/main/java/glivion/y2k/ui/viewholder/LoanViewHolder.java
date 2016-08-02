@@ -2,8 +2,8 @@ package glivion.y2k.ui.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.ParseException;
@@ -22,41 +22,37 @@ public class LoanViewHolder extends RecyclerView.ViewHolder {
 
     private TextView mLoanTitle;
     private TextView mLoanAmount;
-    private TextView mAmountPaid;
     private TextView mAmountOwing;
     private TextView mDateCreated;
-    private ImageView mArrow;
     private Y2KStateManager mStateManager;
+    private View mLoanColor;
 
     public LoanViewHolder(View itemView) {
         super(itemView);
         mStateManager = new Y2KStateManager(itemView.getContext());
         mLoanTitle = (TextView) itemView.findViewById(R.id.loan_title);
         mLoanAmount = (TextView) itemView.findViewById(R.id.loan_amount);
-        mAmountPaid = (TextView) itemView.findViewById(R.id.amount_paid);
         mAmountOwing = (TextView) itemView.findViewById(R.id.amount_owing);
         mDateCreated = (TextView) itemView.findViewById(R.id.date_created);
-        mArrow = (ImageView) itemView.findViewById(R.id.arrow);
+        mLoanColor = itemView.findViewById(R.id.loan_color);
     }
 
     public void bind(Loan loan) throws ParseException {
+
         mLoanTitle.setText(loan.getmLoanTitle());
         double interest = loan.getmLoanInterest();
         double amount = loan.getmLoanAmount();
         double totalAmount = amount + interest;
         double amountLeft = totalAmount - loan.getmAmountPaid();
-        mLoanAmount.setText("Total: " + mStateManager.getCurrency() + totalAmount);
-        mAmountPaid.setText("Paid: " + mStateManager.getCurrency() + loan.getmAmountPaid());
+        mLoanAmount.setText(mStateManager.getCurrency() + totalAmount);
+
         if (loan.isPaid()) {
             mAmountOwing.setText(R.string.cleared);
         } else {
             mAmountOwing.setText("Owing: " + mStateManager.getCurrency() + amountLeft);
         }
-        if (loan.isBorrowed()) {
-            mArrow.setImageResource(R.drawable.ic_down);
-        } else {
-            mArrow.setImageResource(R.drawable.ic_up);
-        }
+        int color = loan.getmLoanColor();
+        mLoanColor.setBackgroundColor(color);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Date dateCreated = format.parse(loan.getmDateCreated());
         String relativeTime = DateUtils.getRelativeTimeSpanString(dateCreated.getTime(), System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS,

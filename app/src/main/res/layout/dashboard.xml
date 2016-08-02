@@ -22,148 +22,28 @@
             app:titleTextColor="@color/white" />
     </android.support.design.widget.AppBarLayout>
 
-
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/income"
-                android:layout_width="140dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/income_selector"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:contentDescription="@string/income_"
-                    android:src="@drawable/ic_income" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/income_"
-                    android:textColor="@color/white"
-                    android:textSize="17sp" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/expenditure"
-                android:layout_width="140dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/expenditure_selector"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:contentDescription="@string/expenses"
-                    android:src="@drawable/ic_expenditure" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/expenses"
-                    android:textColor="@color/white"
-                    android:textSize="17sp" />
-
-            </LinearLayout>
-
-
-        </TableRow>
-
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/loans"
-                android:layout_width="140dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/loan_selector"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:contentDescription="@string/income_"
-                    android:src="@drawable/ic_loan" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/loans"
-                    android:textColor="@color/white"
-                    android:textSize="17sp" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/budget"
-                android:layout_width="140dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/budget_selector"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:contentDescription="@string/expenses"
-                    android:src="@drawable/ic_budget" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/budget"
-                    android:textColor="@color/white"
-                    android:textSize="17sp" />
-
-            </LinearLayout>
-
-
-        </TableRow>
-
-    </TableLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/timeline"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
+        <FrameLayout
+            android:id="@+id/fragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_above="@+id/bottom_navigation"
+            android:layout_weight="4"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:layout_weight="1" />
+    </LinearLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

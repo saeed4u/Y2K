@@ -8,4 +8,31 @@
         <item>@color/colorPrimaryLoans</item>
     </integer-array>
 
+    <array name="demo_colors_expanded">
+        <item>@color/colorAccentBudget</item>
+        <item>@color/colorAccentExpenditure</item>
+        <item>@color/colorAccentIncome</item>
+        <item>@color/colorAccentLoans</item>
+        <item>@color/colorAccentSettings</item>
+        <item>@color/colorAccentTips</item>
+        <item>@color/colorPrimaryBudget</item>
+        <item>@color/colorPrimaryDarkBudget</item>
+        <item>@color/colorPrimaryDarkDashBoard</item>
+        <item>@color/colorPrimaryDarkExpenditure</item>
+        <item>@color/colorPrimaryDarkIncome</item>
+        <item>@color/colorPrimaryDarkLoans</item>
+        <item>@color/colorPrimaryDarkSettings</item>
+        <item>@color/colorPrimaryDarkTips</item>
+        <item>@color/colorPrimaryDashBoard</item>
+        <item>@color/colorPrimaryExpenditure</item>
+        <item>@color/colorPrimaryIncome</item>
+        <item>@color/colorPrimaryLoans</item>
+        <item>@color/colorPrimarySettings</item>
+
+        <item>@color/colorPrimaryTips</item>
+        <item>@color/colorBottomNavigationPrimary</item>
+        <item>@color/colorBottomNavigationPrimaryDark</item>
+    </array>
+
+
 </resources>

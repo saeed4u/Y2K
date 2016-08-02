@@ -20,6 +20,7 @@ public class Y2KDatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_LOAN_TABLE);
         db.execSQL(CREATE_PAYMENT_TABLE);
+        db.execSQL(CREATE_CAT_TABLE);
 
     }
 
@@ -27,6 +28,7 @@ public class Y2KDatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(DROP_TABLE + LOAN_PAYMENT);
         db.execSQL(DROP_TABLE + LOAN_TABLE);
+        db.execSQL(DROP_TABLE + CAT);
         onCreate(db);
     }
 }

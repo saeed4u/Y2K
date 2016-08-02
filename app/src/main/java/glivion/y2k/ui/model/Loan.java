@@ -22,7 +22,9 @@ public class Loan implements Parcelable {
     private boolean isDue;
     private boolean isPaid;
     private double mAmountPaid;
+    private int mLoanColor;
     private ArrayList<LoanPayment> mLoanPayments;
+
 
     public Loan(int mLoanId, String mLoanTitle, String mLoanDetail, double mLoanAmount, float mLoanInterest, String mDateCreated, String mDueDate, int isBorrowed) {
         this.mLoanId = mLoanId;
@@ -53,6 +55,7 @@ public class Loan implements Parcelable {
         isDue = in.readByte() != 0;
         isPaid = in.readByte() != 0;
         mAmountPaid = in.readDouble();
+        mLoanColor = in.readInt();
         mLoanPayments = in.createTypedArrayList(LoanPayment.CREATOR);
     }
 
@@ -124,6 +127,14 @@ public class Loan implements Parcelable {
         return isPaid;
     }
 
+    public int getmLoanColor() {
+        return mLoanColor;
+    }
+
+    public void setmLoanColor(int mLoanColor) {
+        this.mLoanColor = mLoanColor;
+    }
+
     public ArrayList<LoanPayment> getmLoanPayments() {
         return mLoanPayments;
     }
@@ -157,6 +168,7 @@ public class Loan implements Parcelable {
         dest.writeByte((byte) (isDue ? 1 : 0));
         dest.writeByte((byte) (isPaid ? 1 : 0));
         dest.writeDouble(mAmountPaid);
+        dest.writeInt(mLoanColor);
         dest.writeTypedList(mLoanPayments);
 
     }

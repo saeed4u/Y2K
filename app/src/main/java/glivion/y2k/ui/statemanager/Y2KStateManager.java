@@ -36,7 +36,7 @@ public class Y2KStateManager {
     }
 
     public String getCurrency() {
-        return mSharedPreference.getString(CURRENCY, "GHC") + " ";
+        return mSharedPreference.getString(CURRENCY, "GHC");
     }
 
     public void saveQueryType(String queryType) {

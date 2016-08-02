@@ -26,101 +26,277 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.v7.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:orientation="vertical"
-            app:cardElevation="5dp"
-            app:contentPadding="10dp">
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
 
-            <RelativeLayout
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:orientation="vertical"
+                app:cardElevation="2dp"
+                app:contentPadding="10dp">
 
-                <TextView
-                    android:id="@+id/loan_title"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:text="Saeed"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/loan_title_1"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/loan_name"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/loan_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/windowBackground" />
+
+                    <LinearLayout
+                        android:id="@+id/loan_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/loan_details_"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/loan_details"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/loan_details"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/windowBackground" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/due"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/date_created"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+                    </LinearLayout>
 
 
-                <TextView
-                    android:id="@+id/loan_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/loan_title"
-                    android:layout_marginTop="10dp"
-                    android:text="Learning"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/date_created"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerHorizontal="true"
-                    android:text="Some"
-                    android:textColor="@color/colorAccentDashBoard" />
-
-                <TextView
-                    android:id="@+id/loan_amount_interest"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/loan_amount"
-                    android:layout_marginTop="10dp"
-                    android:text="Well"
-                    android:textColor="@color/black" />
+                </LinearLayout>
 
 
-                <TextView
-                    android:id="@+id/amount_to_pay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/loan_amount_interest"
-                    android:layout_marginTop="10dp"
-                    android:text="Well"
-                    android:textColor="@color/black" />
+            </android.support.v7.widget.CardView>
 
-                <TextView
-                    android:id="@+id/amount_paid"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/amount_to_pay"
-                    android:layout_marginTop="10dp"
-                    android:text="Well"
-                    android:textColor="@color/paidColor" />
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                app:cardElevation="2dp"
+                app:contentPadding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/amount_borrow_lent"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/amount_borrowed"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/loan_amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="?colorAccent"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/windowBackground" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/interest_rate"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/loan_amount_interest"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="?colorAccent"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/windowBackground" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/total_amount"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/amount_to_pay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="?colorAccent"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
 
 
-                <TextView
-                    android:id="@+id/amount_owing"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@id/amount_to_pay"
-                    android:layout_marginTop="10dp"
-                    android:text="Nope"
-                    android:textColor="@color/owingColor" />
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                app:cardElevation="2dp"
+                app:contentPadding="10dp">
 
 
-            </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/amount_paid"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/amount_paid"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/paidColor"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/windowBackground" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/amount_owing"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/amount_owing"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/owingColor"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
 
 
-        </android.support.v7.widget.CardView>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:background="@drawable/white_background"
             android:orientation="vertical">
 
@@ -131,36 +307,7 @@
                 android:layout_margin="10dp"
                 android:text="@string/loan_payments"
                 android:textColor="@color/colorAccentDashBoard"
-                android:textSize="18sp" />
-
-            <LinearLayout
-                android:id="@+id/no_payment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:contentDescription="@string/empty"
-                    android:src="@drawable/ic_empty_1" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:gravity="center"
-                    android:text="@string/no_payment_has_been_made_for_this_loan"
-                    android:textColor="#212121"
-                    android:textSize="19sp" />
-
-
-            </LinearLayout>
-
+                android:textSize="20sp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/loan_payments"
@@ -171,11 +318,12 @@
                 android:layout_marginRight="10dp"
                 android:padding="10dp"
                 android:visibility="gone"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
-
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
         </LinearLayout>
 
     </LinearLayout>
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_payment"

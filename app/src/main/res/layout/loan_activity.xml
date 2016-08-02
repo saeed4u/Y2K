@@ -9,25 +9,17 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="?colorPrimary"
         android:fitsSystemWindows="true"
         android:gravity="center">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            android:background="?colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark" />
-
 
         <org.honorato.multistatetogglebutton.MultiStateToggleButton
             android:id="@+id/mstb_multi_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dip"
+            android:background="@color/white"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:values="@array/loans" />
 
     </android.support.design.widget.AppBarLayout>
@@ -36,19 +28,10 @@
         android:id="@+id/loans"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
+        android:paddingTop="5dp"
         android:visibility="gone"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-
-    <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        app:colors="@array/loanColors"
-        app:type="folding_circles" />
 
     <LinearLayout
         android:id="@+id/no_loan"

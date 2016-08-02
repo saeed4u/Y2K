@@ -1,5 +1,8 @@
 package glivion.y2k.ui.ui;
 
+import android.annotation.TargetApi;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -49,19 +52,19 @@ public class LoanDetailActivity extends AppCompatActivity {
     private Loan mLoan;
     private TextView mLoanDueDate;
     private View mAddPayment;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loan_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            toolbar.setNavigationIcon(R.drawable.ic_back);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (mToolbar != null) {
+            mToolbar.setNavigationIcon(R.drawable.ic_back);
         }
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
         mLoan = getIntent().getParcelableExtra("loan");
-
-        final View noPayment = findViewById(R.id.no_payment);
+        getColors();
         mDatabase = new Y2KDatabase(this);
         mAddPayment = findViewById(R.id.add_payment);
         mAddPayment.setScaleX(0.0F);
@@ -81,7 +84,7 @@ public class LoanDetailActivity extends AppCompatActivity {
                     final double[] amount = new double[1];
                     MaterialDialog dialog = new MaterialDialog.Builder(LoanDetailActivity.this)
                             .customView(R.layout.add_payment, false)
-                            .title("Add Payment")
+                            .title("Add Payment - " + mLoan.getmLoanTitle())
                             .positiveText("Add")
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
@@ -93,7 +96,7 @@ public class LoanDetailActivity extends AppCompatActivity {
                                         //mLoanPaymentArrayList.add(loanPayment);
                                         mLoanPaymentAdapter.notifyDataSetChanged();
                                         updateLoanView(mLoan);
-                                        showOrHideView(noPayment);
+                                        showOrHideView();
                                         Log.v("Called", "Called");
                                     }
                                 }
@@ -146,20 +149,28 @@ public class LoanDetailActivity extends AppCompatActivity {
         TextView amountToPay = (TextView) findViewById(R.id.amount_to_pay);
         mAmountOwing = (TextView) findViewById(R.id.amount_owing);
         TextView loanTitle = (TextView) findViewById(R.id.loan_title);
+        TextView loanDetail = (TextView) findViewById(R.id.loan_details);
+        TextView borrowOrLent = (TextView) findViewById(R.id.amount_borrow_lent);
+        borrowOrLent.setText(mLoan.isBorrowed() ? R.string.amount_borrowed : R.string.amount_lent);
 
+        View view = findViewById(R.id.loan_detail);
+        String detail = mLoan.getmLoanDetail();
+        Log.v("Detail ", "Detail " + detail);
+        loanDetail.setText(detail);
+        view.setVisibility(mLoan.getmLoanDetail().isEmpty() ? View.GONE : View.VISIBLE);
 
         mStateManager = new Y2KStateManager(this);
         if (loanTitle != null) {
             loanTitle.setText(mLoan.getmLoanTitle());
         }
         if (loanAmount != null) {
-            loanAmount.setText("Total: " + mStateManager.getCurrency() + "" + mLoan.getmLoanAmount());
+            loanAmount.setText(mStateManager.getCurrency() + mLoan.getmLoanAmount());
         }
         if (mAmountPaid != null) {
-            mAmountPaid.setText("Paid: " + mStateManager.getCurrency() + "" + mLoan.getmAmountPaid());
+            mAmountPaid.setText(mStateManager.getCurrency() + mLoan.getmAmountPaid());
         }
         if (loanInterestAmount != null) {
-            loanInterestAmount.setText("Loan Interest: " + mStateManager.getCurrency() + "" + mLoan.getmLoanInterest());
+            loanInterestAmount.setText(mStateManager.getCurrency() + mLoan.getmLoanInterest());
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date dateCreated = null;
@@ -172,14 +183,14 @@ public class LoanDetailActivity extends AppCompatActivity {
                 DateUtils.FORMAT_ABBREV_ALL).toString();
         double amountWithInterest = mLoan.getmLoanInterest() + mLoan.getmLoanAmount();
         if (amountToPay != null) {
-            amountToPay.setText("Amount to be Paid: " + mStateManager.getCurrency() + "" + amountWithInterest);
+            amountToPay.setText(mStateManager.getCurrency() + amountWithInterest);
         }
         if (mLoanDueDate != null) {
-            mLoanDueDate.setText("Due: " + relativeTime);
+            mLoanDueDate.setText(relativeTime);
         }
         if (mAmountOwing != null) {
             if (!mLoan.isPaid()) {
-                mAmountOwing.setText("Owing: " + mStateManager.getCurrency() + (amountWithInterest - mLoan.getmAmountPaid()));
+                mAmountOwing.setText(mStateManager.getCurrency() + (amountWithInterest - mLoan.getmAmountPaid()));
             } else {
                 mAmountOwing.setText(R.string.cleared);
                 mLoanDueDate.setVisibility(View.GONE);
@@ -190,9 +201,10 @@ public class LoanDetailActivity extends AppCompatActivity {
         mLoanPaymentAdapter = new LoanPaymentAdapter(mLoanPaymentArrayList);
         mLoanPayments = (RecyclerView) findViewById(R.id.loan_payments);
         if (mLoanPayments != null) {
+            Log.v("Adapter", "Adapter");
             mLoanPayments.setAdapter(mLoanPaymentAdapter);
         }
-        showOrHideView(noPayment);
+        showOrHideView();
     }
 
     @Override
@@ -203,33 +215,42 @@ public class LoanDetailActivity extends AppCompatActivity {
         }
     }
 
-    private void showOrHideView(View noPayment) {
-        if (mLoanPaymentArrayList.size() == 0) {
-            if (noPayment != null) {
-                noPayment.setVisibility(View.VISIBLE);
-            }
+    private void showOrHideView() {
+        if (mLoanPaymentArrayList.isEmpty()) {
             mLoanPayments.setVisibility(View.GONE);
         } else {
-            if (noPayment != null) {
-                noPayment.setVisibility(View.GONE);
-            }
             mLoanPayments.setVisibility(View.VISIBLE);
         }
     }
 
     private void updateLoanView(Loan loan) {
         if (mAmountPaid != null) {
-            mAmountPaid.setText("Paid: " + mStateManager.getCurrency() + loan.getmAmountPaid());
+            mAmountPaid.setText(mStateManager.getCurrency() + loan.getmAmountPaid());
         }
         if (mAmountOwing != null) {
             if (!loan.isPaid()) {
-                mAmountOwing.setText("Owing: " + mStateManager.getCurrency() + loan.getmAmountLeft());
+                mAmountOwing.setText(mStateManager.getCurrency() + loan.getmAmountLeft());
             } else {
                 mAmountOwing.setText(R.string.cleared);
                 mLoanDueDate.setVisibility(View.GONE);
                 mAddPayment.animate().scaleX(0.0F).scaleY(0.0F).start();
             }
         }
+    }
+
+
+    private void getColors() {
+        mToolbar.setBackgroundColor(getColor(210, mLoan.getmLoanColor()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getColor(255, mLoan.getmLoanColor()));
+        }
+        supportStartPostponedEnterTransition();
+
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private int getColor(int alpha, int color) {
+        return Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color));
     }
 
     @Override

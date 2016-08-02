@@ -16,7 +16,8 @@
 
     <color name="colorPrimaryDashBoard">#0E6495</color>
     <color name="colorPrimaryDarkDashBoard">#0A486B</color>
-    <color name="colorAccentDashBoard">#1DE9B6</color>
+    <color name="colorAccentDashBoard">#00BCD4</color>
+    <color name="colorAccentDashBoardDark">#00ACC1</color>
 
 
     <color name="colorPrimaryBudget">#1070A8</color>
@@ -37,5 +38,5 @@
 
     <color name="paidColor">#2196F3</color>
     <color name="owingColor">#F44336</color>
-    <color name="black">#000000</color>
+    <color name="black">#212121</color>
 </resources>

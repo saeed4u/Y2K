@@ -22,19 +22,15 @@
             android:theme="@style/DashBoard" />
 
         <activity
-            android:name=".ui.ui.LoanActivity"
-            android:label="@string/loans"
-            android:theme="@style/Loans" />
-
-        <activity
             android:name=".ui.ui.AddLoanActivity"
             android:label="@string/add_loan"
-            android:theme="@style/Loans" />
+            android:theme="@style/DashBoard"
+            android:windowSoftInputMode="stateHidden" />
 
         <activity
             android:name=".ui.ui.LoanDetailActivity"
             android:label="@string/add_payment"
-            android:theme="@style/Loans" />
+            android:theme="@style/DashBoard" />
 
     </application>
 

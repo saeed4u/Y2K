@@ -5,9 +5,9 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
     android:orientation="vertical"
-    app:cardBackgroundColor="@color/windowBackground"
-    app:cardCornerRadius="5dp"
-    app:cardElevation="5dp"
+    app:cardBackgroundColor="?colorAccent"
+    app:cardCornerRadius="2dp"
+    app:cardElevation="2dp"
     app:contentPadding="10dp">
 
     <RelativeLayout
@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="$100"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="18sp" />
 
         <TextView
@@ -29,7 +29,7 @@
             android:layout_below="@id/amount_paid"
             android:layout_marginTop="10dp"
             android:text="$100"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp" />
 
     </RelativeLayout>

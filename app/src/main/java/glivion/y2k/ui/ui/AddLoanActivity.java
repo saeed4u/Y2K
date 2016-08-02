@@ -1,11 +1,13 @@
 package glivion.y2k.ui.ui;
 
-import android.app.FragmentManager;
+import android.annotation.TargetApi;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -20,7 +22,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.wdullaer.materialdatetimepicker.Utils;
+import com.rtugeek.android.colorseekbar.ColorSeekBar;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -31,8 +33,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import glivion.y2k.R;
-import glivion.y2k.ui.utilities.Utilities;
 import glivion.y2k.ui.database.Y2KDatabase;
+import glivion.y2k.ui.utilities.Utilities;
 
 /**
  * Created by saeedissah on 5/17/16.
@@ -46,17 +48,19 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
     private String mLoanDate;
     private EditText mLoanDetails;
     private TextView mDueDateTime;
-
+    private int mColor;
+    private Toolbar mToolbar;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.add_loan);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            toolbar.setNavigationIcon(R.drawable.ic_back);
+        mColor = ContextCompat.getColor(this, R.color.colorPrimaryBudget);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (mToolbar != null) {
+            mToolbar.setNavigationIcon(R.drawable.ic_back);
         }
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
 
         RadioButton borrowed = (RadioButton) findViewById(R.id.borrowed);
         if (borrowed != null) {
@@ -69,6 +73,14 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
                 }
             });
         }
+        ColorSeekBar mColorSeekBar = (ColorSeekBar) findViewById(R.id.color_picker);
+        mColorSeekBar.setOnColorChangeListener(new ColorSeekBar.OnColorChangeListener() {
+            @Override
+            public void onColorChangeListener(int colorBarValue, int alphaBarValue, int color) {
+                mColor = color;
+                getColors(mColor);
+            }
+        });
         RadioButton lent = (RadioButton) findViewById(R.id.lent);
         if (lent != null) {
             lent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -214,7 +226,7 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
             Y2KDatabase database = new Y2KDatabase(AddLoanActivity.this);
             String dateCreated = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
             Log.v("Date Created", dateCreated);
-            return database.addLoan(params[0], params[1], Double.parseDouble(params[2]), Float.parseFloat(params[3]), mLoanMode == 0, mLoanDate, dateCreated);
+            return database.addLoan(params[0], params[1], Double.parseDouble(params[2]), Float.parseFloat(params[3]), mLoanMode == 0, mLoanDate, dateCreated, mColor);
         }
 
         @Override
@@ -227,5 +239,19 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
                 ColoredSnakBar.get(Snackbar.make(mLoanDetails, R.string.an_error_occured, Snackbar.LENGTH_LONG), R.color.colorAccentLoans).show();
             }
         }
+    }
+
+    private void getColors(int color) {
+        mToolbar.setBackgroundColor(getColor(210, color));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getColor(255, color));
+        }
+        supportStartPostponedEnterTransition();
+
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private int getColor(int alpha, int color) {
+        return Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color));
     }
 }

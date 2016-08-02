@@ -15,7 +15,7 @@
     <string name="tips">Tips</string>
     <string name="loan_name">Loan Name</string>
     <string name="amount_loaned">Loan Amount</string>
-    <string name="interest_rate">Interest Rate (%)</string>
+    <string name="interest_rate">Interest Amount</string>
     <string name="borrowed">Borrowed</string>
     <string name="mode">Mode:</string>
     <string name="due_date">Click to select due date</string>
@@ -35,9 +35,15 @@
     <string name="enter_loan_interest">Please enter the loan interest</string>
     <string name="select_loan_due_date">Please select loan due date</string>
     <string name="an_error_occured">An error occurred while saving your data, please try again</string>
-    <string name="loan_day_cant_">"Loan due day can not be less than "</string>
-    <string name="loan_due_month_cant">"Loan due month can not be less than "</string>
-    <string name="loan_due_year">"Loan due year can not be less than "</string>
+    <string name="loan_day_cant_">"Loan due day can not be before "</string>
+    <string name="loan_due_month_cant">"Loan due month can not be before "</string>
+    <string name="loan_due_year">"Loan due year can not be before "</string>
     <string name="amount_entered_exceeds">Amount entered exceeds loan amount left.</string>
     <string name="cleared">Cleared</string>
+    <string name="due">Due</string>
+    <string name="amount_borrowed">Amount Borrowed</string>
+    <string name="amount_lent">Amount Lent</string>
+    <string name="total_amount">Total Amount</string>
+    <string name="amount_paid">Amount Paid</string>
+    <string name="amount_owing">Amount Owing</string>
 </resources>

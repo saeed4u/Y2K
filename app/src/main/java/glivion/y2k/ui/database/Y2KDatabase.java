@@ -4,14 +4,27 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+
+import org.apache.commons.lang.WordUtils;
 
 import java.util.ArrayList;
 
 import glivion.y2k.ui.model.Loan;
 import glivion.y2k.ui.model.LoanPayment;
 
-import static glivion.y2k.ui.constants.Constants.*;
+import static glivion.y2k.ui.constants.Constants.DATE_CREATED;
+import static glivion.y2k.ui.constants.Constants.DATE_PAID;
+import static glivion.y2k.ui.constants.Constants.LOAN_AMOUNT;
+import static glivion.y2k.ui.constants.Constants.LOAN_BORROWED;
+import static glivion.y2k.ui.constants.Constants.LOAN_COLOR;
+import static glivion.y2k.ui.constants.Constants.LOAN_DETAILS;
+import static glivion.y2k.ui.constants.Constants.LOAN_DUE_DATE;
+import static glivion.y2k.ui.constants.Constants.LOAN_INTEREST;
+import static glivion.y2k.ui.constants.Constants.LOAN_PAYMENT;
+import static glivion.y2k.ui.constants.Constants.LOAN_TABLE;
+import static glivion.y2k.ui.constants.Constants.LOAN_TITLE;
+import static glivion.y2k.ui.constants.Constants.PAYMENT_AMOUNT;
+import static glivion.y2k.ui.constants.Constants.PAYMENT_LOAN_ID;
 
 /**
  * Created by saeedissah on 5/16/16.
@@ -28,16 +41,17 @@ public class Y2KDatabase {
     }
 
     //Loan id,title, details, amount(principal), interest rate, borrowed?, due date, created date.
-    public boolean addLoan(String title, String description, double amount, float interest, boolean borrowed, String dueDate, String createdDate) {
+    public boolean addLoan(String title, String description, double amount, float interest, boolean borrowed, String dueDate, String createdDate, int color) {
 
         mContentValues = new ContentValues();
-        mContentValues.put(LOAN_TITLE, title);
-        mContentValues.put(LOAN_DETAILS, description);
+        mContentValues.put(LOAN_TITLE, WordUtils.capitalize(title));
+        mContentValues.put(LOAN_DETAILS, WordUtils.capitalize(description));
         mContentValues.put(LOAN_AMOUNT, amount);
         mContentValues.put(LOAN_INTEREST, interest);
         mContentValues.put(LOAN_BORROWED, borrowed ? 0 : 1);
         mContentValues.put(LOAN_DUE_DATE, dueDate);
         mContentValues.put(DATE_CREATED, createdDate);
+        mContentValues.put(LOAN_COLOR, color);
         return mDatabase.insert(LOAN_TABLE, null, mContentValues) > 0;
 
     }
@@ -66,9 +80,11 @@ public class Y2KDatabase {
                 float interest = cursor.getFloat(4);
                 int borrowed = cursor.getInt(5);
                 String dueDate = cursor.getString(6);
-                String dateCreated = cursor.getString(7);
+                int color = cursor.getInt(7);
+                String dateCreated = cursor.getString(8);
                 Loan loan = new Loan(id, title, details, amount, interest, dateCreated, dueDate, borrowed);
                 loan.setmLoanPayments(getLoanPayment(loan));
+                loan.setmLoanColor(color);
                 loans.add(loan);
 
             }

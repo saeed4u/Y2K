@@ -2,6 +2,7 @@ package glivion.y2k.ui.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -38,6 +39,7 @@ public class LoanPaymentViewHolder extends RecyclerView.ViewHolder {
         Date dateCreated = format.parse(loanPayment.getmDatePaid());
         String relativeTime = DateUtils.getRelativeTimeSpanString(dateCreated.getTime(), System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS,
                 DateUtils.FORMAT_ABBREV_ALL).toString();
+
         mDateCreated.setText(relativeTime);
 
     }
