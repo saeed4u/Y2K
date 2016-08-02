@@ -32,4 +32,5 @@ dependencies {
     compile 'com.afollestad.material-dialogs:core:0.8.5.9'
     compile 'com.wdullaer:materialdatetimepicker:2.3.0'
     compile 'com.github.rtugeek:ColorSeekBar:1.0.2'
+    compile 'se.emilsjolander:stickylistheaders:2.7.0'
 }

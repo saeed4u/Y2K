@@ -9,9 +9,14 @@ import org.apache.commons.lang.WordUtils;
 
 import java.util.ArrayList;
 
+import glivion.y2k.ui.model.Category;
 import glivion.y2k.ui.model.Loan;
 import glivion.y2k.ui.model.LoanPayment;
 
+import static glivion.y2k.ui.constants.Constants.CAT;
+import static glivion.y2k.ui.constants.Constants.CAT_COLOR;
+import static glivion.y2k.ui.constants.Constants.CAT_ID;
+import static glivion.y2k.ui.constants.Constants.CAT_NAME;
 import static glivion.y2k.ui.constants.Constants.DATE_CREATED;
 import static glivion.y2k.ui.constants.Constants.DATE_PAID;
 import static glivion.y2k.ui.constants.Constants.LOAN_AMOUNT;
@@ -86,7 +91,6 @@ public class Y2KDatabase {
                 loan.setmLoanPayments(getLoanPayment(loan));
                 loan.setmLoanColor(color);
                 loans.add(loan);
-
             }
             cursor.close();
         }
@@ -111,6 +115,34 @@ public class Y2KDatabase {
             cursor.close();
         }
         return loanPayments;
+    }
+
+    public ArrayList<Category> getCategories() {
+        ArrayList<Category> categories = new ArrayList<>();
+        Cursor cursor = mDatabase.query(CAT, null, null, null, null, null, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(cursor.getColumnIndex(CAT_ID));
+                String name = cursor.getString(cursor.getColumnIndex(CAT_NAME));
+                int color = cursor.getInt(cursor.getColumnIndex(CAT_COLOR));
+                categories.add(new Category(id, name, color));
+            }
+            cursor.close();
+        }
+        return categories;
+    }
+
+    private Category findCategory(int id) {
+        String selectionArgs[] = {String.valueOf(id)};
+        Cursor cursor = mDatabase.query(CAT, null, CAT_ID + " =? ", selectionArgs, null, null, null);
+        if (cursor != null) {
+            if (cursor.moveToNext()) {
+                String name = cursor.getString(cursor.getColumnIndex(CAT_NAME));
+                int color = cursor.getInt(cursor.getColumnIndex(CAT_COLOR));
+                return new Category(id, name, color);
+            }
+        }
+        return null;
     }
 
 }

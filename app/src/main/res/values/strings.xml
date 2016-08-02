@@ -2,7 +2,7 @@
     <string name="app_name">Y2K</string>
     <string name="ghanaian_cedi_ghc">GHC</string>
     <string name="dollar">Dollar</string>
-    <string name="choose_your_currency">Choose your currency</string>
+    <string name="choose_your_currency">Currency</string>
     <string name="how_do_we_display_your_income_or_expenditure">How do we display your income or expenditure?</string>
     <string name="monthly">Monthly</string>
     <string name="weekly">Weekly</string>
@@ -46,4 +46,5 @@
     <string name="total_amount">Total Amount</string>
     <string name="amount_paid">Amount Paid</string>
     <string name="amount_owing">Amount Owing</string>
+    <string name="finance_structure">Finance Structure</string>
 </resources>

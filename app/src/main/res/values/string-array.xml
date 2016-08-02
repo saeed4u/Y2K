@@ -5,4 +5,9 @@
         <item>Borrowed</item>
         <item>Lent</item>
     </string-array>
+
+    <string-array name="finance_structure">
+        <item>Monthly</item>
+        <item>Weekly</item>
+    </string-array>
 </resources>
