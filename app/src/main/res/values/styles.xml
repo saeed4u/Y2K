@@ -1,0 +1,65 @@
+<resources>
+
+    <style name="Main" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="colorControlNormal">@color/windowBackground</item>
+    </style>
+    <!-- Base application theme. -->
+    <style name="Income" parent="Main">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryIncome</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkIncome</item>
+        <item name="colorAccent">@color/colorAccentIncome</item>
+        <item name="colorControlActivated">@color/colorAccentIncome</item>
+    </style>
+
+    <style name="Expenditure" parent="Main">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryExpenditure</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkExpenditure</item>
+        <item name="colorAccent">@color/colorAccentExpenditure</item>
+        <item name="colorControlActivated">@color/colorAccentExpenditure</item>
+    </style>
+
+
+    <style name="Loans" parent="Main">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryLoans</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkLoans</item>
+        <item name="colorAccent">@color/colorAccentLoans</item>
+    </style>
+
+    <style name="Budget" parent="Main">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryBudget</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkBudget</item>
+        <item name="colorAccent">@color/colorAccentBudget</item>
+        <item name="colorControlActivated">@color/colorAccentBudget</item>
+    </style>
+
+    <style name="Settings" parent="Main">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimarySettings</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkSettings</item>
+        <item name="colorAccent">@color/colorAccentSettings</item>
+        <item name="colorControlActivated">@color/colorAccentSettings</item>
+    </style>
+
+
+    <style name="DashBoard" parent="Main">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryDashBoard</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkDashBoard</item>
+        <item name="colorAccent">@color/colorAccentDashBoard</item>
+        <item name="colorControlActivated">@color/colorAccentDashBoard</item>
+    </style>
+
+    <style name="Tips" parent="Main">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryTips</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkTips</item>
+        <item name="colorAccent">@color/colorAccentTips</item>
+        <item name="colorControlActivated">@color/colorAccentTips</item>
+    </style>
+
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer-array name="loanColors">
+        <item>@color/colorPrimaryDarkLoans</item>
+        <item>@color/colorPrimaryLoans</item>
+        <item>@color/colorAccentLoans</item>
+        <item>@color/colorPrimaryLoans</item>
+    </integer-array>
+
+</resources>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="?colorPrimary"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:padding="10dp">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="5dp"
+            app:contentPadding="10dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:id="@+id/first_part"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/loan_name_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/loan_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:hint="@string/loan_name"
+                            android:textColor="?colorAccent"
+                            android:textSize="20sp" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/loan_amount_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/loan_name_layout"
+                        android:layout_marginTop="10dp">
+
+                        <EditText
+                            android:id="@+id/loan_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:hint="@string/amount_loaned"
+                            android:inputType="numberDecimal"
+                            android:textColor="?colorAccent"
+                            android:textSize="20sp" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/loan_amount_interest"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/loan_amount_layout"
+                        android:layout_marginTop="10dp">
+
+                        <EditText
+                            android:id="@+id/loan_interest"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:hint="@string/interest_rate"
+                            android:inputType="numberDecimal"
+                            android:textColor="?colorAccent"
+                            android:textSize="20sp" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/loan_amount_interest"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginRight="10dp"
+                            android:text="@string/mode"
+                            android:textColor="?colorAccent"
+                            android:textSize="18sp" />
+
+                        <RadioButton
+                            android:id="@+id/borrowed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginRight="10dp"
+                            android:checked="true"
+                            android:text="@string/borrowed"
+                            android:textColor="?colorAccent"
+                            android:textSize="20sp" />
+
+                        <RadioButton
+                            android:id="@+id/lent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/lent"
+                            android:textColor="?colorAccent"
+                            android:textSize="20sp" />
+
+                    </RadioGroup>
+
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_below="@id/first_part"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/windowBackground" />
+
+                <RelativeLayout
+                    android:id="@+id/details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/divider"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:id="@+id/due_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:text="@string/due_date"
+                        android:textColor="?colorAccent"
+                        android:textSize="20sp" />
+
+                    <View
+                        android:id="@+id/divider_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@id/due_date"
+                        android:background="@color/windowBackground" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/loan_details_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/divider_1"
+                        android:layout_marginTop="10dp">
+
+                        <EditText
+                            android:id="@+id/loan_details"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:hint="@string/loan_details"
+                            android:inputType="textMultiLine"
+                            android:maxLines="5"
+                            android:minLines="3"
+                            android:textColor="?colorAccent"
+                            android:textSize="20sp" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/add_loan"
+                    android:layout_width="match_parent"
+                    android:onClick="saveLoan"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/details"
+                    android:background="@drawable/add_loan_button_selector"
+                    android:drawablePadding="20dp"
+                    android:gravity="center"
+                    android:text="@string/add_loan"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+    </ScrollView>
+
+</RelativeLayout>

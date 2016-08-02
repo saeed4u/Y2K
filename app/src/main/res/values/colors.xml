@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimaryIncome">#3B8686</color>
+    <color name="colorPrimaryDarkIncome">#255555</color>
+    <color name="colorAccentIncome">#FFEB3B</color>
+
+
+    <color name="colorPrimaryExpenditure">#F44336</color>
+    <color name="colorPrimaryDarkExpenditure">#B71C1C</color>
+    <color name="colorAccentExpenditure">#8BC34A</color>
+
+    <color name="colorPrimaryLoans">#795548</color>
+    <color name="colorPrimaryDarkLoans">#4D362E</color>
+    <color name="colorAccentLoans">#E91E63</color>
+
+    <color name="colorPrimaryDashBoard">#0E6495</color>
+    <color name="colorPrimaryDarkDashBoard">#0A486B</color>
+    <color name="colorAccentDashBoard">#1DE9B6</color>
+
+
+    <color name="colorPrimaryBudget">#1070A8</color>
+    <color name="colorPrimaryDarkBudget">#0E6495</color>
+    <color name="colorAccentBudget">#fd5622</color>
+
+
+    <color name="colorPrimaryTips">#4CAF50</color>
+    <color name="colorPrimaryDarkTips">#388E3C</color>
+    <color name="colorAccentTips">#F44336</color>
+
+
+    <color name="colorPrimarySettings">#FF5722</color>
+    <color name="colorPrimaryDarkSettings">#E64A19</color>
+    <color name="colorAccentSettings">#CDDC39</color>
+
+    <color name="windowBackground">#E6E6E6</color>
+
+    <color name="paidColor">#2196F3</color>
+    <color name="owingColor">#F44336</color>
+    <color name="black">#000000</color>
+</resources>
