@@ -39,7 +39,7 @@ public final class Constants {
     public static final String CREATE_LOAN_TABLE = "CREATE TABLE IF NOT EXISTS " + LOAN_TABLE + "(" + LOAN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + LOAN_TITLE
             + " TEXT NOT NULL, " + LOAN_DETAILS + " TEXT," + LOAN_AMOUNT + " REAL NOT NULL,"
             + LOAN_INTEREST + " REAL NOT NULL,"
-            + LOAN_BORROWED + " INTEGER NOT NULL," + LOAN_DUE_DATE + " TEXT NOT NULL," + LOAN_COLOR + " INTEGER NOT NULL, " + DATE_CREATED + " TEXT NOT NULL);";
+            + LOAN_BORROWED + " INTEGER NOT NULL," + LOAN_DUE_DATE + " TEXT NOT NULL," + CAT_ID + " INTEGER NOT NULL, " + DATE_CREATED + " TEXT NOT NULL, FOREIGN KEY (" + CAT_ID + ") REFERENCES " + CAT + "(" + CAT_ID + "));";
 
     //LOAN PAYMENT payment id, loan id, amount paid and date paid
     public static final String PAYMENT_ID = "payment_id";
