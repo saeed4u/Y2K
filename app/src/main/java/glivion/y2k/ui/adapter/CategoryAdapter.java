@@ -1,7 +1,7 @@
 package glivion.y2k.ui.adapter;
 
 import android.content.Context;
-import android.text.Layout;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +11,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import glivion.y2k.R;
+import glivion.y2k.ui.constants.Constants;
 import glivion.y2k.ui.model.Category;
-import glivion.y2k.ui.model.CategoryType;
+import glivion.y2k.ui.ui.AddCategory;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
 /**
@@ -28,7 +29,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> implements StickyLis
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_item, parent, false);
@@ -40,9 +41,25 @@ public class CategoryAdapter extends ArrayAdapter<Category> implements StickyLis
             viewHolder = (ViewHolder) convertView.getTag();
         }
         viewHolder.catName.setText(mCategories.get(position).getmCatName());
-        viewHolder.catColor.setBackgroundColor(mCategories.get(position).getmCatColor());
+        int color = mCategories.get(position).getmCatColor();
+        if (color == 0) {
+            viewHolder.catColor.setVisibility(View.GONE);
+            viewHolder.catName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int type = mCategories.get(position).getmCatType();
+                    Intent intent = new Intent(view.getContext(), AddCategory.class);
+                    intent.putExtra(Constants.CAT_TYPE, type);
+                    view.getContext().startActivity(intent);
+                }
+            });
+        } else {
+            viewHolder.catColor.setBackgroundColor(color);
+            viewHolder.catColor.setVisibility(View.VISIBLE);
+        }
         return convertView;
     }
+
 
     @Override
     public View getHeaderView(int position, View convertView, ViewGroup parent) {
@@ -55,7 +72,8 @@ public class CategoryAdapter extends ArrayAdapter<Category> implements StickyLis
         } else {
             header = (Header) convertView.getTag();
         }
-        header.textView.setText(mCategories.get(position).getmCatType());
+
+        header.textView.setText(mCategories.get(position).getmCategoryType().getmTypeName());
         return convertView;
     }
 

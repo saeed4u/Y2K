@@ -3,6 +3,8 @@ package glivion.y2k.ui.statemanager;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import glivion.y2k.R;
+
 /**
  * Created by saeedissah on 5/17/16.
  */
@@ -11,6 +13,7 @@ public class Y2KStateManager {
     private static final String FIRST_RUN = "first_run";
     private static final String CURRENCY = "currency";
     private static final String QUERY_TYPE = "query_type";
+    private static final String CURRENCY_ID = "currency_id";
 
     private SharedPreferences mSharedPreference;
     private SharedPreferences.Editor mEditor;
@@ -47,5 +50,15 @@ public class Y2KStateManager {
 
     public String getQueryType() {
         return mSharedPreference.getString(QUERY_TYPE, "weekly");
+    }
+
+    public void saveCurrencyId(int id) {
+        mEditor = mSharedPreference.edit();
+        mEditor.putInt(CURRENCY_ID, id);
+        mEditor.apply();
+    }
+
+    public int getCurrencyId() {
+        return mSharedPreference.getInt(CURRENCY_ID, R.id.cedis);
     }
 }

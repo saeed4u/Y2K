@@ -86,7 +86,7 @@ public class LoanFragment extends Fragment {
 
         mMultiStateToggleButton = (MultiStateToggleButton) view.findViewById(R.id.mstb_multi_id);
         if (mMultiStateToggleButton != null) {
-            mMultiStateToggleButton.setColorRes(R.color.colorPrimaryBudget, R.color.white);
+            mMultiStateToggleButton.setColorRes(R.color.colorAccentDashBoardDark, R.color.white);
             mMultiStateToggleButton.setValue(0);
             mMultiStateToggleButton.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
                 @Override

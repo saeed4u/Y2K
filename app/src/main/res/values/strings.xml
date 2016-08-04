@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Y2K</string>
-    <string name="ghanaian_cedi_ghc">GHC</string>
+    <string name="ghanaian_cedi_ghc">Cedi</string>
     <string name="dollar">Dollar</string>
     <string name="choose_your_currency">Currency</string>
     <string name="how_do_we_display_your_income_or_expenditure">How do we display your income or expenditure?</string>
@@ -47,4 +47,14 @@
     <string name="amount_paid">Amount Paid</string>
     <string name="amount_owing">Amount Owing</string>
     <string name="finance_structure">Finance Structure</string>
+    <string name="expenditure_categories">Expenditure Categories …</string>
+    <string name="income_categories">Income Categories …</string>
+    <string name="category_name">Category Name</string>
+    <string name="add_category">Add Category</string>
+    <string name="pound_sterling">Pound Sterling</string>
+    <string name="euro">Euro</string>
+    <string name="naira">Naira</string>
+    <string name="cfa">CFA</string>
+    <string name="open">Opened</string>
+    <string name="closed">Closed</string>
 </resources>
