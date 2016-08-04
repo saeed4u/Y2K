@@ -75,19 +75,12 @@
 
 
     <se.emilsjolander.stickylistheaders.StickyListHeadersListView
-        android:id="@+id/income_category"
+        android:id="@+id/add_category"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/layout"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp" />
-
-
-    <se.emilsjolander.stickylistheaders.StickyListHeadersListView
-        android:id="@+id/expenditure_category"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/layout" />
 
 
 </RelativeLayout>

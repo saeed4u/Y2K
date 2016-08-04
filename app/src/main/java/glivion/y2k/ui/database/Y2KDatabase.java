@@ -9,7 +9,9 @@ import org.apache.commons.lang.WordUtils;
 
 import java.util.ArrayList;
 
+import glivion.y2k.R;
 import glivion.y2k.ui.model.Category;
+import glivion.y2k.ui.model.CategoryType;
 import glivion.y2k.ui.model.Loan;
 import glivion.y2k.ui.model.LoanPayment;
 
@@ -17,6 +19,7 @@ import static glivion.y2k.ui.constants.Constants.CAT;
 import static glivion.y2k.ui.constants.Constants.CAT_COLOR;
 import static glivion.y2k.ui.constants.Constants.CAT_ID;
 import static glivion.y2k.ui.constants.Constants.CAT_NAME;
+import static glivion.y2k.ui.constants.Constants.CAT_TYPE;
 import static glivion.y2k.ui.constants.Constants.DATE_CREATED;
 import static glivion.y2k.ui.constants.Constants.DATE_PAID;
 import static glivion.y2k.ui.constants.Constants.LOAN_AMOUNT;
@@ -119,13 +122,22 @@ public class Y2KDatabase {
 
     public ArrayList<Category> getCategories() {
         ArrayList<Category> categories = new ArrayList<>();
+        categories.add(new Category(-1, "Add Income", 0, R.color.colorAccentDashBoard).setmCategoryType(new CategoryType(0, "Income")));
+        categories.add(new Category(0, "Add Income", 1, R.color.colorAccentDashBoard).setmCategoryType(new CategoryType(1, "Expenditure")));
         Cursor cursor = mDatabase.query(CAT, null, null, null, null, null, null);
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 int id = cursor.getInt(cursor.getColumnIndex(CAT_ID));
+                int catType = cursor.getInt(cursor.getColumnIndex(CAT_TYPE));
                 String name = cursor.getString(cursor.getColumnIndex(CAT_NAME));
                 int color = cursor.getInt(cursor.getColumnIndex(CAT_COLOR));
-                categories.add(new Category(id, name, color));
+                CategoryType categoryType;
+                if (catType == 0) {
+                    categoryType = new CategoryType(catType, "Income");
+                } else {
+                    categoryType = new CategoryType(catType, "Expenditure");
+                }
+                categories.add(new Category(id, name, catType, color).setmCategoryType(categoryType));
             }
             cursor.close();
         }
@@ -138,9 +150,17 @@ public class Y2KDatabase {
         if (cursor != null) {
             if (cursor.moveToNext()) {
                 String name = cursor.getString(cursor.getColumnIndex(CAT_NAME));
+                int catType = cursor.getInt(cursor.getColumnIndex(CAT_TYPE));
                 int color = cursor.getInt(cursor.getColumnIndex(CAT_COLOR));
-                return new Category(id, name, color);
+                CategoryType categoryType;
+                if (catType == 0) {
+                    categoryType = new CategoryType(catType, "Income");
+                } else {
+                    categoryType = new CategoryType(catType, "Expenditure");
+                }
+                return new Category(id, name, catType, color).setmCategoryType(categoryType);
             }
+            cursor.close();
         }
         return null;
     }

@@ -8,11 +8,28 @@ public class Category {
     private int mCatId;
     private String mCatName;
     private int mCatColor;
+    private int mCatType;
 
-    public Category(int mCatId, String mCatName, int mCatColor) {
+    private CategoryType mCategoryType;
+
+    public Category(int mCatId, String mCatName, int mCatType, int mCatColor) {
         this.mCatId = mCatId;
         this.mCatName = mCatName;
         this.mCatColor = mCatColor;
+        this.mCatType = mCatType;
+    }
+
+    public int getmCatType() {
+        return mCatType;
+    }
+
+    public CategoryType getmCategoryType() {
+        return mCategoryType;
+    }
+
+    public Category setmCategoryType(CategoryType mCategoryType) {
+        this.mCategoryType = mCategoryType;
+        return this;
     }
 
     public int getmCatId() {
@@ -26,4 +43,5 @@ public class Category {
     public int getmCatColor() {
         return mCatColor;
     }
+
 }

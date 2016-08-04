@@ -26,6 +26,7 @@ public final class Constants {
     public static final String CAT_ID = "category_id";
     public static final String CAT_NAME = "category_name";
     public static final String CAT_COLOR = "category_color";
+    public static final String CAT_TYPE = "cat_type";
 
     //Loan id,title, details, amount(principal), interest rate, borrowed?, due date, created date.
     public static final String LOAN_ID = "loan_id";
@@ -54,7 +55,8 @@ public final class Constants {
     public static final String DROP_TABLE = "DROP TABLE ";
 
     //CAT
-    public static final String CREATE_CAT_TABLE = "CREATE TABLE IF NOT EXISTS " + CAT + "(" + CAT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + CAT_NAME + " TEXT NOT NULL, " + CAT_COLOR + " INTEGER NOT NULL);";
+    public static final String CREATE_CAT_TABLE = "CREATE TABLE IF NOT EXISTS " + CAT + "(" + CAT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + CAT_NAME + " TEXT NOT NULL, " + CAT_TYPE + " INTEGER NOT NULL, " + CAT_COLOR + " INTEGER NOT NULL);";
+
 
 
 }
