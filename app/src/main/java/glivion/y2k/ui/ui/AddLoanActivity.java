@@ -73,12 +73,17 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
                 }
             });
         }
+
         ColorSeekBar mColorSeekBar = (ColorSeekBar) findViewById(R.id.color_picker);
+
+        final View colorView = findViewById(R.id.color_view);
+        colorView.setBackgroundColor(mColorSeekBar.getColor());
         mColorSeekBar.setOnColorChangeListener(new ColorSeekBar.OnColorChangeListener() {
             @Override
             public void onColorChangeListener(int colorBarValue, int alphaBarValue, int color) {
                 mColor = color;
-                getColors(mColor);
+                colorView.setBackgroundColor(color);
+                //getColors(mColor);
             }
         });
         RadioButton lent = (RadioButton) findViewById(R.id.lent);
@@ -162,22 +167,22 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
 
         if (loanName.isEmpty()) {
             Snackbar snackbar = Snackbar.make(mLoanName, R.string.enter_loan_name, Snackbar.LENGTH_LONG);
-            ColoredSnakBar.get(snackbar, R.color.colorAccentLoans).show();
+            ColoredSnakBar.get(snackbar, R.color.colorAccentDashBoard).show();
             Utilities.shakeView(mLoanName);
             mLoanName.requestFocus();
         } else if (loanAmount.isEmpty()) {
             Snackbar snackbar = Snackbar.make(mLoanAmount, R.string.enter_loan_amount, Snackbar.LENGTH_LONG);
-            ColoredSnakBar.get(snackbar, R.color.colorAccentLoans).show();
+            ColoredSnakBar.get(snackbar, R.color.colorAccentDashBoard).show();
             Utilities.shakeView(mLoanAmount);
             mLoanAmount.requestFocus();
         } else if (loanInterest.isEmpty()) {
             Snackbar snackbar = Snackbar.make(mLoanInterest, R.string.enter_loan_interest, Snackbar.LENGTH_LONG);
-            ColoredSnakBar.get(snackbar, R.color.colorAccentLoans).show();
+            ColoredSnakBar.get(snackbar, R.color.colorAccentDashBoard).show();
             Utilities.shakeView(mLoanInterest);
             mLoanInterest.requestFocus();
         } else if (mLoanDate.isEmpty()) {
             Snackbar snackbar = Snackbar.make(mDueDateTime, R.string.select_loan_due_date, Snackbar.LENGTH_LONG);
-            ColoredSnakBar.get(snackbar, R.color.colorAccentLoans).show();
+            ColoredSnakBar.get(snackbar, R.color.colorAccentDashBoard).show();
             Utilities.shakeView(mDueDateTime);
         } else {
             new SaveLoan().execute(loanName, loanDetails, loanAmount, loanInterest);
@@ -236,7 +241,7 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
                 setResult(RESULT_OK);
                 finish();
             } else {
-                ColoredSnakBar.get(Snackbar.make(mLoanDetails, R.string.an_error_occured, Snackbar.LENGTH_LONG), R.color.colorAccentLoans).show();
+                ColoredSnakBar.get(Snackbar.make(mLoanDetails, R.string.an_error_occured, Snackbar.LENGTH_LONG), R.color.colorAccentDashBoard).show();
             }
         }
     }

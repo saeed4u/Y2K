@@ -23,6 +23,8 @@ import static glivion.y2k.ui.constants.Constants.CAT_NAME;
 import static glivion.y2k.ui.constants.Constants.CAT_TYPE;
 import static glivion.y2k.ui.constants.Constants.DATE_CREATED;
 import static glivion.y2k.ui.constants.Constants.DATE_PAID;
+import static glivion.y2k.ui.constants.Constants.EXPENDITURE_CAT;
+import static glivion.y2k.ui.constants.Constants.INCOME_CAT;
 import static glivion.y2k.ui.constants.Constants.LOAN_AMOUNT;
 import static glivion.y2k.ui.constants.Constants.LOAN_BORROWED;
 import static glivion.y2k.ui.constants.Constants.LOAN_COLOR;
@@ -124,16 +126,16 @@ public class Y2KDatabase {
 
     public boolean addCategory(String categoryName, int catType, int catColor) {
         mContentValues = new ContentValues();
-        mContentValues.put(CAT_NAME,categoryName);
-        mContentValues.put(CAT_COLOR,catColor);
-        mContentValues.put(CAT_TYPE,catType);
+        mContentValues.put(CAT_NAME, categoryName);
+        mContentValues.put(CAT_COLOR, catColor);
+        mContentValues.put(CAT_TYPE, catType);
         return mDatabase.insert(CAT, null, mContentValues) > 0;
     }
 
     public ArrayList<Category> getCategories() {
         ArrayList<Category> categories = new ArrayList<>();
-        categories.add(new Category(-1, "Add Income Category", 0, 0).setmCategoryType(new CategoryType(0, mContext.getString(R.string.income_categories))));
-        categories.add(new Category(0, "Add Expenditure Category", 1, 0).setmCategoryType(new CategoryType(1, mContext.getString(R.string.expenditure_categories))));
+        categories.add(new Category(-1, "Add Income Category", INCOME_CAT, 0).setmCategoryType(new CategoryType(INCOME_CAT, mContext.getString(R.string.income_categories))));
+        categories.add(new Category(0, "Add Expenditure Category", EXPENDITURE_CAT, 0).setmCategoryType(new CategoryType(EXPENDITURE_CAT, mContext.getString(R.string.expenditure_categories))));
         Cursor cursor = mDatabase.query(CAT, null, null, null, null, null, null);
         if (cursor != null) {
             while (cursor.moveToNext()) {

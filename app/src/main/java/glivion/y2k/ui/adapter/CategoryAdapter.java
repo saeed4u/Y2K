@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import org.apache.commons.lang.WordUtils;
+
 import java.util.ArrayList;
 
 import glivion.y2k.R;
@@ -26,6 +28,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> implements StickyLis
     public CategoryAdapter(Context context, ArrayList<Category> objects) {
         super(context, R.layout.category_item, objects);
         mCategories = objects;
+        modifyList();
     }
 
     @Override
@@ -40,7 +43,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> implements StickyLis
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.catName.setText(mCategories.get(position).getmCatName());
+        viewHolder.catName.setText(WordUtils.capitalize(mCategories.get(position).getmCatName()));
         int color = mCategories.get(position).getmCatColor();
         if (color == 0) {
             viewHolder.catColor.setVisibility(View.GONE);
@@ -89,5 +92,20 @@ public class CategoryAdapter extends ArrayAdapter<Category> implements StickyLis
     class ViewHolder {
         View catColor;
         TextView catName;
+    }
+
+    private void modifyList() {
+        ArrayList<Category> expenditure = new ArrayList<>();
+        ArrayList<Category> income = new ArrayList<>();
+        for (Category category : mCategories) {
+            if (category.getmCatType() == 0) {
+                income.add(category);
+            } else {
+                expenditure.add(category);
+            }
+        }
+        mCategories.clear();
+        mCategories.addAll(income);
+        mCategories.addAll(expenditure);
     }
 }

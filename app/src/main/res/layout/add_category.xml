@@ -39,12 +39,25 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <com.rtugeek.android.colorseekbar.ColorSeekBar
-                android:id="@+id/color_picker"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                app:colors="@array/demo_colors_expanded" />
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/color_view"/>
+
+                <com.rtugeek.android.colorseekbar.ColorSeekBar
+                    android:id="@+id/color_picker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:colors="@array/demo_colors_expanded" />
+
+            </LinearLayout>
+
 
             <Button
                 android:id="@+id/save_category"

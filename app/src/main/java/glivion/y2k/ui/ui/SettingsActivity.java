@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -41,6 +42,12 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         setContentView(R.layout.settings_layout);
         mStateManager = new Y2KStateManager(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+        }
         mCurrency = (TextView) findViewById(R.id.currency);
         mCurrency.setText(mStateManager.getCurrency());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -63,9 +70,6 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
 
         NavigationView mNavigationView = (NavigationView) findViewById(R.id.nav_view);
 
-        //Picasso.with(this).load("http://" + mStateManager.getPic()).into(mProfilePic);
-
-
         if (mNavigationView != null) {
             mNavigationView.setCheckedItem(mStateManager.getCurrencyId());
             mNavigationView.setNavigationItemSelectedListener(this);
@@ -74,15 +78,14 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
 
         setSupportActionBar(toolbar);
         mAddCategory = (StickyListHeadersListView) findViewById(R.id.add_category);
+        mAddCategory.setDrawingListUnderStickyHeader(false);
         int queryType = mStateManager.getQueryType().equals(mFinanceStructures[0]) ? 0 : 1;
 
         MultiStateToggleButton mMultiStateToggleButton = (MultiStateToggleButton) findViewById(R.id.finance_structure);
-        if (mMultiStateToggleButton != null) {
-            mMultiStateToggleButton.setValue(queryType);
-        }
+
         if (mMultiStateToggleButton != null) {
             mMultiStateToggleButton.setColorRes(R.color.colorAccentDashBoardDark, R.color.white);
-            mMultiStateToggleButton.setValue(0);
+            mMultiStateToggleButton.setValue(queryType);
             mMultiStateToggleButton.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
                 @Override
                 public void onValueChanged(int value) {
@@ -127,6 +130,16 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         mStateManager.saveCurrency(item.getTitle().toString());
         mDrawerLayout.closeDrawer(GravityCompat.END);
         mCurrency.setText(item.getTitle());
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
         return true;
     }
 }

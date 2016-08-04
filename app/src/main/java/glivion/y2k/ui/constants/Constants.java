@@ -9,6 +9,9 @@ public final class Constants {
 
     }
 
+    public static final int INCOME_CAT = 0;
+    public static final int EXPENDITURE_CAT = 1;
+
     public static final String LOAN = "loan";
 
     public static final String DATABASE_NAME = "y2k";
