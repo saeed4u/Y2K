@@ -2,6 +2,7 @@ package glivion.y2k.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> implements StickyLis
                 @Override
                 public void onClick(View view) {
                     int type = mCategories.get(position).getmCatType();
+                    Log.v("Type", String.valueOf(type));
                     Intent intent = new Intent(view.getContext(), AddCategory.class);
                     intent.putExtra(Constants.CAT_TYPE, type);
                     view.getContext().startActivity(intent);

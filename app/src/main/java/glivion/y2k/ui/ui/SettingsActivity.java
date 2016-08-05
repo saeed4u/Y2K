@@ -35,6 +35,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     private Y2KStateManager mStateManager;
     private String[] mFinanceStructures = {"Monthly", "Weekly"};
     private TextView mCurrency;
+    private MultiStateToggleButton mMultiStateToggleButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,7 +82,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         mAddCategory.setDrawingListUnderStickyHeader(false);
         int queryType = mStateManager.getQueryType().equals(mFinanceStructures[0]) ? 0 : 1;
 
-        MultiStateToggleButton mMultiStateToggleButton = (MultiStateToggleButton) findViewById(R.id.finance_structure);
+        mMultiStateToggleButton = (MultiStateToggleButton) findViewById(R.id.finance_structure);
 
         if (mMultiStateToggleButton != null) {
             mMultiStateToggleButton.setColorRes(R.color.colorAccentDashBoardDark, R.color.white);
@@ -141,5 +142,15 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                 break;
         }
         return true;
+    }
+
+    public void selectItem(View view) {
+        int queryType = mStateManager.getQueryType().equals(mFinanceStructures[0]) ? 0 : 1;
+        if (queryType > 0) {
+            queryType = 0;
+        } else {
+            queryType = 1;
+        }
+        mMultiStateToggleButton.setValue(queryType);
     }
 }
