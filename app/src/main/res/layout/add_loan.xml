@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:background="?colorPrimary"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
         app:theme="@style/ThemeOverlay.AppCompat.Dark" />
 
     <ScrollView
@@ -215,7 +215,7 @@
                     android:background="@drawable/add_loan_button_selector"
                     android:gravity="center"
                     android:onClick="saveLoan"
-                    android:text="@string/add_loan"
+                    android:text="@string/add_loan_1"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="20sp" />

@@ -30,7 +30,7 @@
             android:layout_toRightOf="@id/loan_color">
 
             <TextView
-                android:id="@+id/loan_title"
+                android:id="@+id/income_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
@@ -44,41 +44,15 @@
                 android:id="@+id/date_created"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/loan_title"
-                android:text="Well"
-                android:textColor="?colorAccent" />
+                android:layout_below="@id/income_title" />
 
             <TextView
-                android:id="@+id/amount_owing"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@id/loan_title"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="5dp"
-                android:text="123"
-                android:textColor="@color/owingColor" />
-
-            <TextView
-                android:id="@+id/amount_paid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@id/amount_owing"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="5dp"
-                android:text="123"
-                android:textColor="@color/owingColor"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/loan_amount"
+                android:id="@+id/income_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@id/amount_paid"
+                android:layout_below="@id/income_title"
+                android:layout_marginTop="10dp"
                 android:text="Saeed"
                 android:textColor="?colorAccent"
                 android:textSize="20sp" />

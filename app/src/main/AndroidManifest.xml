@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="glivion.y2k">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,8 +12,8 @@
         android:theme="@style/DashBoard">
 
         <activity
-            android:name=".ui.ui.DashBoard"
-            android:label="@string/dashboard"
+            android:name=".android.ui.MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/DashBoard">
 
             <intent-filter>
@@ -21,25 +24,47 @@
         </activity>
 
         <activity
-            android:name=".ui.ui.AddLoanActivity"
+            android:name=".android.ui.AddLoanActivity"
             android:label="@string/add_loan"
+            android:screenOrientation="portrait"
             android:theme="@style/DashBoard"
             android:windowSoftInputMode="stateHidden" />
 
         <activity
-            android:name=".ui.ui.LoanDetailActivity"
-            android:label="@string/add_payment"
+            android:name=".android.ui.LoanDetailActivity"
+            android:label="Loan Detail"
+            android:screenOrientation="portrait"
             android:theme="@style/DashBoard" />
 
         <activity
-            android:name=".ui.ui.SettingsActivity"
+            android:name=".android.ui.SettingsActivity"
             android:label="@string/settings"
+            android:screenOrientation="portrait"
             android:theme="@style/DashBoard" />
 
         <activity
-            android:name=".ui.ui.AddCategory"
-            android:label="@string/add_category" />
+            android:name=".android.ui.AddCategory"
+            android:label="@string/add_category"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".android.ui.TipsActivity"
+            android:label="@string/tips"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".android.ui.TipDetail"
+            android:label="@string/tips"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".android.ui.AddIncome"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".android.ui.IncomeDetail"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

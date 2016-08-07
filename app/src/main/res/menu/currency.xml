@@ -9,7 +9,7 @@
             android:title="@string/dollar" />
 
         <item
-            android:id="@+id/customers"
+            android:id="@+id/pound_sterling"
             android:title="@string/pound_sterling" />
 
         <item
@@ -18,8 +18,7 @@
 
         <item
             android:id="@+id/naira"
-            android:title="@string/naira"
-            android:visible="false" />
+            android:title="@string/naira" />
 
         <item
             android:id="@+id/cfa"

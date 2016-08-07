@@ -9,7 +9,7 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?colorAccent"
+        android:background="?colorPrimary"
         android:fitsSystemWindows="true"
         android:gravity="center">
 
@@ -60,7 +60,9 @@
         android:id="@+id/add_loan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
+        app:layout_anchor="@id/loans"
+        app:layout_behavior="glivion.y2k.android.behavior.ScrollAwareFABBehavior"
+        app:layout_anchorGravity="bottom|right|end"
         android:layout_margin="10dp"
         android:src="@drawable/ic_add" />
 
