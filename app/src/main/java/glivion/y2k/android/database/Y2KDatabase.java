@@ -290,4 +290,24 @@ public class Y2KDatabase {
         return budgets;
     }
 
+    public ArrayList<Budget> getBudgets(int type) {
+        ArrayList<Budget> budgets = new ArrayList<>();
+        String selectionArgs[] = {String.valueOf(type)};
+        Cursor cursor = mDatabase.query(BUDGET, null, BUDGET_IN_EX + "=?", selectionArgs, null, null, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                int budgetId = cursor.getInt(cursor.getColumnIndex(BUDGET_ID));
+                String budgetTitle = cursor.getString(cursor.getColumnIndex(BUDGET_TITLE));
+                boolean isIncome = cursor.getInt(cursor.getColumnIndex(BUDGET_IN_EX)) == IS_INCOME;
+                double budgetTotal = cursor.getDouble(cursor.getColumnIndex(BUDGET_TOTAL));
+                String dueDate = cursor.getString(cursor.getColumnIndex(BUDGET_DUE_DATE));
+                boolean isCompleted = cursor.getInt(cursor.getColumnIndex(BUDGET_COMPLETED)) == 1;
+                int color = cursor.getInt(cursor.getColumnIndex(BUDGET_COLOR));
+                budgets.add(new Budget(isCompleted, isIncome, budgetId, budgetTitle, budgetTotal, dueDate, dueDate, color));
+            }
+            cursor.close();
+        }
+        return budgets;
+    }
+
 }

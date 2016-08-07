@@ -10,4 +10,10 @@
         <item>Monthly</item>
         <item>Weekly</item>
     </string-array>
+
+    <string-array name="income_ex">
+        <item>All</item>
+        <item>Income</item>
+        <item>Expenditure</item>
+    </string-array>
 </resources>

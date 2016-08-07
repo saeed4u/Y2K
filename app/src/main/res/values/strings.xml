@@ -26,6 +26,7 @@
     <string name="add_loan">New Loan</string>
     <string name="empty">Empty</string>
     <string name="no_loan_to_display">No Loan to display.</string>
+    <string name="no_budget_to_display">No Budget to display.</string>
     <string name="arrow">arrow</string>
     <string name="loan_payments">Payments</string>
     <string name="no_payment_has_been_made_for_this_loan">No payment has been made for this loan.</string>
@@ -75,4 +76,7 @@
     <string name="total_income">Total %s</string>
     <string name="pay_date_">Pay Date</string>
     <string name="you_have_not_added">You have not added any %s category. You can add a couple in settings</string>
+    <string name="income_budget">Income Budget</string>
+    <string name="expenditure_budget">Expenditure Budget</string>
+    <string name="add_budget">Add Budget</string>
 </resources>
