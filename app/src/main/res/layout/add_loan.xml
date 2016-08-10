@@ -61,7 +61,7 @@
                             android:id="@+id/loan_amount"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:hint="@string/amount_loaned"
+                            android:hint="@string/amount"
                             android:inputType="numberDecimal"
                             android:textColor="?colorAccent"
                             android:textSize="20sp" />

@@ -55,10 +55,20 @@ public class AddCategory extends AppCompatActivity {
                     if (catName.getText().toString().trim().isEmpty()) {
                         Utilities.shakeView(catName);
                     } else {
-                        Y2KDatabase y2KDatabase = new Y2KDatabase(AddCategory.this);
-                        y2KDatabase.addCategory(WordUtils.capitalize(catName.getText().toString()), type, colorSeekBar.getColor());
-                        setResult(RESULT_OK);
-                        finish();
+                        Thread thread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Y2KDatabase y2KDatabase = new Y2KDatabase(AddCategory.this);
+                                if (y2KDatabase.addCategory(WordUtils.capitalize(catName.getText().toString()), type, colorSeekBar.getColor())) {
+                                    setResult(RESULT_OK);
+                                } else {
+                                    setResult(RESULT_CANCELED);
+                                }
+                                finish();
+                            }
+                        });
+                        thread.start();
+
                     }
 
                 }

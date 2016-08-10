@@ -20,7 +20,6 @@ public final class Constants {
 
     public static final int NUMBER_OF_DEFAULT = 0;
 
-    public static final String LOAN = "loan";
 
     public static final String DATABASE_NAME = "y2k";
     public static final int DATABASE_VERSION = 6;
@@ -57,6 +56,7 @@ public final class Constants {
     public static final String IN_EX_PAY_DATE = "in_ex_pay_date";
     public static final String IN_EX_WEEK = "in_ex_week";
 
+    //Budget
     public static final String BUDGET = "budget";
     public static final String BUDGET_ID = "budget_id";
     public static final String BUDGET_TOTAL = "budget_total";
@@ -66,6 +66,12 @@ public final class Constants {
     public static final String BUDGET_DUE_DATE = "budget_due_date";
     public static final String BUDGET_COMPLETED = "budget_completed";
     public static final String BUDGET_COLOR = "budget_color";
+
+    //Budget Item
+    public static final String BUDGET_ITEM = "budget_item";
+    public static final String BUDGET_ITEM_ID = "budget_item_id";
+    public static final String BUDGET_ITEM_NAME = "budget_item_name";
+    public static final String BUDGET_ITEM_AMOUNT = "budget_item_amount";
 
     // loan
     public static final String CREATE_LOAN_TABLE = "CREATE TABLE IF NOT EXISTS " + LOAN_TABLE + "(" + LOAN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + LOAN_TITLE
@@ -98,7 +104,9 @@ public final class Constants {
             + BUDGET_TITLE + " TEXT NOT NULL," + BUDGET_TOTAL + " REAL NOT NULL," + BUDGET_COLOR + " INTEGER NOT NULL," + BUDGET_IN_EX + " INTEGER NOT NULL," + BUDGET_DUE_DATE + " TEXT NOT NULL," + BUDGET_CREATED_AT + " TEXT NOT NULL,"
             + BUDGET_COMPLETED + " INTEGER NOT NULL);";
 
-    public static String CREATE_FIRST_CAT = "INSERT INTO TABLE " + CAT + " VALUES(" + "default,-1," + R.color.colorAccentDashBoard + ");";
+    public static String CREATE_FIRST_CAT = "INSERT INTO " + CAT + " VALUES(" + "1,'default',-1," + R.color.colorAccentDashBoard + ");";
+
+    public static String CREATE_BUDGET_ITEM = "CREATE TABLE IF NOT EXISTS " + BUDGET_ITEM + "(" + BUDGET_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + BUDGET_ITEM_NAME + " TEXT NOT NULL," + BUDGET_ITEM_AMOUNT + "REAL NOT NULL," + BUDGET_ID + " INTEGER NOT NULL);";
 
 
 }

@@ -127,16 +127,16 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
         mLoanDetails = (EditText) findViewById(R.id.loan_details);
 
         SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Calendar calendar = Calendar.getInstance();
         mLoanDate = dateFormatForMonth.format(new Date());
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        String loanDate = day + Utilities.getDay(day) + "-" + Utilities.getMonthName(month) + "-" + year;
+        mDueDateTime.setText(loanDate);
         mDueDateTime = (TextView) findViewById(R.id.due_date);
         if (mDueDateTime != null) {
-
-            Calendar calendar = Calendar.getInstance();
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
-            String loanDate = day + Utilities.getDay(day) + "-" + Utilities.getMonthName(month) + "-" + year;
-            mDueDateTime.setText(loanDate);
             mDueDateTime.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

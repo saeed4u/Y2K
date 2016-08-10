@@ -79,4 +79,10 @@
     <string name="income_budget">Income Budget</string>
     <string name="expenditure_budget">Expenditure Budget</string>
     <string name="add_budget">Add Budget</string>
+    <string name="budget_items">Budget Items</string>
+    <string name="add_budget_item">Add Budget Item</string>
+    <string name="enter_name_of_budget_item">Please enter name of the budget item</string>
+    <string name="enter_amount_budget_item">Please enter amount of budget item</string>
+    <string name="budget_items_total">Budget Items Total</string>
+    <string name="add_at_least_budget_item">Please add at least one budget item</string>
 </resources>

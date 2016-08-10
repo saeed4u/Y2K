@@ -1,6 +1,7 @@
 package glivion.y2k.android.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,17 +17,16 @@ import java.util.ArrayList;
 
 import glivion.y2k.R;
 import glivion.y2k.android.adapter.BudgetAdapter;
-import glivion.y2k.android.adapter.LoanAdapter;
 import glivion.y2k.android.database.Y2KDatabase;
 import glivion.y2k.android.model.Budget;
-import glivion.y2k.android.model.Loan;
+import glivion.y2k.android.utilities.Utilities;
 
 /**
  * Created by blanka on 8/6/2016.
  */
 public class BudgetFragment extends Fragment {
 
-    private static final int ADD_LOAN_REQUEST = 100;
+    private static final int ADD_BUDGET_REQUEST = 100;
 
     private MultiStateToggleButton mMultiStateToggleButton;
     private View mAddBudget;
@@ -54,7 +54,8 @@ public class BudgetFragment extends Fragment {
         mAddBudget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(mDashBoard,AddBudgetActivity.class);
+                startActivityForResult(intent, ADD_BUDGET_REQUEST);
             }
         });
         mBudgetList = (RecyclerView) view.findViewById(R.id.budget);
@@ -67,7 +68,8 @@ public class BudgetFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mAddBudget.animate().scaleX(1.0F).scaleY(1.0F).setDuration(500).start();
-        new GetBudgets().execute(mMultiStateToggleButton.getValue() - 1);
+        mDatabase = new Y2KDatabase(mDashBoard);
+        new GetBudgets().execute(0);
     }
 
     private class GetBudgets extends AsyncTask<Integer, Void, Void> {
@@ -89,6 +91,7 @@ public class BudgetFragment extends Fragment {
                 mNoBudget.setVisibility(View.GONE);
                 BudgetAdapter budgetAdapter = new BudgetAdapter(mBudgets);
                 mBudgetList.setAdapter(budgetAdapter);
+                mBudgetList.setVisibility(View.VISIBLE);
             } else {
                 mBudgetList.setVisibility(View.GONE);
                 mNoBudget.setVisibility(View.VISIBLE);
