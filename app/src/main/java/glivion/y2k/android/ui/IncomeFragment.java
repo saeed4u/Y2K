@@ -17,6 +17,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import glivion.y2k.R;
@@ -49,7 +50,7 @@ public class IncomeFragment extends Fragment {
 
     private TextView mTotalIncomeTv;
     private Y2KStateManager mStateManager;
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar;
 
     private boolean isFromIncome = true;
 
@@ -102,7 +103,8 @@ public class IncomeFragment extends Fragment {
         }
         TextView noIncome = (TextView) view.findViewById(R.id.no_income_ex);
         noIncome.setText(getString(R.string.no_income, isFromIncome ? "Income" : "Expenditure"));
-        calendar.setFirstDayOfWeek(Calendar.SUNDAY);
+        calendar = new GregorianCalendar();
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
         calendar.setMinimalDaysInFirstWeek(7);
 
         mWeekNumberFromCalendar = calendar.get(Calendar.WEEK_OF_YEAR);
@@ -112,30 +114,29 @@ public class IncomeFragment extends Fragment {
         mPreviousWeek.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar calendar = Calendar.getInstance();
+              /*  Calendar calendar = Calendar.getInstance();
                 mWeekNumberFromCalendar -= 1;
                 Log.v("Week Number Next", "" + mWeekNumberFromCalendar);
                 mWeekNumber.setText("Week " + mWeekNumberFromCalendar + ", " + calendar.get(Calendar.YEAR));
-                mWeekDateRange.setText(getDateRange(mWeekNumberFromCalendar));
+                mWeekDateRange.setText(getDateRange(mWeekNumberFromCalendar));*/
                 new GetIncome().execute();
             }
         });
         mNextWeek.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar calendar = Calendar.getInstance();
+              /*  Calendar calendar = Calendar.getInstance();
                 mWeekNumberFromCalendar += 1;
                 Log.v("Week Number", "" + mWeekNumberFromCalendar);
                 mWeekNumber.setText("Week " + mWeekNumberFromCalendar + ", " + calendar.get(Calendar.YEAR));
                 mWeekDateRange.setText(getDateRange(mWeekNumberFromCalendar));
-                new GetIncome().execute();
+                new GetIncome().execute();*/
             }
         });
         mWeekDateRange = (TextView) view.findViewById(R.id.week_date);
         mWeekNumber = (TextView) view.findViewById(R.id.week_number);
 
         Calendar calendar = Calendar.getInstance();
-        mWeekNumberFromCalendar -= 2;
         mWeekNumber.setText("Week " + mWeekNumberFromCalendar + ", " + calendar.get(Calendar.YEAR));
         mWeekDateRange.setText(getDateRange(mWeekNumberFromCalendar));
         return view;

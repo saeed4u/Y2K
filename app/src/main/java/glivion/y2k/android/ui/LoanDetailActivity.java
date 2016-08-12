@@ -35,6 +35,7 @@ import java.util.Locale;
 
 import glivion.y2k.R;
 import glivion.y2k.android.adapter.LoanPaymentAdapter;
+import glivion.y2k.android.constants.Constants;
 import glivion.y2k.android.database.Y2KDatabase;
 import glivion.y2k.android.model.Loan;
 import glivion.y2k.android.model.LoanPayment;
@@ -285,6 +286,21 @@ public class LoanDetailActivity extends ItemDetailActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
+                break;
+            case R.id.action_delete:
+                new MaterialDialog.Builder(this).title("Delete?")
+                        .positiveText("Yes")
+                        .negativeText("No")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                Y2KDatabase y2KDatabase = new Y2KDatabase(LoanDetailActivity.this);
+                                if (y2KDatabase.deleteItem(Constants.LOAN_TABLE, Constants.LOAN_ID, mLoan.getmLoanId())) {
+                                    finish();
+                                }
+                            }
+                        }).show();
+
                 break;
         }
         return true;

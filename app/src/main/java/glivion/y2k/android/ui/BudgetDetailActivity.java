@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.apache.commons.lang.WordUtils;
 
@@ -24,6 +28,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import glivion.y2k.R;
+import glivion.y2k.android.constants.Constants;
+import glivion.y2k.android.database.Y2KDatabase;
 import glivion.y2k.android.model.Budget;
 import glivion.y2k.android.model.BudgetItem;
 import glivion.y2k.android.statemanager.Y2KStateManager;
@@ -129,6 +135,21 @@ public class BudgetDetailActivity extends ItemDetailActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
+                break;
+            case R.id.action_delete:
+                new MaterialDialog.Builder(this).title("Delete?")
+                        .positiveText("Yes")
+                        .negativeText("No")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                Y2KDatabase y2KDatabase = new Y2KDatabase(BudgetDetailActivity.this);
+                                if (y2KDatabase.deleteItem(Constants.BUDGET, Constants.BUDGET_ID, mBudget.getmBudgetId())) {
+                                    finish();
+                                }
+                            }
+                        }).show();
+
                 break;
         }
         return true;

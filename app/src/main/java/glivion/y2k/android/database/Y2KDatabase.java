@@ -360,5 +360,8 @@ public class Y2KDatabase {
         return budgetItems;
     }
 
+    public boolean deleteItem(String tableName, String primaryKeyName, int rowId) {
+        return mDatabase.delete(tableName, primaryKeyName + "=?", new String[]{String.valueOf(rowId)}) > 0;
+    }
 
 }
