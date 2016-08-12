@@ -84,7 +84,7 @@ public class AddIncome extends AppCompatActivity implements DatePickerDialog.OnD
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        String loanDate = day + Utilities.getDay(day) + "-" + Utilities.getMonthName(month) + "-" + year;
+        String loanDate = day + Utilities.getDay(day) + " " + Utilities.getMonthName(month) + ", " + year + ".";
         mSelectedDate.setText(loanDate);
     }
 
@@ -162,6 +162,11 @@ public class AddIncome extends AppCompatActivity implements DatePickerDialog.OnD
                 now.get(Calendar.MONTH),
                 now.get(Calendar.DAY_OF_MONTH)
         );
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR));
+        dpd.setMaxDate(calendar);
+
+        dpd.setTitle("Set " + (isFromIncome ? "Income " : "Expenditure ") + "Date");
         dpd.show(getFragmentManager(), DatePickerDialog.class.getSimpleName());
     }
 
@@ -197,7 +202,7 @@ public class AddIncome extends AppCompatActivity implements DatePickerDialog.OnD
         } else {
             date = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
             mPayDate = date;
-            String loanDate = dayOfMonth + Utilities.getDay(dayOfMonth) + "-" + Utilities.getMonthName(monthOfYear) + "-" + year;
+            String loanDate = dayOfMonth + Utilities.getDay(dayOfMonth) + " " + Utilities.getMonthName(monthOfYear) + ", " + year + ".";
             mSelectedDate.setText(loanDate);
         }
     }

@@ -5,6 +5,7 @@ import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -47,14 +48,15 @@ public class LoanViewHolder extends RecyclerView.ViewHolder {
         double amountPaid = loan.getmAmountPaid();
         double amountLeft = totalAmount - amountPaid;
 
-        mLoanAmount.setText(mStateManager.getCurrency() + totalAmount);
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        mLoanAmount.setText(mStateManager.getCurrency() + decimalFormat.format(totalAmount));
 
         if (loan.isPaid()) {
             mAmountOwing.setText(R.string.cleared);
         } else {
-            mAmountOwing.setText("Owing: " + mStateManager.getCurrency() + amountLeft);
+            mAmountOwing.setText("Owing: " + mStateManager.getCurrency() + decimalFormat.format(amountLeft));
         }
-        mAmountPaid.setText("Paid: " + mStateManager.getCurrency() + amountPaid);
+        mAmountPaid.setText("Paid: " + mStateManager.getCurrency() + decimalFormat.format(amountPaid));
         int color = loan.getmLoanColor();
         mLoanColor.setBackgroundColor(color);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());

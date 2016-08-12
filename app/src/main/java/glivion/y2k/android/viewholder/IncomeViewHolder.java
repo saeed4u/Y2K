@@ -5,6 +5,7 @@ import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,7 +41,10 @@ public class IncomeViewHolder extends RecyclerView.ViewHolder {
         int color = incomeExpenditure.getmCategory().getmCatColor();
         mColor.setBackgroundColor(color);
         mTitle.setText(title);
-        mAmount.setText(mStateManager.getCurrency() + String.valueOf(amount));
+
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+
+        mAmount.setText(mStateManager.getCurrency() + decimalFormat.format(amount));
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date dateCreated = format.parse(incomeExpenditure.getmPayDate());
         String relativeTime = DateUtils.getRelativeTimeSpanString(dateCreated.getTime(), System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS,

@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.view.MenuItem;
@@ -15,6 +14,7 @@ import android.widget.TextView;
 
 import org.apache.commons.lang.WordUtils;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,7 +27,7 @@ import glivion.y2k.android.statemanager.Y2KStateManager;
 /**
  * Created by blanka on 8/7/2016.
  */
-public class IncomeDetail extends AppCompatActivity {
+public class IncomeDetailActivity extends ItemDetailActivity {
 
     private Toolbar mToolbar;
     private IncomeExpenditure mIncomeExpenditure;
@@ -39,7 +39,7 @@ public class IncomeDetail extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
-
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
         mIncomeExpenditure = getIntent().getParcelableExtra("income");
         mToolbar.setTitle(mIncomeExpenditure.getmTitle());
         if (actionBar != null) {
@@ -55,7 +55,7 @@ public class IncomeDetail extends AppCompatActivity {
         Y2KStateManager stateManager = new Y2KStateManager(this);
 
         if (incomeAmount != null) {
-            incomeAmount.setText(stateManager.getCurrency() + String.valueOf(mIncomeExpenditure.getmAmount()));
+            incomeAmount.setText(stateManager.getCurrency() + decimalFormat.format(mIncomeExpenditure.getmAmount()));
         }
         if (incomeTitle != null) {
             incomeTitle.setText(mIncomeExpenditure.getmTitle());

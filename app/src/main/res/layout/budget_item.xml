@@ -13,9 +13,7 @@
         android:layout_marginRight="5dp"
         app:cardCornerRadius="2dp"
         app:cardElevation="2dp"
-        app:contentPaddingLeft="10dp"
-        app:contentPaddingRight="10dp"
-        app:contentPaddingTop="10dp">
+        app:contentPaddingRight="10dp">
 
 
         <LinearLayout
@@ -26,25 +24,27 @@
             <View
                 android:id="@+id/budget_color"
                 android:layout_width="15dp"
+                android:layout_marginRight="5dp"
                 android:layout_height="match_parent" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="3dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/budget_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="2dp"
                     android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/budget_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="2dp"
                     android:textColor="@color/owingColor"
                     android:textSize="16sp" />
 
@@ -52,8 +52,8 @@
                     android:id="@+id/budget_total"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="end"
                     android:textColor="?colorAccent"
+                    android:layout_marginBottom="2dp"
                     android:textSize="22sp" />
 
             </LinearLayout>

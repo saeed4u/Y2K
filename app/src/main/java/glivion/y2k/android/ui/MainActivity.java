@@ -32,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private AHBottomNavigation mBottomNavigation;
     private Toolbar mToolbar;
 
-    private static final int REQUEST_WRTIE_PERMISSION = 100;
+    private static final int REQUEST_WRITE_PERMISSION = 100;
+
+    private int mSelectedPosition = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,36 +69,39 @@ public class MainActivity extends AppCompatActivity {
                 public void onTabSelected(int position, boolean wasSelected) {
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    switch (position) {
-                        case 0:
-                            mToolbar.setTitle(R.string.dashboard);
-                            fragmentTransaction.replace(R.id.fragment, new DashBoardFragment(), IncomeExpenditure.class.getSimpleName()).commit();
-                            break;
-                        case 1:
-                            mToolbar.setTitle(R.string.income_);
-                            IncomeFragment incomeFragment = new IncomeFragment();
-                            Bundle bundle = new Bundle();
-                            bundle.putBoolean("is_income",true);
-                            incomeFragment.setArguments(bundle);
-                            fragmentTransaction.replace(R.id.fragment, incomeFragment, IncomeExpenditure.class.getSimpleName()).commit();
-                            break;
-                        case 2:
-                            mToolbar.setTitle(R.string.expenses);
-                            IncomeFragment expenditureFragment = new IncomeFragment();
-                            Bundle expenditureBundle = new Bundle();
-                            expenditureBundle.putBoolean("is_income",false);
-                            expenditureFragment.setArguments(expenditureBundle);
-                            fragmentTransaction.replace(R.id.fragment, expenditureFragment, IncomeExpenditure.class.getSimpleName()).commit();
+                    if (mSelectedPosition != position) {
+                        switch (position) {
+                            case 0:
+                                mToolbar.setTitle(R.string.dashboard);
+                                fragmentTransaction.replace(R.id.fragment, new DashBoardFragment(), IncomeExpenditure.class.getSimpleName()).commit();
+                                break;
+                            case 1:
+                                mToolbar.setTitle(R.string.income_);
+                                IncomeFragment incomeFragment = new IncomeFragment();
+                                Bundle bundle = new Bundle();
+                                bundle.putBoolean("is_income", true);
+                                incomeFragment.setArguments(bundle);
+                                fragmentTransaction.replace(R.id.fragment, incomeFragment, IncomeExpenditure.class.getSimpleName()).commit();
+                                break;
+                            case 2:
+                                mToolbar.setTitle(R.string.expenses);
+                                IncomeFragment expenditureFragment = new IncomeFragment();
+                                Bundle expenditureBundle = new Bundle();
+                                expenditureBundle.putBoolean("is_income", false);
+                                expenditureFragment.setArguments(expenditureBundle);
+                                fragmentTransaction.replace(R.id.fragment, expenditureFragment, IncomeExpenditure.class.getSimpleName()).commit();
 
-                            break;
-                        case 3:
-                            mToolbar.setTitle(R.string.budget);
-                            fragmentTransaction.replace(R.id.fragment, new BudgetFragment(), IncomeExpenditure.class.getSimpleName()).commit();
-                            break;
-                        case 4:
-                            fragmentTransaction.replace(R.id.fragment, new LoanFragment(), LoanFragment.class.getSimpleName()).commit();
-                            mToolbar.setTitle(R.string.loans);
-                            break;
+                                break;
+                            case 3:
+                                mToolbar.setTitle(R.string.budget);
+                                fragmentTransaction.replace(R.id.fragment, new BudgetFragment(), IncomeExpenditure.class.getSimpleName()).commit();
+                                break;
+                            case 4:
+                                fragmentTransaction.replace(R.id.fragment, new LoanFragment(), LoanFragment.class.getSimpleName()).commit();
+                                mToolbar.setTitle(R.string.loans);
+                                break;
+                        }
+                        mSelectedPosition = position;
                     }
                 }
             });
@@ -112,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
     @TargetApi(Build.VERSION_CODES.M)
     private void requestForPermission() {
         if (!checkForPermission()) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRTIE_PERMISSION);
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
         }
     }
 
@@ -121,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_WRTIE_PERMISSION) {
+        if (requestCode == REQUEST_WRITE_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 new MaterialDialog.Builder(this).title("Y2K Permissions")
                         .content("Y2K requires access to your files in order to make it serve you better with caching of what you like. Would you like to grant Y2K the permission to access your files?")

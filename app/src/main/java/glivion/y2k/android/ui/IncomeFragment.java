@@ -30,6 +30,8 @@ import glivion.y2k.android.statemanager.Y2KStateManager;
 /**
  * Created by blanka on 8/6/2016.
  */
+
+// TODO: 12/08/2016 Work on getting week number
 public class IncomeFragment extends Fragment {
 
     private MainActivity mMainActivity;
@@ -73,7 +75,7 @@ public class IncomeFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 IncomeExpenditure incomeExpenditure = mIncomeExpenditures.get(position);
-                Intent intent = new Intent(mMainActivity, IncomeDetail.class);
+                Intent intent = new Intent(mMainActivity, IncomeDetailActivity.class);
                 intent.putExtra("income", incomeExpenditure);
                 startActivity(intent);
             }
@@ -190,7 +192,7 @@ public class IncomeFragment extends Fragment {
                 mIncomes.setVisibility(View.VISIBLE);
                 mNoIncome.setVisibility(View.GONE);
             }
-            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+            DecimalFormat decimalFormat = new DecimalFormat("0.00");
             String amount = decimalFormat.format(mTotalIncome);
             mTotalIncomeTv.setText(mStateManager.getCurrency() + amount);
         }

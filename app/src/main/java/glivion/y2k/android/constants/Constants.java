@@ -22,7 +22,7 @@ public final class Constants {
 
 
     public static final String DATABASE_NAME = "y2k";
-    public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 7;
     public static final String LOAN_TABLE = "loans";
     public static final String LOAN_PAYMENT = "loan_payment";
     public static final String IN_EX_TABLE = "in_ex_table";
@@ -106,7 +106,7 @@ public final class Constants {
 
     public static String CREATE_FIRST_CAT = "INSERT INTO " + CAT + " VALUES(" + "1,'default',-1," + R.color.colorAccentDashBoard + ");";
 
-    public static String CREATE_BUDGET_ITEM = "CREATE TABLE IF NOT EXISTS " + BUDGET_ITEM + "(" + BUDGET_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + BUDGET_ITEM_NAME + " TEXT NOT NULL," + BUDGET_ITEM_AMOUNT + "REAL NOT NULL," + BUDGET_ID + " INTEGER NOT NULL);";
+    public static String CREATE_BUDGET_ITEM = "CREATE TABLE IF NOT EXISTS " + BUDGET_ITEM + "(" + BUDGET_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + BUDGET_ITEM_NAME + " TEXT NOT NULL," + BUDGET_ITEM_AMOUNT + " REAL NOT NULL," + BUDGET_ID + " INTEGER NOT NULL);";
 
 
 }

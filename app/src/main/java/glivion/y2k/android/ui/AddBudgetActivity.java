@@ -21,6 +21,7 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import org.apache.commons.lang.WordUtils;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -92,11 +93,13 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
         SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
         mBudgetDate = dateFormatForMonth.format(new Date());
+        Log.v("Budget Date", String.valueOf(mBudgetDate));
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        String loanDate = day + Utilities.getDay(day) + "-" + Utilities.getMonthName(month) + "-" + year;
+        String loanDate = day + Utilities.getDay(day) + " " + Utilities.getMonthName(month) + ", " + year + ".";
+
         mDate.setText(loanDate);
 
         if (mExpenditureBudget != null) {
@@ -138,12 +141,18 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
                             @Override
                             public void run() {
                                 Y2KDatabase y2KDatabase = new Y2KDatabase(AddBudgetActivity.this);
-                                if (y2KDatabase.addBudget(WordUtils.capitalize(budgetName), getAmount(), mBudgetType == Constants.IS_INCOME, mBudgetDate, false, colorSeekBar.getColor())) {
-                                    Log.v("Yeah", "Yeah");
-                                    setResult(RESULT_OK);
+                                long rowId = y2KDatabase.addBudget(WordUtils.capitalize(budgetName), getAmount(), mBudgetType == Constants.IS_INCOME, mBudgetDate, false, colorSeekBar.getColor());
+                                if (rowId != -1) {
+                                    if (addBudgetItems((int) rowId)) {
+                                        setResult(RESULT_OK);
+                                    } else {
+                                        setResult(RESULT_CANCELED);
+                                    }
                                 } else {
                                     setResult(RESULT_CANCELED);
                                 }
+
+
                                 finish();
                             }
                         }).start();
@@ -162,15 +171,24 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
         return amount;
     }
 
+    private boolean addBudgetItems(int budgetId) {
+        boolean successful = false;
+        for (BudgetItem budgetItem : mBudgetItems) {
+            Y2KDatabase y2KDatabase = new Y2KDatabase(this);
+            successful = y2KDatabase.addBudgetItem(budgetItem.getmItemName(), budgetItem.getmBudgetAmount(), budgetId);
+        }
+        return successful;
+    }
 
     public void addBudgetItem(BudgetItem budgetItem) {
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
         View view = getLayoutInflater().inflate(R.layout.budget_item_layout, null);
         TextView budgetItemName = (TextView) view.findViewById(R.id.budget_item_name);
         TextView budgetItemAmount = (TextView) view.findViewById(R.id.budget_item_amount);
-        budgetItemAmount.setText(mStateManager.getCurrency() + String.valueOf(budgetItem.getmBudgetAmount()));
+        budgetItemAmount.setText(mStateManager.getCurrency() + decimalFormat.format(budgetItem.getmBudgetAmount()));
         budgetItemName.setText(budgetItem.getmItemName());
         mBudgetItemsLayout.addView(view);
-        mBudgetItemTotal.setText(mStateManager.getCurrency() + getAmount());
+        mBudgetItemTotal.setText(mStateManager.getCurrency() + decimalFormat.format(getAmount()));
     }
 
     @Override
@@ -203,13 +221,14 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
                 now.get(Calendar.MONTH),
                 now.get(Calendar.DAY_OF_MONTH)
         );
-
+        dpd.setTitle("Set Budget Date");
+        dpd.setMinDate(Calendar.getInstance());
         dpd.show(getFragmentManager(), DatePickerDialog.class.getSimpleName());
     }
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        String loanDate = dayOfMonth + Utilities.getDay(dayOfMonth) + "-" + Utilities.getMonthName(monthOfYear) + "-" + year;
+        String loanDate = dayOfMonth + Utilities.getDay(dayOfMonth) + " " + Utilities.getMonthName(monthOfYear) + ", " + year + ".";
         mDate.setText(loanDate);
         mBudgetDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
     }
