@@ -7,10 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 
 import org.apache.commons.lang.WordUtils;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import glivion.y2k.R;
 import glivion.y2k.android.model.Budget;
+import glivion.y2k.android.model.BudgetItem;
 import glivion.y2k.android.model.Category;
 import glivion.y2k.android.model.CategoryType;
 import glivion.y2k.android.model.IncomeExpenditure;
@@ -24,6 +26,9 @@ import static glivion.y2k.android.constants.Constants.BUDGET_CREATED_AT;
 import static glivion.y2k.android.constants.Constants.BUDGET_DUE_DATE;
 import static glivion.y2k.android.constants.Constants.BUDGET_ID;
 import static glivion.y2k.android.constants.Constants.BUDGET_IN_EX;
+import static glivion.y2k.android.constants.Constants.BUDGET_ITEM;
+import static glivion.y2k.android.constants.Constants.BUDGET_ITEM_AMOUNT;
+import static glivion.y2k.android.constants.Constants.BUDGET_ITEM_NAME;
 import static glivion.y2k.android.constants.Constants.BUDGET_TITLE;
 import static glivion.y2k.android.constants.Constants.BUDGET_TOTAL;
 import static glivion.y2k.android.constants.Constants.CAT;
@@ -37,12 +42,12 @@ import static glivion.y2k.android.constants.Constants.EXPENDITURE_CAT;
 import static glivion.y2k.android.constants.Constants.INCOME_CAT;
 import static glivion.y2k.android.constants.Constants.IN_EX_AMOUNT;
 import static glivion.y2k.android.constants.Constants.IN_EX_CREATED_AT;
+import static glivion.y2k.android.constants.Constants.IN_EX_DETAILS;
 import static glivion.y2k.android.constants.Constants.IN_EX_ID;
 import static glivion.y2k.android.constants.Constants.IN_EX_IS_INCOME;
 import static glivion.y2k.android.constants.Constants.IN_EX_PAY_DATE;
 import static glivion.y2k.android.constants.Constants.IN_EX_TABLE;
 import static glivion.y2k.android.constants.Constants.IN_EX_TITLE;
-import static glivion.y2k.android.constants.Constants.IN_EX_DETAILS;
 import static glivion.y2k.android.constants.Constants.IN_EX_WEEK;
 import static glivion.y2k.android.constants.Constants.IS_EXPENDITURE;
 import static glivion.y2k.android.constants.Constants.IS_INCOME;
@@ -66,11 +71,13 @@ public class Y2KDatabase {
     private SQLiteDatabase mDatabase;
     private ContentValues mContentValues;
     private Context mContext;
+    private DecimalFormat decimalFormat;
 
     public Y2KDatabase(Context context) {
         Y2KDatabaseHelper database = new Y2KDatabaseHelper(context);
         mDatabase = database.getWritableDatabase();
         mContext = context;
+        decimalFormat = new DecimalFormat("0.00");
     }
 
     //Loan id,title, details, amount(principal), interest rate, borrowed?, due date, created date.
@@ -79,8 +86,8 @@ public class Y2KDatabase {
         mContentValues = new ContentValues();
         mContentValues.put(LOAN_TITLE, WordUtils.capitalize(title));
         mContentValues.put(LOAN_DETAILS, WordUtils.capitalize(description));
-        mContentValues.put(LOAN_AMOUNT, amount);
-        mContentValues.put(LOAN_INTEREST, interest);
+        mContentValues.put(LOAN_AMOUNT, Double.parseDouble(decimalFormat.format(amount)));
+        mContentValues.put(LOAN_INTEREST, Double.parseDouble(decimalFormat.format(interest)));
         mContentValues.put(LOAN_BORROWED, borrowed ? 0 : 1);
         mContentValues.put(LOAN_DUE_DATE, dueDate);
         mContentValues.put(DATE_CREATED, createdDate);
@@ -92,9 +99,11 @@ public class Y2KDatabase {
     public boolean addPayment(int loanId, double amount, String datePaid) {
         mContentValues = new ContentValues();
         mContentValues.put(PAYMENT_LOAN_ID, loanId);
-        mContentValues.put(PAYMENT_AMOUNT, amount);
+        mContentValues.put(PAYMENT_AMOUNT, Double.parseDouble(decimalFormat.format(amount)));
         mContentValues.put(DATE_PAID, datePaid);
-        return mDatabase.insert(LOAN_PAYMENT, null, mContentValues) > 0;
+        boolean successful = mDatabase.insert(LOAN_PAYMENT, null, mContentValues) > 0;
+        mDatabase.close();
+        return successful;
     }
 
     public ArrayList<Loan> getLoans(int type) {
@@ -122,6 +131,7 @@ public class Y2KDatabase {
             }
             cursor.close();
         }
+        mDatabase.close();
         return loans;
     }
 
@@ -142,6 +152,7 @@ public class Y2KDatabase {
             }
             cursor.close();
         }
+        mDatabase.close();
         return loanPayments;
     }
 
@@ -150,7 +161,9 @@ public class Y2KDatabase {
         mContentValues.put(CAT_NAME, categoryName);
         mContentValues.put(CAT_COLOR, catColor);
         mContentValues.put(CAT_TYPE, catType);
-        return mDatabase.insert(CAT, null, mContentValues) > 0;
+        boolean successful = mDatabase.insert(CAT, null, mContentValues) > 0;
+        mDatabase.close();
+        return successful;
     }
 
     public ArrayList<Category> getCategories() {
@@ -174,6 +187,7 @@ public class Y2KDatabase {
             }
             cursor.close();
         }
+        mDatabase.close();
         return categories;
     }
 
@@ -197,6 +211,7 @@ public class Y2KDatabase {
             }
             cursor.close();
         }
+        mDatabase.close();
         return categories;
     }
 
@@ -214,10 +229,11 @@ public class Y2KDatabase {
                 } else {
                     categoryType = new CategoryType(catType, "Expenditure");
                 }
+                cursor.close();
                 return new Category(id, name, catType, color).setmCategoryType(categoryType);
             }
-            cursor.close();
         }
+        mDatabase.close();
         return null;
     }
 
@@ -226,12 +242,14 @@ public class Y2KDatabase {
         mContentValues.put(IN_EX_TITLE, title);
         mContentValues.put(IN_EX_DETAILS, detail);
         mContentValues.put(IN_EX_IS_INCOME, isIncome ? IS_INCOME : IS_EXPENDITURE);
-        mContentValues.put(IN_EX_AMOUNT, amount);
+        mContentValues.put(IN_EX_AMOUNT, Double.parseDouble(decimalFormat.format(amount)));
         mContentValues.put(IN_EX_CREATED_AT, createdAt);
         mContentValues.put(IN_EX_PAY_DATE, payDate);
         mContentValues.put(CAT_ID, catId);
         mContentValues.put(IN_EX_WEEK, weekNo);
-        return mDatabase.insert(IN_EX_TABLE, null, mContentValues) > 0;
+        boolean successful = mDatabase.insert(IN_EX_TABLE, null, mContentValues) > 0;
+        mDatabase.close();
+        return successful;
     }
 
     public ArrayList<IncomeExpenditure> getIncomeOrExpenditure(int type, int week) {
@@ -256,19 +274,22 @@ public class Y2KDatabase {
             }
             cursor.close();
         }
+        mDatabase.close();
         return incomeExpenditures;
     }
 
-    public boolean addBudget(String title, double amount, boolean isIncome, String dueDate, boolean isCompleted, int color) {
+    public long addBudget(String title, double amount, boolean isIncome, String dueDate, boolean isCompleted, int color) {
         mContentValues = new ContentValues();
         mContentValues.put(BUDGET_TITLE, title);
-        mContentValues.put(BUDGET_TOTAL, amount);
+        mContentValues.put(BUDGET_TOTAL, Double.parseDouble(decimalFormat.format(amount)));
         mContentValues.put(BUDGET_IN_EX, isIncome ? IS_INCOME : IS_EXPENDITURE);
         mContentValues.put(BUDGET_DUE_DATE, dueDate);
         mContentValues.put(BUDGET_COMPLETED, isCompleted ? 0 : 1);
         mContentValues.put(BUDGET_CREATED_AT, dueDate);
         mContentValues.put(BUDGET_COLOR, color);
-        return mDatabase.insert(BUDGET, null, mContentValues) > 0;
+        long successful = mDatabase.insert(BUDGET, null, mContentValues);
+        mDatabase.close();
+        return successful;
     }
 
     public ArrayList<Budget> getBudgets() {
@@ -283,10 +304,11 @@ public class Y2KDatabase {
                 String dueDate = cursor.getString(cursor.getColumnIndex(BUDGET_DUE_DATE));
                 boolean isCompleted = cursor.getInt(cursor.getColumnIndex(BUDGET_COMPLETED)) == 1;
                 int color = cursor.getInt(cursor.getColumnIndex(BUDGET_COLOR));
-                budgets.add(new Budget(isCompleted, isIncome, budgetId, budgetTitle, budgetTotal, dueDate, dueDate, color));
+                budgets.add(new Budget(isCompleted, isIncome, budgetId, budgetTitle, budgetTotal, dueDate, dueDate, color).setmBudgetItems(getBudgetItems(budgetId)));
             }
             cursor.close();
         }
+        mDatabase.close();
         return budgets;
     }
 
@@ -303,11 +325,43 @@ public class Y2KDatabase {
                 String dueDate = cursor.getString(cursor.getColumnIndex(BUDGET_DUE_DATE));
                 boolean isCompleted = cursor.getInt(cursor.getColumnIndex(BUDGET_COMPLETED)) == 1;
                 int color = cursor.getInt(cursor.getColumnIndex(BUDGET_COLOR));
-                budgets.add(new Budget(isCompleted, isIncome, budgetId, budgetTitle, budgetTotal, dueDate, dueDate, color));
+                budgets.add(new Budget(isCompleted, isIncome, budgetId, budgetTitle, budgetTotal, dueDate, dueDate, color).setmBudgetItems(getBudgetItems(budgetId)));
             }
             cursor.close();
         }
+        mDatabase.close();
         return budgets;
+    }
+
+    public boolean addBudgetItem(String name, double amount, int budgetId) {
+        mContentValues = new ContentValues();
+        mContentValues.put(BUDGET_ITEM_NAME, name);
+        mContentValues.put(BUDGET_ITEM_AMOUNT, Double.parseDouble(decimalFormat.format(amount)));
+        mContentValues.put(BUDGET_ID, budgetId);
+        boolean successful = mDatabase.insert(BUDGET_ITEM, null, mContentValues) > 0;
+        mDatabase.close();
+        return successful;
+    }
+
+    public ArrayList<BudgetItem> getBudgetItems(int budgetId) {
+        ArrayList<BudgetItem> budgetItems = new ArrayList<>();
+        String[] selectionArgs = {String.valueOf(budgetId)};
+        Cursor cursor = mDatabase.query(BUDGET_ITEM, null, BUDGET_ID + "=?", selectionArgs, null, null, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                int budgetItemId = cursor.getInt(cursor.getColumnIndex(BUDGET_ID));
+                String name = cursor.getString(cursor.getColumnIndex(BUDGET_ITEM_NAME));
+                double amount = cursor.getDouble(cursor.getColumnIndex(BUDGET_ITEM_AMOUNT));
+                budgetItems.add(new BudgetItem(budgetItemId, name, amount));
+            }
+            cursor.close();
+        }
+        mDatabase.close();
+        return budgetItems;
+    }
+
+    public boolean deleteItem(String tableName, String primaryKeyName, int rowId) {
+        return mDatabase.delete(tableName, primaryKeyName + "=?", new String[]{String.valueOf(rowId)}) > 0;
     }
 
 }

@@ -5,6 +5,7 @@ import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,7 +37,8 @@ public class BudgetViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(Budget budget) throws ParseException {
         mBudgetColor.setBackgroundColor(budget.getmColor());
-        mBudgetAmount.setText(mStateManager.getCurrency() + budget.getmBudgetTotal());
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        mBudgetAmount.setText(mStateManager.getCurrency() + decimalFormat.format(budget.getmBudgetTotal()));
         mBudgetTitle.setText(budget.getmBudgetTitle());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date dateCreated = format.parse(budget.getmCreatedAt());

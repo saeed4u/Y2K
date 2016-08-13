@@ -3,6 +3,8 @@ package glivion.y2k.android.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * Created by blanka on 8/7/2016.
  */
@@ -16,6 +18,7 @@ public class Budget implements Parcelable {
     private String mDueDate;
     private boolean isCompleted;
     private int mColor;
+    private ArrayList<BudgetItem> mBudgetItems;
 
     public Budget(boolean isCompleted, boolean isIncome, int mBudgetId, String mBudgetTitle, double mBudgetTotal, String mCreatedAt, String mDueDate, int mColor) {
         this.isCompleted = isCompleted;
@@ -37,6 +40,7 @@ public class Budget implements Parcelable {
         mDueDate = in.readString();
         isCompleted = in.readByte() != 0;
         mColor = in.readInt();
+        mBudgetItems = in.createTypedArrayList(BudgetItem.CREATOR);
     }
 
     public static final Creator<Budget> CREATOR = new Creator<Budget>() {
@@ -55,6 +59,14 @@ public class Budget implements Parcelable {
         return mColor;
     }
 
+    public ArrayList<BudgetItem> getmBudgetItems() {
+        return mBudgetItems;
+    }
+
+    public Budget setmBudgetItems(ArrayList<BudgetItem> mBudgetItems) {
+        this.mBudgetItems = mBudgetItems;
+        return this;
+    }
 
     public boolean isCompleted() {
         return isCompleted;
@@ -84,20 +96,22 @@ public class Budget implements Parcelable {
         return mDueDate;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(mBudgetId);
-        dest.writeString(mBudgetTitle);
-        dest.writeDouble(mBudgetTotal);
-        dest.writeByte((byte) (isIncome ? 1 : 0));
-        dest.writeString(mCreatedAt);
-        dest.writeString(mDueDate);
-        dest.writeByte((byte) (isCompleted ? 1 : 0));
-        dest.writeInt(mColor);
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(mBudgetId);
+        parcel.writeString(mBudgetTitle);
+        parcel.writeDouble(mBudgetTotal);
+        parcel.writeByte((byte) (isIncome ? 1 : 0));
+        parcel.writeString(mCreatedAt);
+        parcel.writeString(mDueDate);
+        parcel.writeByte((byte) (isCompleted ? 1 : 0));
+        parcel.writeInt(mColor);
+        parcel.writeTypedList(mBudgetItems);
     }
 }

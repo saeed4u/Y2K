@@ -4,30 +4,36 @@ import android.annotation.TargetApi;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import org.apache.commons.lang.WordUtils;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 import glivion.y2k.R;
+import glivion.y2k.android.constants.Constants;
+import glivion.y2k.android.database.Y2KDatabase;
 import glivion.y2k.android.model.IncomeExpenditure;
 import glivion.y2k.android.statemanager.Y2KStateManager;
 
 /**
  * Created by blanka on 8/7/2016.
  */
-public class IncomeDetail extends AppCompatActivity {
+public class IncomeDetailActivity extends ItemDetailActivity {
 
     private Toolbar mToolbar;
     private IncomeExpenditure mIncomeExpenditure;
@@ -39,7 +45,7 @@ public class IncomeDetail extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
-
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
         mIncomeExpenditure = getIntent().getParcelableExtra("income");
         mToolbar.setTitle(mIncomeExpenditure.getmTitle());
         if (actionBar != null) {
@@ -55,7 +61,7 @@ public class IncomeDetail extends AppCompatActivity {
         Y2KStateManager stateManager = new Y2KStateManager(this);
 
         if (incomeAmount != null) {
-            incomeAmount.setText(stateManager.getCurrency() + String.valueOf(mIncomeExpenditure.getmAmount()));
+            incomeAmount.setText(stateManager.getCurrency() + decimalFormat.format(mIncomeExpenditure.getmAmount()));
         }
         if (incomeTitle != null) {
             incomeTitle.setText(mIncomeExpenditure.getmTitle());
@@ -106,6 +112,21 @@ public class IncomeDetail extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
+                break;
+            case R.id.action_delete:
+                new MaterialDialog.Builder(this).title("Delete?")
+                        .positiveText("Yes")
+                        .negativeText("No")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                Y2KDatabase y2KDatabase = new Y2KDatabase(IncomeDetailActivity.this);
+                                if (y2KDatabase.deleteItem(Constants.IN_EX_TABLE, Constants.IN_EX_ID, mIncomeExpenditure.getmId())) {
+                                    finish();
+                                }
+                            }
+                        }).show();
+
                 break;
         }
         return true;

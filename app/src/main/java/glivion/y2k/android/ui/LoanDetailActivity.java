@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -27,6 +26,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.apache.commons.lang.WordUtils;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,6 +35,7 @@ import java.util.Locale;
 
 import glivion.y2k.R;
 import glivion.y2k.android.adapter.LoanPaymentAdapter;
+import glivion.y2k.android.constants.Constants;
 import glivion.y2k.android.database.Y2KDatabase;
 import glivion.y2k.android.model.Loan;
 import glivion.y2k.android.model.LoanPayment;
@@ -43,7 +44,7 @@ import glivion.y2k.android.statemanager.Y2KStateManager;
 /**
  * Created by saeedissah on 5/18/16.
  */
-public class LoanDetailActivity extends AppCompatActivity {
+public class LoanDetailActivity extends ItemDetailActivity {
 
     private RecyclerView mLoanPayments;
     private ArrayList<LoanPayment> mLoanPaymentArrayList;
@@ -75,6 +76,10 @@ public class LoanDetailActivity extends AppCompatActivity {
             actionBar.setTitle(WordUtils.capitalize(mLoan.getmLoanTitle()));
         }
         getColors();
+
+
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+
         mDatabase = new Y2KDatabase(this);
         mAddPayment = findViewById(R.id.add_payment);
         if (mAddPayment != null) {
@@ -96,7 +101,7 @@ public class LoanDetailActivity extends AppCompatActivity {
                     final double[] amount = new double[1];
                     MaterialDialog dialog = new MaterialDialog.Builder(LoanDetailActivity.this)
                             .customView(R.layout.add_payment, false)
-                            .title("Add Payment - " + mLoan.getmLoanTitle())
+                            .title("Add Payment for \"" + mLoan.getmLoanTitle() + "\"")
                             .positiveText("Add")
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
@@ -188,10 +193,10 @@ public class LoanDetailActivity extends AppCompatActivity {
             loanAmount.setText(mStateManager.getCurrency() + mLoan.getmLoanAmount());
         }
         if (mAmountPaid != null) {
-            mAmountPaid.setText(mStateManager.getCurrency() + mLoan.getmAmountPaid());
+            mAmountPaid.setText(mStateManager.getCurrency() + decimalFormat.format(mLoan.getmAmountPaid()));
         }
         if (loanInterestAmount != null) {
-            loanInterestAmount.setText(mStateManager.getCurrency() + mLoan.getmLoanInterest());
+            loanInterestAmount.setText(mStateManager.getCurrency() + decimalFormat.format(mLoan.getmLoanInterest()));
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date dateCreated = null;
@@ -204,14 +209,14 @@ public class LoanDetailActivity extends AppCompatActivity {
                 DateUtils.FORMAT_ABBREV_ALL).toString();
         double amountWithInterest = mLoan.getmLoanInterest() + mLoan.getmLoanAmount();
         if (amountToPay != null) {
-            amountToPay.setText(mStateManager.getCurrency() + amountWithInterest);
+            amountToPay.setText(mStateManager.getCurrency() + decimalFormat.format(amountWithInterest));
         }
         if (mLoanDueDate != null) {
             mLoanDueDate.setText(relativeTime);
         }
         if (mAmountOwing != null) {
             if (!mLoan.isPaid()) {
-                mAmountOwing.setText(mStateManager.getCurrency() + (amountWithInterest - mLoan.getmAmountPaid()));
+                mAmountOwing.setText(mStateManager.getCurrency() + decimalFormat.format((amountWithInterest - mLoan.getmAmountPaid())));
             } else {
                 mAmountOwing.setText(R.string.cleared);
                 mLoanDueDate.setVisibility(View.GONE);
@@ -246,12 +251,13 @@ public class LoanDetailActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void updateLoanView(Loan loan) {
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
         if (mAmountPaid != null) {
-            mAmountPaid.setText(mStateManager.getCurrency() + loan.getmAmountPaid());
+            mAmountPaid.setText(mStateManager.getCurrency() + decimalFormat.format(loan.getmAmountPaid()));
         }
         if (mAmountOwing != null) {
             if (!loan.isPaid()) {
-                mAmountOwing.setText(mStateManager.getCurrency() + loan.getmAmountLeft());
+                mAmountOwing.setText(mStateManager.getCurrency() + decimalFormat.format(loan.getmAmountLeft()));
             } else {
                 mAmountOwing.setText(R.string.cleared);
                 mLoanDueDate.setVisibility(View.GONE);
@@ -280,6 +286,21 @@ public class LoanDetailActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
+                break;
+            case R.id.action_delete:
+                new MaterialDialog.Builder(this).title("Delete?")
+                        .positiveText("Yes")
+                        .negativeText("No")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                Y2KDatabase y2KDatabase = new Y2KDatabase(LoanDetailActivity.this);
+                                if (y2KDatabase.deleteItem(Constants.LOAN_TABLE, Constants.LOAN_ID, mLoan.getmLoanId())) {
+                                    finish();
+                                }
+                            }
+                        }).show();
+
                 break;
         }
         return true;

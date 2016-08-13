@@ -45,8 +45,8 @@
         <activity
             android:name=".android.ui.AddCategory"
             android:label="@string/add_category"
-            android:windowSoftInputMode="stateHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
 
         <activity
             android:name=".android.ui.TipsActivity"
@@ -60,11 +60,27 @@
 
         <activity
             android:name=".android.ui.AddIncome"
-            android:windowSoftInputMode="stateHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
 
-        <activity android:name=".android.ui.IncomeDetail"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".android.ui.IncomeDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".android.ui.AddBudgetActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".android.ui.AddBudgetItemActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name=".android.ui.BudgetDetailActivity"
+            android:label="Budget Detail"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+
     </application>
 
 </manifest>
