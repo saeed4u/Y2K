@@ -222,14 +222,7 @@ public class IncomeFragment extends Fragment {
         protected ArrayList<IncomeExpenditure> doInBackground(Void... params) {
             Y2KDatabase y2KDatabase = new Y2KDatabase(mMainActivity);
             String queryType = mStateManager.getQueryType();
-            Calendar calendar = Calendar.getInstance();
-            int monthlyOrWeekly = -1;
-            if (queryType.equalsIgnoreCase("weekly")) {
-                monthlyOrWeekly = calendar.get(Calendar.WEEK_OF_YEAR);
-            } else if (queryType.equalsIgnoreCase("monthly")) {
-                monthlyOrWeekly = calendar.get(Calendar.MONTH);
-            }
-            return y2KDatabase.getIncomeOrExpenditure(isFromIncome ? Constants.IS_INCOME : Constants.IS_EXPENDITURE, monthlyOrWeekly, queryType.equalsIgnoreCase("weekly"));
+            return y2KDatabase.getIncomeOrExpenditure(isFromIncome ? Constants.IS_INCOME : Constants.IS_EXPENDITURE, queryType.equalsIgnoreCase("weekly") ? mWeekNumberFromCalendar : mMonthCalendar, queryType.equalsIgnoreCase("weekly"));
         }
 
         @Override
@@ -240,6 +233,7 @@ public class IncomeFragment extends Fragment {
             mIncomeExpenditures = incomeExpenditures;
             if (incomeExpenditures.isEmpty()) {
                 mNoIncome.setVisibility(View.VISIBLE);
+                mIncomes.setVisibility(View.GONE);
             } else {
                 for (IncomeExpenditure incomeExpenditure : incomeExpenditures) {
                     mTotalIncome += incomeExpenditure.getmAmount();

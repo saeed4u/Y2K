@@ -231,7 +231,11 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         String loanDate = dayOfMonth + Utilities.getDay(dayOfMonth) + " " + Utilities.getMonthName(monthOfYear) + ", " + year + ".";
         mDate.setText(loanDate);
-        mBudgetDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+        String monthYear = String.valueOf((monthOfYear + 1));
+        if ((monthOfYear + 1) < 10) {
+            monthYear = "0" + monthYear;
+        }
+        mBudgetDate = year + "-" + monthYear + "-" + dayOfMonth;
     }
 
     public void budgetItemsFragment(View view) {

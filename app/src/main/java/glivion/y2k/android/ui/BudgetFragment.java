@@ -58,8 +58,9 @@ public class BudgetFragment extends Fragment {
             mMultiStateToggleButton.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
                 @Override
                 public void onValueChanged(int value) {
+                    value -= 1;
+                    new GetBudgets().execute(value);
                     Log.v("Value", "" + value);
-                    new GetBudgets().execute(--value);
                 }
             });
         }
@@ -101,10 +102,12 @@ public class BudgetFragment extends Fragment {
         @Override
         protected Void doInBackground(Integer... params) {
             mDatabase = new Y2KDatabase(mDashBoard);
+            Log.v("Value on task",String.valueOf(params[0]));
             if (params[0] != -1) {
                 mBudgets = mDatabase.getBudgets(params[0]);
             } else {
                 mBudgets = mDatabase.getBudgets();
+                Log.v("Budgets", "Budgets Size = " + String.valueOf(mBudgets.size()));
             }
             return null;
         }

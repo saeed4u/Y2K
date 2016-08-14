@@ -77,8 +77,8 @@
     <string name="pay_date_">Pay Date</string>
     <string name="budget_date">Budget Date</string>
     <string name="you_have_not_added">You have not added any %s category. You can add a couple in settings</string>
-    <string name="income_budget">Income Budget</string>
-    <string name="expenditure_budget">Expenditure Budget</string>
+    <string name="income_budget">Income</string>
+    <string name="expenditure_budget">Expenditure</string>
     <string name="add_budget">Add Budget</string>
     <string name="budget_items">Budget Items</string>
     <string name="add_budget_item">Add Budget Item</string>

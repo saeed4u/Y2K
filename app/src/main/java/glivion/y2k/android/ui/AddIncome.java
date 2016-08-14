@@ -23,6 +23,7 @@ import org.apache.commons.lang.WordUtils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import glivion.y2k.R;
@@ -85,6 +86,10 @@ public class AddIncome extends AppCompatActivity implements DatePickerDialog.OnD
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         String loanDate = day + Utilities.getDay(day) + " " + Utilities.getMonthName(month) + ", " + year + ".";
+
+        SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        mPayDate = dateFormatForMonth.format(new Date());
+
         mSelectedDate.setText(loanDate);
     }
 
@@ -140,6 +145,7 @@ public class AddIncome extends AppCompatActivity implements DatePickerDialog.OnD
             Snackbar snackbar = Snackbar.make(mSelectedDate, R.string.select_income_date, Snackbar.LENGTH_LONG);
             ColoredSnakBar.get(snackbar, R.color.colorAccentDashBoard).show();
         } else {
+            mY2KDatabase = new Y2KDatabase(AddIncome.this);
             if (mY2KDatabase.addIncomeOrExpenditure(WordUtils.capitalize(incomeName), detail, isFromIncome, Double.parseDouble(amount), mPayDate,
                     mPayDate, mCatId, weekNumber, month)) {
                 setResult(RESULT_OK);
@@ -201,8 +207,17 @@ public class AddIncome extends AppCompatActivity implements DatePickerDialog.OnD
         } else if (year == yearNow && monthOfYear == monthNow && dayOfMonth > dayNow) {
             showError(date);
         } else {
-            date = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+
+            String monthYear = String.valueOf((monthOfYear + 1));
+            if ((monthOfYear + 1) < 10) {
+                monthYear = "0" + monthYear;
+            }
+
+            date = year + "-" + monthYear + "-" + dayOfMonth;
             mPayDate = date;
+
+            Log.v("Pay Date",mPayDate);
+
             String loanDate = dayOfMonth + Utilities.getDay(dayOfMonth) + " " + Utilities.getMonthName(monthOfYear) + ", " + year + ".";
             mSelectedDate.setText(loanDate);
         }

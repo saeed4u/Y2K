@@ -285,6 +285,8 @@ public class Y2KDatabase {
     }
 
     public ArrayList<IncomeExpenditure> getIncomeOrExpenditure(int type, int queryType, boolean isWeek) {
+        Log.v("Type = ",""+type);
+        Log.v("queryType = ",""+queryType);
         ArrayList<IncomeExpenditure> incomeExpenditures = new ArrayList<>();
         String[] selectionArgs = {String.valueOf(type), String.valueOf(queryType)};
         Cursor cursor = mDatabase.query(IN_EX_TABLE, null, IN_EX_IS_INCOME + "=? AND " + (isWeek ? IN_EX_WEEK : IN_EX_MONTH) + " =? ", selectionArgs, null, null, null);
