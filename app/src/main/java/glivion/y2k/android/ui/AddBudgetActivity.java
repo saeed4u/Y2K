@@ -63,6 +63,7 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
+            actionBar.setTitle("New Budget");
         }
         mStateManager = new Y2KStateManager(this);
         mBudgetName = (EditText) findViewById(R.id.budget_name);

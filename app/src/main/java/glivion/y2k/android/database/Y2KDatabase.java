@@ -389,7 +389,6 @@ public class Y2KDatabase {
             }
             cursor.close();
         }
-        mDatabase.close();
         return budgetItems;
     }
 
