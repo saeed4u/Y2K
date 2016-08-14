@@ -125,6 +125,7 @@ public class AddIncome extends AppCompatActivity implements DatePickerDialog.OnD
 
         Calendar calendar = Calendar.getInstance();
         int weekNumber = calendar.get(Calendar.WEEK_OF_YEAR);
+        int month = calendar.get(Calendar.MONTH);
 
         if (incomeName.isEmpty()) {
             Utilities.shakeView(mName);
@@ -140,7 +141,7 @@ public class AddIncome extends AppCompatActivity implements DatePickerDialog.OnD
             ColoredSnakBar.get(snackbar, R.color.colorAccentDashBoard).show();
         } else {
             if (mY2KDatabase.addIncomeOrExpenditure(WordUtils.capitalize(incomeName), detail, isFromIncome, Double.parseDouble(amount), mPayDate,
-                    mPayDate, mCatId, weekNumber)) {
+                    mPayDate, mCatId, weekNumber, month)) {
                 setResult(RESULT_OK);
             } else {
                 setResult(RESULT_CANCELED);

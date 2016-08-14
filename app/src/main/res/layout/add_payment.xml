@@ -15,7 +15,7 @@
             android:layout_height="50dp"
             android:hint="@string/payment_amount"
             android:inputType="numberDecimal"
-            android:textColor="@color/colorAccentLoans"
+            android:textColor="?colorAccent"
             android:textSize="20sp" />
     </android.support.design.widget.TextInputLayout>
 

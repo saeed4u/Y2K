@@ -47,7 +47,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             app:matProg_barColor="?colorAccent"
-            app:matProg_progressIndeterminate="false" />
+            app:matProg_progressIndeterminate="true" />
 
     </RelativeLayout>
 

@@ -28,6 +28,7 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -232,7 +233,12 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
         } else {
             String loanDate = dayOfMonth + Utilities.getDay(dayOfMonth) + " " + Utilities.getMonthName(monthOfYear) + "," + year;
             mDueDateTime.setText(loanDate);
-            mLoanDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+            String monthYear = String.valueOf((monthOfYear + 1));
+            if ((monthOfYear + 1) < 10) {
+                monthYear = "0" + monthYear;
+            }
+            Log.v("Month Year",monthYear);
+            mLoanDate = year + "-" + monthYear + "-" + dayOfMonth;
 
         }
     }

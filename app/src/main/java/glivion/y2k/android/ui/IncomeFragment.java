@@ -27,6 +27,7 @@ import glivion.y2k.android.database.Y2KDatabase;
 import glivion.y2k.android.listener.RecyclerItemClickListener;
 import glivion.y2k.android.model.IncomeExpenditure;
 import glivion.y2k.android.statemanager.Y2KStateManager;
+import glivion.y2k.android.utilities.Utilities;
 
 /**
  * Created by blanka on 8/6/2016.
@@ -47,10 +48,14 @@ public class IncomeFragment extends Fragment {
 
     private static final int ADD_INCOME = 100;
     private int mWeekNumberFromCalendar;
+    private int mMonthCalendar = 0;
 
     private TextView mTotalIncomeTv;
     private Y2KStateManager mStateManager;
     Calendar calendar;
+    private View mPrevious;
+    private View mNext;
+    private int mYear;
 
     private boolean isFromIncome = true;
 
@@ -104,46 +109,76 @@ public class IncomeFragment extends Fragment {
         TextView noIncome = (TextView) view.findViewById(R.id.no_income_ex);
         noIncome.setText(getString(R.string.no_income, isFromIncome ? "Income" : "Expenditure"));
         calendar = new GregorianCalendar();
-        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        calendar.setFirstDayOfWeek(Calendar.SUNDAY);
         calendar.setMinimalDaysInFirstWeek(7);
-
+        mYear = calendar.get(Calendar.YEAR);
         mWeekNumberFromCalendar = calendar.get(Calendar.WEEK_OF_YEAR);
-        View mPreviousWeek = view.findViewById(R.id.previous_week);
+        mMonthCalendar = calendar.get(Calendar.MONTH);
+        mPrevious = view.findViewById(R.id.previous_week);
         mTotalIncomeTv = (TextView) view.findViewById(R.id.total_amount);
-        View mNextWeek = view.findViewById(R.id.next_week);
-        mPreviousWeek.setOnClickListener(new View.OnClickListener() {
+        mNext = view.findViewById(R.id.next_week);
+        mNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              /*  Calendar calendar = Calendar.getInstance();
-                mWeekNumberFromCalendar -= 1;
-                Log.v("Week Number Next", "" + mWeekNumberFromCalendar);
-                mWeekNumber.setText("Week " + mWeekNumberFromCalendar + ", " + calendar.get(Calendar.YEAR));
-                mWeekDateRange.setText(getDateRange(mWeekNumberFromCalendar));*/
+                mYear = calendar.get(Calendar.YEAR);
+                calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, 31);
+                int totalWeekInYear = calendar.get(Calendar.WEEK_OF_YEAR);
+                String queryType = mStateManager.getQueryType();
+                if (queryType.equalsIgnoreCase("monthly")) {
+                    mMonthCalendar++;
+                    if (mMonthCalendar == 12) {
+                        mMonthCalendar = 0;
+                        mYear++;
+                        calendar.set(Calendar.YEAR, mYear);
+                        Log.v("Year Monthly", String.valueOf(mYear));
+                    }
+                } else if (queryType.equalsIgnoreCase("weekly")) {
+                    mWeekNumberFromCalendar++;
+                    if (mWeekNumberFromCalendar == totalWeekInYear + 1) {
+                        mWeekNumberFromCalendar = 1;
+                        mYear++;
+                        calendar.set(Calendar.YEAR, mYear);
+                        Log.v("Year weekly", String.valueOf(mYear));
+                    }
+                }
+                getDateType(mYear);
                 new GetIncome().execute();
             }
         });
-        mNextWeek.setOnClickListener(new View.OnClickListener() {
+        mPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              /*  Calendar calendar = Calendar.getInstance();
-                mWeekNumberFromCalendar += 1;
-                Log.v("Week Number", "" + mWeekNumberFromCalendar);
-                mWeekNumber.setText("Week " + mWeekNumberFromCalendar + ", " + calendar.get(Calendar.YEAR));
-                mWeekDateRange.setText(getDateRange(mWeekNumberFromCalendar));
-                new GetIncome().execute();*/
+                mYear = calendar.get(Calendar.YEAR);
+                calendar.set(calendar.get(Calendar.YEAR), Calendar.DECEMBER, 31);
+                String queryType = mStateManager.getQueryType();
+                if (queryType.equalsIgnoreCase("monthly")) {
+                    mMonthCalendar--;
+                    if (mMonthCalendar == -1) {
+                        mMonthCalendar = 11;
+                        mYear--;
+                        calendar.set(Calendar.YEAR, mYear);
+                    }
+                } else if (queryType.equalsIgnoreCase("weekly")) {
+                    mWeekNumberFromCalendar--;
+                    if (mWeekNumberFromCalendar == 0) {
+                        mWeekNumberFromCalendar = calendar.get(Calendar.WEEK_OF_YEAR);
+                        mYear--;
+                        calendar.set(Calendar.YEAR, mYear);
+                    }
+                }
+                getDateType(IncomeFragment.this.mYear);
+                new GetIncome().execute();
             }
         });
         mWeekDateRange = (TextView) view.findViewById(R.id.week_date);
         mWeekNumber = (TextView) view.findViewById(R.id.week_number);
 
-        Calendar calendar = Calendar.getInstance();
-        mWeekNumber.setText("Week " + mWeekNumberFromCalendar + ", " + calendar.get(Calendar.YEAR));
-        mWeekDateRange.setText(getDateRange(mWeekNumberFromCalendar));
         return view;
     }
 
-    private String getDateRange(int weekNo) {
+    private String getDateRange(int weekNo, int year) {
         Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
         calendar.setFirstDayOfWeek(Calendar.SUNDAY);
         calendar.setMinimalDaysInFirstWeek(0);
         calendar.set(Calendar.WEEK_OF_YEAR, weekNo);
@@ -166,6 +201,19 @@ public class IncomeFragment extends Fragment {
         super.onResume();
         new GetIncome().execute();
         mAddIncome.animate().scaleX(1.0F).scaleY(1.0F).setDuration(500).start();
+        getDateType(mYear);
+    }
+
+    private void getDateType(int year) {
+        String queryType = mStateManager.getQueryType();
+        if (queryType.equalsIgnoreCase("weekly")) {
+            mWeekNumber.setText("Week " + mWeekNumberFromCalendar + ", " + calendar.get(Calendar.YEAR));
+            mWeekDateRange.setText(getDateRange(mWeekNumberFromCalendar, year));
+            mWeekDateRange.setVisibility(View.VISIBLE);
+        } else if (queryType.equalsIgnoreCase("monthly")) {
+            mWeekNumber.setText(Utilities.getMonthName(mMonthCalendar) + ", " + calendar.get(Calendar.YEAR));
+            mWeekDateRange.setVisibility(View.GONE);
+        }
     }
 
     private class GetIncome extends AsyncTask<Void, Void, ArrayList<IncomeExpenditure>> {
@@ -173,8 +221,15 @@ public class IncomeFragment extends Fragment {
         @Override
         protected ArrayList<IncomeExpenditure> doInBackground(Void... params) {
             Y2KDatabase y2KDatabase = new Y2KDatabase(mMainActivity);
-            int week = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR);
-            return y2KDatabase.getIncomeOrExpenditure(isFromIncome ? Constants.IS_INCOME : Constants.IS_EXPENDITURE, week);
+            String queryType = mStateManager.getQueryType();
+            Calendar calendar = Calendar.getInstance();
+            int monthlyOrWeekly = -1;
+            if (queryType.equalsIgnoreCase("weekly")) {
+                monthlyOrWeekly = calendar.get(Calendar.WEEK_OF_YEAR);
+            } else if (queryType.equalsIgnoreCase("monthly")) {
+                monthlyOrWeekly = calendar.get(Calendar.MONTH);
+            }
+            return y2KDatabase.getIncomeOrExpenditure(isFromIncome ? Constants.IS_INCOME : Constants.IS_EXPENDITURE, monthlyOrWeekly, queryType.equalsIgnoreCase("weekly"));
         }
 
         @Override

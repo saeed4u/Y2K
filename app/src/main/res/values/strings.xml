@@ -40,7 +40,7 @@
     <string name="loan_day_cant_">"Loan due day can not be before "</string>
     <string name="loan_due_month_cant">"Loan due month can not be before "</string>
     <string name="loan_due_year">"Loan due date can not be before "</string>
-    <string name="amount_entered_exceeds">Amount entered exceeds loan amount left.</string>
+    <string name="amount_entered_exceeds" formatted="false">Amount entered exceeds loan amount left (%s%.2f).</string>
     <string name="cleared">Cleared</string>
     <string name="due">Due</string>
     <string name="amount_borrowed">Amount Borrowed</string>
@@ -49,8 +49,8 @@
     <string name="amount_paid">Amount Paid</string>
     <string name="amount_owing">Amount Owing</string>
     <string name="finance_structure">Finance Structure</string>
-    <string name="expenditure_categories">Expenditure Categories …</string>
-    <string name="income_categories">Income Categories …</string>
+    <string name="expenditure_categories">Expenditure Categories</string>
+    <string name="income_categories">Income Categories</string>
     <string name="category_name">Category Title</string>
     <string name="add_category">New Category</string>
     <string name="pound_sterling">Pound Sterling</string>

@@ -102,13 +102,12 @@ public class TipsActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-//            mLoader.setVisibility(View.VISIBLE);
+            mLoader.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
-            mLoader.setProgress(values[0]);
         }
 
         @Override

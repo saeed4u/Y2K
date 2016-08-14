@@ -2,6 +2,7 @@ package glivion.y2k.android.ui;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.NotificationManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -69,6 +70,11 @@ public class LoanDetailActivity extends ItemDetailActivity {
         ActionBar actionBar = getSupportActionBar();
 
         mLoan = getIntent().getParcelableExtra("loan");
+
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancel(mLoan.getmLoanId());
+
         mToolbar.setTitle(mLoan.getmLoanTitle());
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -107,6 +113,7 @@ public class LoanDetailActivity extends ItemDetailActivity {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     String dateCreated = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+                                    mDatabase = new Y2KDatabase(LoanDetailActivity.this);
                                     if (mDatabase.addPayment(mLoan.getmLoanId(), amount[0], dateCreated)) {
                                         LoanPayment loanPayment = new LoanPayment(-1, dateCreated, amount[0], dateCreated);
                                         mLoan.addPayment(loanPayment);
@@ -136,9 +143,9 @@ public class LoanDetailActivity extends ItemDetailActivity {
                                 double amountLeft = -1;
                                 mTextInputLayout.setErrorEnabled(true);
                                 if (!s.toString().isEmpty()) {
-                                    amountLeft = mLoan.getAmountOwing() - Double.parseDouble(s.toString());
+                                    amountLeft = (mLoan.getmLoanAmount() + mLoan.getmLoanInterest()) - Double.parseDouble(s.toString());
                                     if (amountLeft < 0) {
-                                        mTextInputLayout.setError(getString(R.string.amount_entered_exceeds));
+                                        mTextInputLayout.setError(getString(R.string.amount_entered_exceeds, mStateManager.getCurrency(), mLoan.getAmountOwing()));
                                     } else {
                                         amount[0] = Double.parseDouble(s.toString());
                                         mTextInputLayout.setErrorEnabled(false);

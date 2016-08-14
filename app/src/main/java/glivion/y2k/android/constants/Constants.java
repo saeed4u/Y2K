@@ -20,9 +20,10 @@ public final class Constants {
 
     public static final int NUMBER_OF_DEFAULT = 0;
 
+    public static final String LOAN = "loan";
 
     public static final String DATABASE_NAME = "y2k";
-    public static final int DATABASE_VERSION = 7;
+    public static final int DATABASE_VERSION = 8;
     public static final String LOAN_TABLE = "loans";
     public static final String LOAN_PAYMENT = "loan_payment";
     public static final String IN_EX_TABLE = "in_ex_table";
@@ -55,6 +56,7 @@ public final class Constants {
     public static final String IN_EX_CREATED_AT = "in_ex_created_at";
     public static final String IN_EX_PAY_DATE = "in_ex_pay_date";
     public static final String IN_EX_WEEK = "in_ex_week";
+    public static final String IN_EX_MONTH = "in_ex_month";
 
     //Budget
     public static final String BUDGET = "budget";
@@ -96,7 +98,7 @@ public final class Constants {
 
     //INCOME & EXPENDITURE
     public static final String CREATE_IN_EX_TABLE = "CREATE TABLE IF NOT EXISTS " + IN_EX_TABLE + "(" + IN_EX_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + IN_EX_TITLE + " TEXT NOT NULL, " + IN_EX_WEEK + " INTEGER NOT NULL, " + IN_EX_DETAILS + " TEXT, " + IN_EX_AMOUNT + " REAL NOT NULL," + CAT_ID + " INTEGER NOT NULL, " + IN_EX_IS_INCOME + " INTEGER NOT NULL," + IN_EX_CREATED_AT + " TEXT NOT NULL,"
+            + IN_EX_TITLE + " TEXT NOT NULL, " + IN_EX_WEEK + " INTEGER NOT NULL, " + IN_EX_MONTH + " INTEGER NOT NULL," + IN_EX_DETAILS + " TEXT, " + IN_EX_AMOUNT + " REAL NOT NULL," + CAT_ID + " INTEGER NOT NULL, " + IN_EX_IS_INCOME + " INTEGER NOT NULL," + IN_EX_CREATED_AT + " TEXT NOT NULL,"
             + IN_EX_PAY_DATE + " TEXT NOT NULL, FOREIGN KEY (" + CAT_ID + ") REFERENCES " + CAT + "(" + CAT_ID + "))";
 
     //BUDGET

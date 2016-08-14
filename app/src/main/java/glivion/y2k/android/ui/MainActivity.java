@@ -2,6 +2,8 @@ package glivion.y2k.android.ui;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -13,6 +15,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -21,8 +24,11 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 
+import java.util.Calendar;
+
 import glivion.y2k.R;
 import glivion.y2k.android.model.IncomeExpenditure;
+import glivion.y2k.android.service.NotificationService;
 
 /**
  * Created by saeedissah on 5/17/16.
@@ -33,14 +39,26 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
 
     private static final int REQUEST_WRITE_PERMISSION = 100;
-
     private int mSelectedPosition = 0;
+
+    private void startNotificationService() {
+        Log.v("Called", "Called Start notification");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 7);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        Intent intent = new Intent(this, NotificationService.class);
+        startService(intent);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard);
-
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
@@ -106,7 +124,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-        requestForPermission();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestForPermission();
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -150,6 +170,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.v("On Resume", "On resume");
+        startNotificationService();
     }
 
 

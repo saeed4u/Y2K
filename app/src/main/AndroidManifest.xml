@@ -4,6 +4,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -80,6 +82,14 @@
             android:label="Budget Detail"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
+
+        <service android:name=".android.service.NotificationService" />
+        <receiver android:name=".android.service.BootCompleted">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 

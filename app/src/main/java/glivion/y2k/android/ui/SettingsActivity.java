@@ -85,7 +85,6 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             mNavigationView.setNavigationItemSelectedListener(this);
         }
 
-
         setSupportActionBar(toolbar);
         mAddCategory = (StickyListHeadersListView) findViewById(R.id.add_category);
         mAddCategory.setDrawingListUnderStickyHeader(false);

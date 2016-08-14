@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import org.apache.commons.lang.WordUtils;
 
@@ -45,6 +46,7 @@ import static glivion.y2k.android.constants.Constants.IN_EX_CREATED_AT;
 import static glivion.y2k.android.constants.Constants.IN_EX_DETAILS;
 import static glivion.y2k.android.constants.Constants.IN_EX_ID;
 import static glivion.y2k.android.constants.Constants.IN_EX_IS_INCOME;
+import static glivion.y2k.android.constants.Constants.IN_EX_MONTH;
 import static glivion.y2k.android.constants.Constants.IN_EX_PAY_DATE;
 import static glivion.y2k.android.constants.Constants.IN_EX_TABLE;
 import static glivion.y2k.android.constants.Constants.IN_EX_TITLE;
@@ -106,6 +108,33 @@ public class Y2KDatabase {
         return successful;
     }
 
+    public ArrayList<Loan> getLoans(String dueDate) {
+        Log.v("Due Date", dueDate);
+        String selectionArgs[] = {dueDate};
+        Cursor cursor = mDatabase.query(LOAN_TABLE, null, LOAN_DUE_DATE + " =? ", selectionArgs, null, null, null);
+        ArrayList<Loan> loans = new ArrayList<>();
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+
+                int id = cursor.getInt(0);
+                String title = cursor.getString(1);
+                String details = cursor.getString(2);
+                double amount = cursor.getDouble(3);
+                float interest = cursor.getFloat(4);
+                int borrowed = cursor.getInt(5);
+                int color = cursor.getInt(7);
+                String dateCreated = cursor.getString(8);
+                Loan loan = new Loan(id, title, details, amount, interest, dateCreated, dueDate, borrowed);
+                loan.setmLoanPayments(getLoanPayment(loan));
+                loan.setmLoanColor(color);
+                loans.add(loan);
+            }
+            cursor.close();
+        }
+        mDatabase.close();
+        return loans;
+    }
+
     public ArrayList<Loan> getLoans(int type) {
 
         String[] selectionArgs = {String.valueOf(type)};
@@ -122,6 +151,7 @@ public class Y2KDatabase {
                 float interest = cursor.getFloat(4);
                 int borrowed = cursor.getInt(5);
                 String dueDate = cursor.getString(6);
+                Log.v("Loans",dueDate);
                 int color = cursor.getInt(7);
                 String dateCreated = cursor.getString(8);
                 Loan loan = new Loan(id, title, details, amount, interest, dateCreated, dueDate, borrowed);
@@ -152,7 +182,6 @@ public class Y2KDatabase {
             }
             cursor.close();
         }
-        mDatabase.close();
         return loanPayments;
     }
 
@@ -178,12 +207,14 @@ public class Y2KDatabase {
                 String name = cursor.getString(cursor.getColumnIndex(CAT_NAME));
                 int color = cursor.getInt(cursor.getColumnIndex(CAT_COLOR));
                 CategoryType categoryType;
-                if (catType == 0) {
-                    categoryType = new CategoryType(catType, "Income Categories");
-                } else {
-                    categoryType = new CategoryType(catType, "Expenditure Categories");
+                if (catType != -1) {
+                    if (catType == 0) {
+                        categoryType = new CategoryType(catType, "Income Categories");
+                    } else {
+                        categoryType = new CategoryType(catType, "Expenditure Categories");
+                    }
+                    categories.add(new Category(id, name, catType, color).setmCategoryType(categoryType));
                 }
-                categories.add(new Category(id, name, catType, color).setmCategoryType(categoryType));
             }
             cursor.close();
         }
@@ -237,7 +268,7 @@ public class Y2KDatabase {
         return null;
     }
 
-    public boolean addIncomeOrExpenditure(String title, String detail, boolean isIncome, double amount, String createdAt, String payDate, int catId, int weekNo) {
+    public boolean addIncomeOrExpenditure(String title, String detail, boolean isIncome, double amount, String createdAt, String payDate, int catId, int weekNo, int monthNo) {
         mContentValues = new ContentValues();
         mContentValues.put(IN_EX_TITLE, title);
         mContentValues.put(IN_EX_DETAILS, detail);
@@ -247,15 +278,16 @@ public class Y2KDatabase {
         mContentValues.put(IN_EX_PAY_DATE, payDate);
         mContentValues.put(CAT_ID, catId);
         mContentValues.put(IN_EX_WEEK, weekNo);
+        mContentValues.put(IN_EX_MONTH, monthNo);
         boolean successful = mDatabase.insert(IN_EX_TABLE, null, mContentValues) > 0;
         mDatabase.close();
         return successful;
     }
 
-    public ArrayList<IncomeExpenditure> getIncomeOrExpenditure(int type, int week) {
+    public ArrayList<IncomeExpenditure> getIncomeOrExpenditure(int type, int queryType, boolean isWeek) {
         ArrayList<IncomeExpenditure> incomeExpenditures = new ArrayList<>();
-        String[] selectionArgs = {String.valueOf(type)};
-        Cursor cursor = mDatabase.query(IN_EX_TABLE, null, IN_EX_IS_INCOME + "=?", selectionArgs, null, null, null);
+        String[] selectionArgs = {String.valueOf(type), String.valueOf(queryType)};
+        Cursor cursor = mDatabase.query(IN_EX_TABLE, null, IN_EX_IS_INCOME + "=? AND " + (isWeek ? IN_EX_WEEK : IN_EX_MONTH) + " =? ", selectionArgs, null, null, null);
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 int id = cursor.getInt(cursor.getColumnIndex(IN_EX_ID));
@@ -267,8 +299,9 @@ public class Y2KDatabase {
                 int isIncome = cursor.getInt(cursor.getColumnIndex(IN_EX_IS_INCOME));
                 int catId = cursor.getInt(cursor.getColumnIndex(CAT_ID));
                 int weekNumber = cursor.getInt(cursor.getColumnIndex(IN_EX_WEEK));
+                int monthNumber = cursor.getInt(cursor.getColumnIndex(IN_EX_MONTH));
                 Category category = findCategory(catId);
-                IncomeExpenditure incomeExpenditure = new IncomeExpenditure(isIncome == IS_INCOME, amount, createdAt, details, id, payDate, title, weekNumber);
+                IncomeExpenditure incomeExpenditure = new IncomeExpenditure(isIncome == IS_INCOME, amount, createdAt, details, id, payDate, title, weekNumber, monthNumber);
                 incomeExpenditure.setmCategory(category);
                 incomeExpenditures.add(incomeExpenditure);
             }

@@ -16,11 +16,13 @@ public class IncomeExpenditure implements Parcelable {
     private String mCreatedAt;
     private String mPayDate;
     private int mWeekNumber;
+    private int mMonthNumber;
 
     private Category mCategory;
 
 
-    public IncomeExpenditure(boolean isIncome, double mAmount, String mCreatedAt, String mDetails, int mId, String mPayDate, String mTitle, int mWeekNumber) {
+    public IncomeExpenditure(boolean isIncome, double mAmount, String mCreatedAt, String mDetails, int mId,
+                             String mPayDate, String mTitle, int mWeekNumber, int mMonthNumber) {
         this.isIncome = isIncome;
         this.mAmount = mAmount;
         this.mCreatedAt = mCreatedAt;
@@ -29,7 +31,9 @@ public class IncomeExpenditure implements Parcelable {
         this.mPayDate = mPayDate;
         this.mTitle = mTitle;
         this.mWeekNumber = mWeekNumber;
+        this.mMonthNumber = mMonthNumber;
     }
+
 
     protected IncomeExpenditure(Parcel in) {
         mId = in.readInt();
@@ -40,6 +44,7 @@ public class IncomeExpenditure implements Parcelable {
         mCreatedAt = in.readString();
         mPayDate = in.readString();
         mWeekNumber = in.readInt();
+        mMonthNumber = in.readInt();
         mCategory = in.readParcelable(Category.class.getClassLoader());
     }
 
@@ -54,6 +59,10 @@ public class IncomeExpenditure implements Parcelable {
             return new IncomeExpenditure[size];
         }
     };
+
+    public int getmMonthNumber() {
+        return mMonthNumber;
+    }
 
     public int getmWeekNumber() {
         return mWeekNumber;
@@ -110,6 +119,7 @@ public class IncomeExpenditure implements Parcelable {
         dest.writeString(mCreatedAt);
         dest.writeString(mPayDate);
         dest.writeInt(mWeekNumber);
+        dest.writeInt(mMonthNumber);
         dest.writeParcelable(mCategory, flags);
     }
 }
