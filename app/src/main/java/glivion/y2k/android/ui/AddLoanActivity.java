@@ -14,21 +14,18 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rtugeek.android.colorseekbar.ColorSeekBar;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -206,41 +203,18 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        Calendar calendar = Calendar.getInstance();
-        int nowYear = calendar.get(Calendar.YEAR);
-        int nowMonth = calendar.get(Calendar.MONTH);
-        int nowDay = calendar.get(Calendar.DAY_OF_MONTH);
-
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy:MM:dd", Locale.getDefault());
-        String date = simpleDateFormat.format(System.currentTimeMillis());
-
-        if (year < nowYear) {
-            Toast toast = Toast.makeText(AddLoanActivity.this, getString(R.string.loan_due_year) + date, Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-            reShowDatePicker();
-        } else if ((year < nowYear || year == nowYear) && monthOfYear < nowMonth) {
-            Toast toast = Toast.makeText(AddLoanActivity.this, getString(R.string.loan_due_year) + date, Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-            reShowDatePicker();
-        } else if (((year < nowYear || year == nowYear) && (monthOfYear < nowMonth || monthOfYear == nowMonth)) && dayOfMonth < nowDay) {
-            Toast toast = Toast.makeText(AddLoanActivity.this, getString(R.string.loan_day_cant_) + date, Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-            reShowDatePicker();
-        } else {
-            String loanDate = dayOfMonth + Utilities.getDay(dayOfMonth) + " " + Utilities.getMonthName(monthOfYear) + "," + year;
-            mDueDateTime.setText(loanDate);
-            String monthYear = String.valueOf((monthOfYear + 1));
-            if ((monthOfYear + 1) < 10) {
-                monthYear = "0" + monthYear;
-            }
-            Log.v("Month Year",monthYear);
-            mLoanDate = year + "-" + monthYear + "-" + dayOfMonth;
-
+        String loanDate = dayOfMonth + Utilities.getDay(dayOfMonth) + " " + Utilities.getMonthName(monthOfYear) + ", " + year + ".";
+        mDueDateTime.setText(loanDate);
+        String monthYear = String.valueOf((monthOfYear + 1));
+        if ((monthOfYear + 1) < 10) {
+            monthYear = "0" + monthYear;
         }
+        String dayYear = String.valueOf(dayOfMonth);
+
+        if (dayOfMonth < 10) {
+            dayYear = "0" + dayYear;
+        }
+        mLoanDate = year + "-" + monthYear + "-" + dayYear;
     }
 
     @Override

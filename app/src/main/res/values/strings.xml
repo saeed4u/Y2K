@@ -88,4 +88,10 @@
     <string name="add_at_least_budget_item">Please add at least one budget item</string>
     <string name="budget_type">Budget Type</string>
     <string name="delete">Delete</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="expiring_budgets">Expiring Budgets</string>
+    <string name="overview">Overview</string>
+    <string name="total_income_">Total Income</string>
+    <string name="total_expenditure">Total Expenses</string>
 </resources>

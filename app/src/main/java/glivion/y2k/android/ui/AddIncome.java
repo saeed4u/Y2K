@@ -48,18 +48,40 @@ public class AddIncome extends AppCompatActivity implements DatePickerDialog.OnD
     private ArrayList<Category> mCategories;
     private Y2KDatabase mY2KDatabase;
     private boolean isFromIncome;
+    private TextView mDefaultCategory;
+
+    private int mMonthNumber;
+    private int mWeekNumber;
+    private int mYear;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.add_income);
+        mName = (EditText) findViewById(R.id.income_name);
+        mDetail = (EditText) findViewById(R.id.income_detail);
+        mAmount = (EditText) findViewById(R.id.income_amount);
+        mSelectedDate = (TextView) findViewById(R.id.due_date);
+        mDefaultCategory = (TextView) findViewById(R.id.category);
         mCategories = new ArrayList<>();
         mY2KDatabase = new Y2KDatabase(this);
         isFromIncome = getIntent().getBooleanExtra("is_income", true);
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                mCategories = mY2KDatabase.getCategory(isFromIncome ? Constants.INCOME_CAT : Constants.EXPENDITURE_CAT);
+                mCategories = mY2KDatabase.getCategories(isFromIncome ? Constants.INCOME_CAT : Constants.EXPENDITURE_CAT);
+                mY2KDatabase = new Y2KDatabase(AddIncome.this);
+                final Category category = mY2KDatabase.findCategory(1);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mDefaultCategory != null) {
+                            mDefaultCategory.setBackgroundColor(category.getmCatColor());
+                            mDefaultCategory.setText(WordUtils.capitalize(category.getmCatName()));
+                        }
+                    }
+                });
             }
         });
         thread.start();
@@ -77,14 +99,18 @@ public class AddIncome extends AppCompatActivity implements DatePickerDialog.OnD
             addButton.setText(isFromIncome ? "Add Income" : "Add Expenditure");
         }
 
-        mName = (EditText) findViewById(R.id.income_name);
-        mDetail = (EditText) findViewById(R.id.income_detail);
-        mAmount = (EditText) findViewById(R.id.income_amount);
-        mSelectedDate = (TextView) findViewById(R.id.due_date);
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        mWeekNumber = calendar.get(Calendar.WEEK_OF_YEAR);
+
+
+        mMonthNumber = month + 1;
+
+        mYear = calendar.get(Calendar.YEAR);
+
         String loanDate = day + Utilities.getDay(day) + " " + Utilities.getMonthName(month) + ", " + year + ".";
 
         SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -113,10 +139,10 @@ public class AddIncome extends AppCompatActivity implements DatePickerDialog.OnD
                     bottomSheet.dismiss();
                     Category category = mCategories.get(position);
                     mCatId = category.getmCatId();
-                    TextView textView = (TextView) findViewById(R.id.category);
-                    if (textView != null) {
-                        textView.setBackgroundColor(category.getmCatColor());
-                        textView.setText(category.getmCatName());
+                    mDefaultCategory = (TextView) findViewById(R.id.category);
+                    if (mDefaultCategory != null) {
+                        mDefaultCategory.setBackgroundColor(category.getmCatColor());
+                        mDefaultCategory.setText(WordUtils.capitalize(category.getmCatName()));
                     }
                 }
             }));
@@ -127,11 +153,6 @@ public class AddIncome extends AppCompatActivity implements DatePickerDialog.OnD
         String incomeName = mName.getText().toString().trim();
         String detail = mDetail.getText().toString().trim();
         String amount = mAmount.getText().toString().trim();
-
-        Calendar calendar = Calendar.getInstance();
-        int weekNumber = calendar.get(Calendar.WEEK_OF_YEAR);
-        int month = calendar.get(Calendar.MONTH);
-
         if (incomeName.isEmpty()) {
             Utilities.shakeView(mName);
             Snackbar snackbar = Snackbar.make(mName, R.string.enter_income_name, Snackbar.LENGTH_LONG);
@@ -146,10 +167,15 @@ public class AddIncome extends AppCompatActivity implements DatePickerDialog.OnD
             ColoredSnakBar.get(snackbar, R.color.colorAccentDashBoard).show();
         } else {
             mY2KDatabase = new Y2KDatabase(AddIncome.this);
+            Log.v("Pay Date ", mPayDate);
+            Log.v("Week Number ", "" + mWeekNumber);
+            Log.v("Month Number ", "mMonthNumber" + mMonthNumber);
             if (mY2KDatabase.addIncomeOrExpenditure(WordUtils.capitalize(incomeName), detail, isFromIncome, Double.parseDouble(amount), mPayDate,
-                    mPayDate, mCatId, weekNumber, month)) {
+                    mPayDate, mCatId, mWeekNumber, mMonthNumber, mYear)) {
+                Log.v("YEah", "Saved");
                 setResult(RESULT_OK);
             } else {
+                Log.v("YEah", "Nope");
                 setResult(RESULT_CANCELED);
             }
             finish();
@@ -190,41 +216,36 @@ public class AddIncome extends AppCompatActivity implements DatePickerDialog.OnD
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+
         Calendar calendar = Calendar.getInstance();
-        int yearNow = calendar.get(Calendar.YEAR);
-        int monthNow = calendar.get(Calendar.MONTH);
-        int dayNow = calendar.get(Calendar.DAY_OF_MONTH);
+        calendar.set(year, monthOfYear, dayOfMonth);
 
-        Log.v("Day now", "" + dayNow);
-        Log.v("Day month", "" + dayOfMonth);
+        mWeekNumber = calendar.get(Calendar.WEEK_OF_YEAR);
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy:MM:dd", Locale.getDefault());
-        String date = simpleDateFormat.format(System.currentTimeMillis());
-        if (year > yearNow) {
-            showError(date);
-        } else if (year == yearNow && monthOfYear > monthNow) {
-            showError(date);
-        } else if (year == yearNow && monthOfYear == monthNow && dayOfMonth > dayNow) {
-            showError(date);
-        } else {
 
-            String monthYear = String.valueOf((monthOfYear + 1));
-            if ((monthOfYear + 1) < 10) {
-                monthYear = "0" + monthYear;
-            }
+        mMonthNumber = monthOfYear + 1;
+        mYear = year;
 
-            date = year + "-" + monthYear + "-" + dayOfMonth;
-            mPayDate = date;
 
-            Log.v("Pay Date",mPayDate);
+        Log.v("Week number", "Week Number" + mWeekNumber);
+        Log.v("Month number", "mMonthNumber " + mMonthNumber);
 
-            String loanDate = dayOfMonth + Utilities.getDay(dayOfMonth) + " " + Utilities.getMonthName(monthOfYear) + ", " + year + ".";
-            mSelectedDate.setText(loanDate);
+        String monthYear = String.valueOf((monthOfYear + 1));
+        String dayYear = String.valueOf(dayOfMonth);
+
+        if ((monthOfYear + 1) < 10) {
+            monthYear = "0" + monthYear;
         }
+
+        if (dayOfMonth < 10) {
+            dayYear = "0" + dayYear;
+        }
+        mPayDate = year + "-" + monthYear + "-" + dayYear;
+
+        Log.v("Pay Date", mPayDate);
+
+        String loanDate = dayOfMonth + Utilities.getDay(dayOfMonth) + " " + Utilities.getMonthName(monthOfYear) + ", " + year + ".";
+        mSelectedDate.setText(loanDate);
     }
 
-    private void showError(String date) {
-        Toast.makeText(AddIncome.this, "Please date can not be after " + date, Toast.LENGTH_LONG).show();
-        showDatePicker();
-    }
 }

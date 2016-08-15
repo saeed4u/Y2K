@@ -50,11 +50,10 @@ public class IncomeFragment extends Fragment {
     private int mWeekNumberFromCalendar;
     private int mMonthCalendar = 0;
 
+
     private TextView mTotalIncomeTv;
     private Y2KStateManager mStateManager;
     Calendar calendar;
-    private View mPrevious;
-    private View mNext;
     private int mYear;
 
     private boolean isFromIncome = true;
@@ -113,10 +112,10 @@ public class IncomeFragment extends Fragment {
         calendar.setMinimalDaysInFirstWeek(7);
         mYear = calendar.get(Calendar.YEAR);
         mWeekNumberFromCalendar = calendar.get(Calendar.WEEK_OF_YEAR);
-        mMonthCalendar = calendar.get(Calendar.MONTH);
-        mPrevious = view.findViewById(R.id.previous_week);
+        mMonthCalendar = calendar.get(Calendar.MONTH) + 1;
+        View mPrevious = view.findViewById(R.id.previous_week);
         mTotalIncomeTv = (TextView) view.findViewById(R.id.total_amount);
-        mNext = view.findViewById(R.id.next_week);
+        View mNext = view.findViewById(R.id.next_week);
         mNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,8 +125,8 @@ public class IncomeFragment extends Fragment {
                 String queryType = mStateManager.getQueryType();
                 if (queryType.equalsIgnoreCase("monthly")) {
                     mMonthCalendar++;
-                    if (mMonthCalendar == 12) {
-                        mMonthCalendar = 0;
+                    if (mMonthCalendar == 13) {
+                        mMonthCalendar = 1;
                         mYear++;
                         calendar.set(Calendar.YEAR, mYear);
                         Log.v("Year Monthly", String.valueOf(mYear));
@@ -153,8 +152,8 @@ public class IncomeFragment extends Fragment {
                 String queryType = mStateManager.getQueryType();
                 if (queryType.equalsIgnoreCase("monthly")) {
                     mMonthCalendar--;
-                    if (mMonthCalendar == -1) {
-                        mMonthCalendar = 11;
+                    if (mMonthCalendar == 0) {
+                        mMonthCalendar = 12;
                         mYear--;
                         calendar.set(Calendar.YEAR, mYear);
                     }
@@ -211,7 +210,7 @@ public class IncomeFragment extends Fragment {
             mWeekDateRange.setText(getDateRange(mWeekNumberFromCalendar, year));
             mWeekDateRange.setVisibility(View.VISIBLE);
         } else if (queryType.equalsIgnoreCase("monthly")) {
-            mWeekNumber.setText(Utilities.getMonthName(mMonthCalendar) + ", " + calendar.get(Calendar.YEAR));
+            mWeekNumber.setText(Utilities.getMonthName(mMonthCalendar - 1) + ", " + calendar.get(Calendar.YEAR));
             mWeekDateRange.setVisibility(View.GONE);
         }
     }
@@ -221,8 +220,13 @@ public class IncomeFragment extends Fragment {
         @Override
         protected ArrayList<IncomeExpenditure> doInBackground(Void... params) {
             Y2KDatabase y2KDatabase = new Y2KDatabase(mMainActivity);
+            Log.v("Month", "" + mMonthCalendar);
             String queryType = mStateManager.getQueryType();
-            return y2KDatabase.getIncomeOrExpenditure(isFromIncome ? Constants.IS_INCOME : Constants.IS_EXPENDITURE, queryType.equalsIgnoreCase("weekly") ? mWeekNumberFromCalendar : mMonthCalendar, queryType.equalsIgnoreCase("weekly"));
+            if (queryType.equalsIgnoreCase("weekly")) {
+                return y2KDatabase.getWeekly(isFromIncome ? Constants.IS_INCOME : Constants.IS_EXPENDITURE, mWeekNumberFromCalendar, mYear);
+            } else {
+                return y2KDatabase.getMonthly(isFromIncome ? Constants.IS_INCOME : Constants.IS_EXPENDITURE, mMonthCalendar, mYear);
+            }
         }
 
         @Override

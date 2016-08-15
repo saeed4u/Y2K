@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private void startNotificationService() {
         Log.v("Called", "Called Start notification");
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 7);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
@@ -59,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.dashboard);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+
+        startNotificationService();
 
         mBottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
 
@@ -89,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                         switch (position) {
                             case 0:
                                 mToolbar.setTitle(R.string.dashboard);
-                                fragmentTransaction.replace(R.id.fragment, new DashBoardFragment(), IncomeExpenditure.class.getSimpleName()).commit();
+                                fragmentTransaction.replace(R.id.fragment, new DashBoardFragment(), DashBoardFragment.class.getSimpleName()).commit();
                                 break;
                             case 1:
                                 mToolbar.setTitle(R.string.income_);
@@ -168,8 +171,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.v("On Resume", "On resume");
-        startNotificationService();
     }
 
 
@@ -194,8 +195,21 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showTips() {
-        Intent intent = new Intent(this, TipsActivity.class);
-        startActivity(intent);
+        if (checkForPermission()) {
+            Intent intent = new Intent(this, TipsActivity.class);
+            startActivity(intent);
+        } else {
+            new MaterialDialog.Builder(this).title(R.string.app_name).content("File permission required to access this feature. Will you like to grant Y2K file permission?")
+                    .positiveText(R.string.yes)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            requestForPermission();
+                        }
+                    })
+                    .negativeText(R.string.no)
+                    .show();
+        }
     }
 
     private void showSettingsActivity() {

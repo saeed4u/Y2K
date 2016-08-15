@@ -35,7 +35,6 @@ public class NotificationService extends Service {
         new GetIncome().execute();
         Log.v("On start command", "On start command");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        Toast.makeText(this, "Started at " + simpleDateFormat.format(new Date()), Toast.LENGTH_LONG).show();
 
         return START_STICKY;
     }

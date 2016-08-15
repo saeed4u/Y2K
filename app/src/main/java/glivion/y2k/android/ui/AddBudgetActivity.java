@@ -143,6 +143,9 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
                             public void run() {
                                 Y2KDatabase y2KDatabase = new Y2KDatabase(AddBudgetActivity.this);
                                 long rowId = y2KDatabase.addBudget(WordUtils.capitalize(budgetName), getAmount(), mBudgetType == Constants.IS_INCOME, mBudgetDate, false, colorSeekBar.getColor());
+
+                                Log.v("Budget Date = ",mBudgetDate);
+
                                 if (rowId != -1) {
                                     if (addBudgetItems((int) rowId)) {
                                         setResult(RESULT_OK);
@@ -235,7 +238,12 @@ public class AddBudgetActivity extends AppCompatActivity implements DatePickerDi
         if ((monthOfYear + 1) < 10) {
             monthYear = "0" + monthYear;
         }
-        mBudgetDate = year + "-" + monthYear + "-" + dayOfMonth;
+        String dayYear = String.valueOf(dayOfMonth);
+
+        if (dayOfMonth < 10) {
+            dayYear = "0" + dayYear;
+        }
+        mBudgetDate = year + "-" + monthYear + "-" + dayYear;
     }
 
     public void budgetItemsFragment(View view) {

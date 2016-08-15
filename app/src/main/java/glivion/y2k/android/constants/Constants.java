@@ -1,6 +1,6 @@
 package glivion.y2k.android.constants;
 
-import glivion.y2k.R;
+import android.graphics.Color;
 
 /**
  * Created by saeedissah on 5/16/16.
@@ -57,6 +57,7 @@ public final class Constants {
     public static final String IN_EX_PAY_DATE = "in_ex_pay_date";
     public static final String IN_EX_WEEK = "in_ex_week";
     public static final String IN_EX_MONTH = "in_ex_month";
+    public static final String IN_EX_YEAR = "in_ex_year";
 
     //Budget
     public static final String BUDGET = "budget";
@@ -98,7 +99,7 @@ public final class Constants {
 
     //INCOME & EXPENDITURE
     public static final String CREATE_IN_EX_TABLE = "CREATE TABLE IF NOT EXISTS " + IN_EX_TABLE + "(" + IN_EX_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + IN_EX_TITLE + " TEXT NOT NULL, " + IN_EX_WEEK + " INTEGER NOT NULL, " + IN_EX_MONTH + " INTEGER NOT NULL," + IN_EX_DETAILS + " TEXT, " + IN_EX_AMOUNT + " REAL NOT NULL," + CAT_ID + " INTEGER NOT NULL, " + IN_EX_IS_INCOME + " INTEGER NOT NULL," + IN_EX_CREATED_AT + " TEXT NOT NULL,"
+            + IN_EX_TITLE + " TEXT NOT NULL, " + IN_EX_WEEK + " INTEGER NOT NULL, " + IN_EX_MONTH + " INTEGER NOT NULL," + IN_EX_YEAR + " INTEGER NOT NULL, " + IN_EX_DETAILS + " TEXT, " + IN_EX_AMOUNT + " REAL NOT NULL," + CAT_ID + " INTEGER NOT NULL, " + IN_EX_IS_INCOME + " INTEGER NOT NULL," + IN_EX_CREATED_AT + " TEXT NOT NULL,"
             + IN_EX_PAY_DATE + " TEXT NOT NULL, FOREIGN KEY (" + CAT_ID + ") REFERENCES " + CAT + "(" + CAT_ID + "))";
 
     //BUDGET
@@ -106,7 +107,7 @@ public final class Constants {
             + BUDGET_TITLE + " TEXT NOT NULL," + BUDGET_TOTAL + " REAL NOT NULL," + BUDGET_COLOR + " INTEGER NOT NULL," + BUDGET_IN_EX + " INTEGER NOT NULL," + BUDGET_DUE_DATE + " TEXT NOT NULL," + BUDGET_CREATED_AT + " TEXT NOT NULL,"
             + BUDGET_COMPLETED + " INTEGER NOT NULL);";
 
-    public static String CREATE_FIRST_CAT = "INSERT INTO " + CAT + " VALUES(" + "1,'default',-1," + R.color.colorAccentDashBoard + ");";
+    public static String CREATE_FIRST_CAT = "INSERT INTO " + CAT + " VALUES(" + "1,'default',-1," + Color.parseColor("#FF00BCD4") + ");";
 
     public static String CREATE_BUDGET_ITEM = "CREATE TABLE IF NOT EXISTS " + BUDGET_ITEM + "(" + BUDGET_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + BUDGET_ITEM_NAME + " TEXT NOT NULL," + BUDGET_ITEM_AMOUNT + " REAL NOT NULL," + BUDGET_ID + " INTEGER NOT NULL);";
 

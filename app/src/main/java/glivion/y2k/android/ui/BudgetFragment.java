@@ -53,7 +53,7 @@ public class BudgetFragment extends Fragment {
         View view = inflater.inflate(R.layout.budget_fragment, container, false);
         mMultiStateToggleButton = (MultiStateToggleButton) view.findViewById(R.id.income_ex_selector);
         if (mMultiStateToggleButton != null) {
-            mMultiStateToggleButton.setColorRes(R.color.colorPrimaryDashBoard, R.color.white);
+            mMultiStateToggleButton.setColorRes(R.color.white, R.color.colorPrimaryDashBoard);
             mMultiStateToggleButton.setValue(0);
             mMultiStateToggleButton.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
                 @Override
@@ -102,7 +102,7 @@ public class BudgetFragment extends Fragment {
         @Override
         protected Void doInBackground(Integer... params) {
             mDatabase = new Y2KDatabase(mDashBoard);
-            Log.v("Value on task",String.valueOf(params[0]));
+            Log.v("Value on task", String.valueOf(params[0]));
             if (params[0] != -1) {
                 mBudgets = mDatabase.getBudgets(params[0]);
             } else {

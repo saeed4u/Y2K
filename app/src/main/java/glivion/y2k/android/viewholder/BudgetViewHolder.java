@@ -2,6 +2,7 @@ package glivion.y2k.android.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -40,6 +41,7 @@ public class BudgetViewHolder extends RecyclerView.ViewHolder {
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
         mBudgetAmount.setText(mStateManager.getCurrency() + decimalFormat.format(budget.getmBudgetTotal()));
         mBudgetTitle.setText(budget.getmBudgetTitle());
+        Log.v("Budget Date",budget.getmDueDate());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date dateCreated = format.parse(budget.getmCreatedAt());
         String relativeTime = DateUtils.getRelativeTimeSpanString(dateCreated.getTime(), System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS,

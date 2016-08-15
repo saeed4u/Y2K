@@ -86,7 +86,7 @@ public class LoanFragment extends Fragment {
 
         mMultiStateToggleButton = (MultiStateToggleButton) view.findViewById(R.id.mstb_multi_id);
         if (mMultiStateToggleButton != null) {
-            mMultiStateToggleButton.setColorRes(R.color.colorPrimaryDashBoard, R.color.white);
+            mMultiStateToggleButton.setColorRes(R.color.white, R.color.colorPrimaryDashBoard);
             mMultiStateToggleButton.setValue(0);
             mMultiStateToggleButton.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
                 @Override
@@ -98,7 +98,6 @@ public class LoanFragment extends Fragment {
         }
         return view;
     }
-
 
 
     private class GetLoans extends AsyncTask<Integer, Void, Void> {
