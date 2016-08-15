@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     private void startNotificationService() {
         Log.v("Called", "Called Start notification");
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 7);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
