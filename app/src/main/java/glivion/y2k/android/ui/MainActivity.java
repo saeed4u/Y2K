@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -54,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
+    public CoordinatorLayout getCoordinatorLayout(){
+        return (CoordinatorLayout) findViewById(R.id.main_layout);
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +67,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
 
         startNotificationService();
+
+
+        mToolbar.setTitle(R.string.dashboard);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment, new DashBoardFragment(), DashBoardFragment.class.getSimpleName()).commit();
 
         mBottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
 

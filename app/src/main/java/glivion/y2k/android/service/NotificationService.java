@@ -12,11 +12,9 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 
 import glivion.y2k.R;
@@ -30,12 +28,15 @@ import glivion.y2k.android.ui.LoanDetailActivity;
  */
 public class NotificationService extends Service {
 
+
+    private static boolean isRunning = false;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        new GetIncome().execute();
-        Log.v("On start command", "On start command");
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-
+        if (!isRunning) {
+            new GetIncome().execute();
+            isRunning = true;
+        }
         return START_STICKY;
     }
 
