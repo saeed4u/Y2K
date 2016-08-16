@@ -29,7 +29,7 @@ import glivion.y2k.android.ui.LoanDetailActivity;
 public class NotificationService extends Service {
 
 
-    private static boolean isRunning = false;
+    public static boolean isRunning = false;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -55,7 +55,7 @@ public class NotificationService extends Service {
             Y2KDatabase y2kDatabase = new Y2KDatabase(NotificationService.this);
             String time = simpleDateFormat.format(System.currentTimeMillis());
             Log.v("Time", "Time = " + time);
-            ArrayList<Loan> loans = y2kDatabase.getLoans(time);
+            ArrayList<Loan> loans = y2kDatabase.getNotificationLoans(time);
             for (Loan loan : loans) {
                 String title = loan.getmLoanTitle();
 
@@ -77,6 +77,8 @@ public class NotificationService extends Service {
                         .setContentIntent(contentIntent);
                 Notification notification = builder.build();
                 notificationManager.notify(loan.getmLoanId(), notification);
+                y2kDatabase = new Y2KDatabase(NotificationService.this);
+                y2kDatabase.updateNotificationLoad(loan.getmLoanId());
             }
             return null;
         }

@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -46,6 +47,9 @@ public class BudgetDetailActivity extends ItemDetailActivity {
 
     private LinearLayout mBudgetItems;
 
+    private View mDone;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +64,9 @@ public class BudgetDetailActivity extends ItemDetailActivity {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setTitle(WordUtils.capitalize(mBudget.getmBudgetTitle()));
         }
+
+        mDone = findViewById(R.id.ic_done);
+        mDone.setVisibility(mBudget.isCompleted() ? View.VISIBLE : View.GONE);
 
         TextView incomeTitle = (TextView) findViewById(R.id.budget_title);
         TextView incomeAmount = (TextView) findViewById(R.id.budget_amount);
@@ -125,6 +132,16 @@ public class BudgetDetailActivity extends ItemDetailActivity {
         }
     }
 
+    private MenuItem mDoneMenuItem;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.budegt_item, menu);
+        mDoneMenuItem = menu.findItem(R.id.action_done);
+        mDoneMenuItem.setVisible(!mBudget.isCompleted());
+        return true;
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private int getColor(int alpha, int color) {
         return Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color));
@@ -151,7 +168,22 @@ public class BudgetDetailActivity extends ItemDetailActivity {
                         }).show();
 
                 break;
+            case R.id.action_done:
+                new MaterialDialog.Builder(this).title("Done?").positiveText("Yes")
+                        .negativeText("No")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                Y2KDatabase y2KDatabase = new Y2KDatabase(BudgetDetailActivity.this);
+                                if (y2KDatabase.setBudgetCompleted(mBudget.getmBudgetId())) {
+                                    mDoneMenuItem.setVisible(false);
+                                    mDone.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }).show();
+                break;
         }
         return true;
     }
+
 }

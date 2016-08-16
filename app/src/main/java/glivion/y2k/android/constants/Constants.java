@@ -23,7 +23,7 @@ public final class Constants {
     public static final String LOAN = "loan";
 
     public static final String DATABASE_NAME = "y2k";
-    public static final int DATABASE_VERSION = 8;
+    public static final int DATABASE_VERSION = 9;
     public static final String LOAN_TABLE = "loans";
     public static final String LOAN_PAYMENT = "loan_payment";
     public static final String IN_EX_TABLE = "in_ex_table";
@@ -46,6 +46,8 @@ public final class Constants {
     public static final String LOAN_INTEREST = "loan_interest";
     public static final String LOAN_BORROWED = "loan_borrowed";
     public static final String LOAN_DUE_DATE = "loan_due_date";
+    public static final String LOAN_COMPLETED = "loan_completed";
+    public static final String IS_NOTIFICATION = "is_notified";
 
 
     public static final String IN_EX_ID = "in_ex_id";
@@ -80,7 +82,7 @@ public final class Constants {
     public static final String CREATE_LOAN_TABLE = "CREATE TABLE IF NOT EXISTS " + LOAN_TABLE + "(" + LOAN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + LOAN_TITLE
             + " TEXT NOT NULL, " + LOAN_DETAILS + " TEXT," + LOAN_AMOUNT + " REAL NOT NULL,"
             + LOAN_INTEREST + " REAL NOT NULL,"
-            + LOAN_BORROWED + " INTEGER NOT NULL," + LOAN_DUE_DATE + " TEXT NOT NULL," + LOAN_COLOR + " INTEGER NOT NULL," + DATE_CREATED + " TEXT NOT NULL);";
+            + LOAN_BORROWED + " INTEGER NOT NULL," + LOAN_DUE_DATE + " TEXT NOT NULL," + LOAN_COLOR + " INTEGER NOT NULL," + DATE_CREATED + " TEXT NOT NULL," + IS_NOTIFICATION + " INTEGER);";
 
     //LOAN PAYMENT payment id, loan id, amount paid and date paid
     public static final String PAYMENT_ID = "payment_id";

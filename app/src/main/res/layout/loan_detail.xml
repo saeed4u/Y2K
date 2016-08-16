@@ -244,6 +244,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:orientation="vertical"
+                    android:id="@+id/date_created_layout"
                     app:cardElevation="2dp"
                     app:contentPadding="10dp">
 

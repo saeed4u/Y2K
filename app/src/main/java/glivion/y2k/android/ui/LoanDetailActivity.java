@@ -59,6 +59,7 @@ public class LoanDetailActivity extends ItemDetailActivity {
     private TextView mLoanDueDate;
     private View mAddPayment;
     private Toolbar mToolbar;
+    private View mLoanDueDateLayout;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -169,6 +170,7 @@ public class LoanDetailActivity extends ItemDetailActivity {
         TextView loanAmount = (TextView) findViewById(R.id.loan_amount);
         TextView loanInterestAmount = (TextView) findViewById(R.id.loan_amount_interest);
         mLoanDueDate = (TextView) findViewById(R.id.date_created);
+        mLoanDueDateLayout = findViewById(R.id.date_created_layout);
         mAmountPaid = (TextView) findViewById(R.id.amount_paid);
         TextView amountToPay = (TextView) findViewById(R.id.amount_to_pay);
         mAmountOwing = (TextView) findViewById(R.id.amount_owing);
@@ -226,7 +228,7 @@ public class LoanDetailActivity extends ItemDetailActivity {
                 mAmountOwing.setText(mStateManager.getCurrency() + decimalFormat.format((amountWithInterest - mLoan.getmAmountPaid())));
             } else {
                 mAmountOwing.setText(R.string.cleared);
-                mLoanDueDate.setVisibility(View.GONE);
+                mLoanDueDateLayout.setVisibility(View.GONE);
             }
         }
         mLoanPaymentArrayList = mLoan.getmLoanPayments();
@@ -267,7 +269,7 @@ public class LoanDetailActivity extends ItemDetailActivity {
                 mAmountOwing.setText(mStateManager.getCurrency() + decimalFormat.format(loan.getmAmountLeft()));
             } else {
                 mAmountOwing.setText(R.string.cleared);
-                mLoanDueDate.setVisibility(View.GONE);
+                mLoanDueDateLayout.setVisibility(View.GONE);
                 mAddPayment.animate().scaleX(0.0F).scaleY(0.0F).start();
             }
         }
@@ -303,6 +305,8 @@ public class LoanDetailActivity extends ItemDetailActivity {
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 Y2KDatabase y2KDatabase = new Y2KDatabase(LoanDetailActivity.this);
                                 if (y2KDatabase.deleteItem(Constants.LOAN_TABLE, Constants.LOAN_ID, mLoan.getmLoanId())) {
+                                    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                                    notificationManager.cancel(mLoan.getmLoanId());
                                     finish();
                                 }
                             }

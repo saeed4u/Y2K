@@ -67,6 +67,7 @@ public class TipsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
+            actionBar.setTitle("Financial Tips");
         }
         mNewsItems = new ArrayList<>();
         mTips = (RecyclerView) findViewById(R.id.tips);
@@ -82,7 +83,6 @@ public class TipsActivity extends AppCompatActivity {
             }
         }));
         mLoader = (ProgressWheel) findViewById(R.id.loader);
-        mLoader.setProgress(2);
         new GetTips().execute();
     }
 
@@ -159,9 +159,9 @@ public class TipsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            mLoader.setVisibility(View.GONE);
             mTips.setAdapter(new TipAdapter(mNewsItems));
             mTips.setVisibility(View.VISIBLE);
+            mLoader.setVisibility(View.GONE);
         }
     }
 

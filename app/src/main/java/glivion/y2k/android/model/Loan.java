@@ -24,6 +24,7 @@ public class Loan implements Parcelable {
     private double mAmountPaid;
     private int mLoanColor;
     private ArrayList<LoanPayment> mLoanPayments;
+    private boolean isNotified = false;
 
 
     public Loan(int mLoanId, String mLoanTitle, String mLoanDetail, double mLoanAmount, float mLoanInterest, String mDateCreated, String mDueDate, int isBorrowed) {
@@ -37,10 +38,6 @@ public class Loan implements Parcelable {
         this.mDueDate = mDueDate;
     }
 
-    public double getAmountOwing() {
-        double amountWithInterest = mLoanInterest + mLoanAmount;
-        return amountWithInterest - mAmountPaid;
-    }
 
     protected Loan(Parcel in) {
         mLoanId = in.readInt();
@@ -57,6 +54,7 @@ public class Loan implements Parcelable {
         mAmountPaid = in.readDouble();
         mLoanColor = in.readInt();
         mLoanPayments = in.createTypedArrayList(LoanPayment.CREATOR);
+        isNotified = in.readByte() != 0;
     }
 
     public static final Creator<Loan> CREATOR = new Creator<Loan>() {
@@ -70,6 +68,41 @@ public class Loan implements Parcelable {
             return new Loan[size];
         }
     };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+
+        parcel.writeInt(mLoanId);
+        parcel.writeString(mLoanTitle);
+        parcel.writeString(mLoanDetail);
+        parcel.writeDouble(mLoanAmount);
+        parcel.writeFloat(mLoanInterest);
+        parcel.writeString(mDateCreated);
+        parcel.writeString(mDueDate);
+        parcel.writeDouble(mAmountLeft);
+        parcel.writeByte((byte) (isBorrowed ? 1 : 0));
+        parcel.writeByte((byte) (isDue ? 1 : 0));
+        parcel.writeByte((byte) (isPaid ? 1 : 0));
+        parcel.writeDouble(mAmountPaid);
+        parcel.writeInt(mLoanColor);
+        parcel.writeTypedList(mLoanPayments);
+        parcel.writeByte((byte) (isNotified ? 1 : 0));
+    }
+
+
+    public double getAmountOwing() {
+        double amountWithInterest = mLoanInterest + mLoanAmount;
+        return amountWithInterest - mAmountPaid;
+    }
+
+    public Loan(boolean isNotified) {
+        this.isNotified = isNotified;
+    }
 
     private void setIsPaid() {
         mAmountPaid = 0;
@@ -123,6 +156,10 @@ public class Loan implements Parcelable {
         return isDue;
     }
 
+    public void setPaid(boolean paid) {
+        isPaid = paid;
+    }
+
     public boolean isPaid() {
         return isPaid;
     }
@@ -149,27 +186,4 @@ public class Loan implements Parcelable {
         setIsPaid();
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(mLoanId);
-        dest.writeString(mLoanTitle);
-        dest.writeString(mLoanDetail);
-        dest.writeDouble(mLoanAmount);
-        dest.writeFloat(mLoanInterest);
-        dest.writeString(mDateCreated);
-        dest.writeString(mDueDate);
-        dest.writeDouble(mAmountLeft);
-        dest.writeByte((byte) (isBorrowed ? 1 : 0));
-        dest.writeByte((byte) (isDue ? 1 : 0));
-        dest.writeByte((byte) (isPaid ? 1 : 0));
-        dest.writeDouble(mAmountPaid);
-        dest.writeInt(mLoanColor);
-        dest.writeTypedList(mLoanPayments);
-
-    }
 }

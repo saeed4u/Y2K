@@ -35,7 +35,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     private DrawerLayout mDrawerLayout;
     private Y2KStateManager mStateManager;
     private String[] mFinanceStructures = {"Monthly", "Weekly"};
-    private static HashMap<Integer,String> mCurrencies;
+    private static HashMap<Integer, String> mCurrencies;
     private TextView mCurrency;
     private MultiStateToggleButton mMultiStateToggleButton;
 
@@ -43,12 +43,13 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCurrencies = new HashMap<>();
-        mCurrencies.put(R.id.cedis,"GHC");
-        mCurrencies.put(R.id.dollar,"$");
-        mCurrencies.put(R.id.pound_sterling,"£");
-        mCurrencies.put(R.id.euro,"€");
-        mCurrencies.put(R.id.naira,"₦");
-        mCurrencies.put(R.id.cfa,"FCFA");
+        mCurrencies.put(R.id.cedis, "GHC");
+        mCurrencies.put(R.id.dollar, "$");
+        mCurrencies.put(R.id.pound_sterling, "£");
+        mCurrencies.put(R.id.euro, "€");
+        mCurrencies.put(R.id.naira, "₦");
+        mCurrencies.put(R.id.south_africa, "R");
+        mCurrencies.put(R.id.cfa, "FCFA");
         setContentView(R.layout.settings_layout);
         mStateManager = new Y2KStateManager(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

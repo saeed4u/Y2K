@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
@@ -30,7 +29,6 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.IPieDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
@@ -53,6 +51,7 @@ import glivion.y2k.android.database.Y2KDatabase;
 import glivion.y2k.android.model.Budget;
 import glivion.y2k.android.model.Category;
 import glivion.y2k.android.model.IncomeExpenditure;
+import glivion.y2k.android.model.Loan;
 import glivion.y2k.android.statemanager.Y2KStateManager;
 
 /**
@@ -77,6 +76,9 @@ public class DashBoardFragment extends Fragment implements OnChartValueSelectedL
     private PieChart mChart;
 
     private LinearLayout mBudgetDashboard;
+    private LinearLayout mLoansDashboard;
+    private View mNoIncomeExpense;
+    private View mAmountLayout;
 
     @Override
     public void onAttach(Context context) {
@@ -115,6 +117,9 @@ public class DashBoardFragment extends Fragment implements OnChartValueSelectedL
                 }
             });
         }
+
+        mNoIncomeExpense = view.findViewById(R.id.no_income_ex);
+        mAmountLayout = view.findViewById(R.id.amount_layout);
 
         mChart = (PieChart) view.findViewById(R.id.piechart);
         mChart.setUsePercentValues(true);
@@ -166,6 +171,7 @@ public class DashBoardFragment extends Fragment implements OnChartValueSelectedL
         mAmountDashboard = (TextView) view.findViewById(R.id.amount_dashboard);
 
         mBudgetDashboard = (LinearLayout) view.findViewById(R.id.budget_dashboard);
+        mLoansDashboard = (LinearLayout) view.findViewById(R.id.loan_dashboard);
         mAmountDashboardText = (TextView) view.findViewById(R.id.amount_dashboard_text);
         mAmountDashboardText.setText(R.string.total_income_);
         return view;
@@ -179,22 +185,31 @@ public class DashBoardFragment extends Fragment implements OnChartValueSelectedL
         final boolean weekly = mStateManager.getQueryType().equalsIgnoreCase("weekly");
         mY2KDatabase = new Y2KDatabase(mMainActivity);
         ArrayList<Category> categories = mY2KDatabase.getCategories(mMultiStateToggleButton.getValue() == 0 ? Constants.INCOME_CAT : Constants.EXPENDITURE_CAT);
-        HashMap<Category, ArrayList<IncomeExpenditure>> categoryArrayListHashMap = new HashMap<>();
-        for (Category category : categories) {
-            if (category.getmCatId() > 1) {
-                Log.v("Category Name", "" + category.getmCatId());
-                mY2KDatabase = new Y2KDatabase(mMainActivity);
-                if (mMultiStateToggleButton.getValue() == 0) {
+        if (!categories.isEmpty()) {
+            mChart.setVisibility(View.VISIBLE);
+            mAmountDashboardText.setVisibility(View.VISIBLE);
+            mNoIncomeExpense.setVisibility(View.GONE);
+            HashMap<Category, ArrayList<IncomeExpenditure>> categoryArrayListHashMap = new HashMap<>();
+            for (Category category : categories) {
+                if (category.getmCatId() > 1) {
                     Log.v("Category Name", "" + category.getmCatId());
-                    categoryArrayListHashMap.put(category, weekly ? mY2KDatabase.getTotalWeekly(Constants.IS_INCOME, week, year, category.getmCatId())
-                            : mY2KDatabase.getTotalMonthly(Constants.IS_INCOME, month, year, category.getmCatId()));
-                } else {
-                    categoryArrayListHashMap.put(category, weekly ? mY2KDatabase.getTotalWeekly(Constants.IS_EXPENDITURE, week, year, category.getmCatId())
-                            : mY2KDatabase.getTotalMonthly(Constants.IS_EXPENDITURE, month, year, category.getmCatId()));
+                    mY2KDatabase = new Y2KDatabase(mMainActivity);
+                    if (mMultiStateToggleButton.getValue() == 0) {
+                        Log.v("Category Name", "" + category.getmCatId());
+                        categoryArrayListHashMap.put(category, weekly ? mY2KDatabase.getTotalWeekly(Constants.IS_INCOME, week, year, category.getmCatId())
+                                : mY2KDatabase.getTotalMonthly(Constants.IS_INCOME, month, year, category.getmCatId()));
+                    } else {
+                        categoryArrayListHashMap.put(category, weekly ? mY2KDatabase.getTotalWeekly(Constants.IS_EXPENDITURE, week, year, category.getmCatId())
+                                : mY2KDatabase.getTotalMonthly(Constants.IS_EXPENDITURE, month, year, category.getmCatId()));
+                    }
                 }
             }
+            setData(categoryArrayListHashMap);
+        } else {
+            mChart.setVisibility(View.GONE);
+            mAmountDashboardText.setVisibility(View.GONE);
+            mNoIncomeExpense.setVisibility(View.VISIBLE);
         }
-        setData(categoryArrayListHashMap);
     }
 
     private double getCategoryTotal(ArrayList<IncomeExpenditure> incomeExpenditures) {
@@ -208,35 +223,20 @@ public class DashBoardFragment extends Fragment implements OnChartValueSelectedL
     private void setData(HashMap<Category, ArrayList<IncomeExpenditure>> inCategoryArrayListHashMap) {
 
         ArrayList<PieEntry> entries = new ArrayList<>();
+        ArrayList<Integer> colors = new ArrayList<>();
 
         Set<Category> categories = inCategoryArrayListHashMap.keySet();
         for (Category category : categories) {
             Log.v("Category category", "" + category.getmCatId());
             Log.v("Category Value", "Value " + getCategoryTotal(inCategoryArrayListHashMap.get(category)));
             entries.add(new PieEntry((float) getCategoryTotal(inCategoryArrayListHashMap.get(category)), category.getmCatName()));
+            colors.add(category.getmCatColor());
         }
 
         PieDataSet dataSet = new PieDataSet(entries, mMultiStateToggleButton.getValue() == 0 ? "Income" : "Expenditure");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
 
-
-        ArrayList<Integer> colors = new ArrayList<>();
-
-        for (int c : ColorTemplate.VORDIPLOM_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.JOYFUL_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.COLORFUL_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.LIBERTY_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.PASTEL_COLORS)
-            colors.add(c);
 
         colors.add(ColorTemplate.getHoloBlue());
 
@@ -303,6 +303,44 @@ public class DashBoardFragment extends Fragment implements OnChartValueSelectedL
 
     }
 
+
+    private void getExpiringLoans() throws ParseException {
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        mY2KDatabase = new Y2KDatabase(mMainActivity);
+        String date = simpleDateFormat.format(new Date());
+        Log.v("Date = ", date);
+        ArrayList<Loan> loans = mY2KDatabase.getExpiringLoans(date);
+        Log.v("Budget Size", "" + loans.size());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+
+        mLoansDashboard.removeViews(1, mLoansDashboard.getChildCount() - 1);
+
+        for (Loan loan : loans) {
+            View view = mMainActivity.getLayoutInflater().inflate(R.layout.budget_item_layout, null);
+            view.setTag(loan);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mMainActivity, LoanDetailActivity.class);
+                    intent.putExtra("loan", (Loan) view.getTag());
+                    startActivity(intent);
+                }
+            });
+            Date dateCreated = format.parse(loan.getmDueDate());
+            String relativeTime = DateUtils.getRelativeTimeSpanString(dateCreated.getTime(), System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS,
+                    DateUtils.FORMAT_ABBREV_ALL).toString();
+            TextView budgetName = (TextView) view.findViewById(R.id.budget_item_name);
+            TextView budgetAmount = (TextView) view.findViewById(R.id.budget_item_amount);
+            budgetName.setText(loan.getmLoanTitle() + " (" + mStateManager.getCurrency() + decimalFormat.format(loan.getmLoanAmount()) + ")");
+            budgetAmount.setText(relativeTime);
+            mLoansDashboard.addView(view);
+        }
+        mLoansDashboard.setVisibility(!loans.isEmpty() ? View.VISIBLE : View.GONE);
+    }
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -310,6 +348,11 @@ public class DashBoardFragment extends Fragment implements OnChartValueSelectedL
         mQueryType.setText(weekly ? " This Week" : "This Month");
 
         fetchData();
+        try {
+            getExpiringLoans();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         try {
             getExpiringBudgets();
         } catch (ParseException e) {

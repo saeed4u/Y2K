@@ -26,6 +26,7 @@ public class BudgetViewHolder extends RecyclerView.ViewHolder {
     private TextView mBudgetDate;
     private TextView mBudgetAmount;
     private Y2KStateManager mStateManager;
+    private View mDone;
 
     public BudgetViewHolder(View itemView) {
         super(itemView);
@@ -33,15 +34,17 @@ public class BudgetViewHolder extends RecyclerView.ViewHolder {
         mBudgetAmount = (TextView) itemView.findViewById(R.id.budget_total);
         mBudgetTitle = (TextView) itemView.findViewById(R.id.budget_title);
         mBudgetDate = (TextView) itemView.findViewById(R.id.budget_date);
+        mDone = itemView.findViewById(R.id.ic_done);
         mStateManager = new Y2KStateManager(itemView.getContext());
     }
 
     public void bind(Budget budget) throws ParseException {
+        mDone.setVisibility(budget.isCompleted() ? View.VISIBLE : View.GONE);
         mBudgetColor.setBackgroundColor(budget.getmColor());
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
         mBudgetAmount.setText(mStateManager.getCurrency() + decimalFormat.format(budget.getmBudgetTotal()));
         mBudgetTitle.setText(budget.getmBudgetTitle());
-        Log.v("Budget Date",budget.getmDueDate());
+        Log.v("Budget Date", budget.getmDueDate());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date dateCreated = format.parse(budget.getmCreatedAt());
         String relativeTime = DateUtils.getRelativeTimeSpanString(dateCreated.getTime(), System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS,

@@ -21,6 +21,10 @@
             android:title="@string/naira" />
 
         <item
+            android:id="@+id/south_africa"
+            android:title="@string/south_africa" />
+
+        <item
             android:id="@+id/cfa"
             android:title="@string/cfa" />
 

@@ -1,13 +1,13 @@
 package glivion.y2k.android.ui;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -33,6 +33,7 @@ import java.util.Locale;
 
 import glivion.y2k.R;
 import glivion.y2k.android.database.Y2KDatabase;
+import glivion.y2k.android.service.NotificationService;
 import glivion.y2k.android.utilities.Utilities;
 
 /**
@@ -55,7 +56,6 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.add_loan);
-        mColor = ContextCompat.getColor(this, R.color.colorPrimaryBudget);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -80,7 +80,7 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
         ColorSeekBar mColorSeekBar = (ColorSeekBar) findViewById(R.id.color_picker);
 
         final View colorView = findViewById(R.id.color_view);
-        colorView.setBackgroundColor(mColorSeekBar.getColor());
+        colorView.setBackgroundColor(mColor = mColorSeekBar.getColor());
         mColorSeekBar.setOnColorChangeListener(new ColorSeekBar.OnColorChangeListener() {
             @Override
             public void onColorChangeListener(int colorBarValue, int alphaBarValue, int color) {
@@ -237,6 +237,9 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             if (aBoolean) {
+                NotificationService.isRunning = false;
+                Intent intent = new Intent(AddLoanActivity.this, NotificationService.class);
+                startService(intent);
                 setResult(RESULT_OK);
                 finish();
             } else {

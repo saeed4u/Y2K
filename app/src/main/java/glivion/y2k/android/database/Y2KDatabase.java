@@ -54,11 +54,13 @@ import static glivion.y2k.android.constants.Constants.IN_EX_WEEK;
 import static glivion.y2k.android.constants.Constants.IN_EX_YEAR;
 import static glivion.y2k.android.constants.Constants.IS_EXPENDITURE;
 import static glivion.y2k.android.constants.Constants.IS_INCOME;
+import static glivion.y2k.android.constants.Constants.IS_NOTIFICATION;
 import static glivion.y2k.android.constants.Constants.LOAN_AMOUNT;
 import static glivion.y2k.android.constants.Constants.LOAN_BORROWED;
 import static glivion.y2k.android.constants.Constants.LOAN_COLOR;
 import static glivion.y2k.android.constants.Constants.LOAN_DETAILS;
 import static glivion.y2k.android.constants.Constants.LOAN_DUE_DATE;
+import static glivion.y2k.android.constants.Constants.LOAN_ID;
 import static glivion.y2k.android.constants.Constants.LOAN_INTEREST;
 import static glivion.y2k.android.constants.Constants.LOAN_PAYMENT;
 import static glivion.y2k.android.constants.Constants.LOAN_TABLE;
@@ -96,6 +98,7 @@ public class Y2KDatabase {
         mContentValues.put(LOAN_DUE_DATE, dueDate);
         mContentValues.put(DATE_CREATED, createdDate);
         mContentValues.put(LOAN_COLOR, color);
+        mContentValues.put(IS_NOTIFICATION, 0);
         return mDatabase.insert(LOAN_TABLE, null, mContentValues) > 0;
 
     }
@@ -137,6 +140,76 @@ public class Y2KDatabase {
         return loans;
     }
 
+    public ArrayList<Loan> getExpiringLoans(String expiringDate) {
+
+        String[] selectionArgs = {expiringDate};
+
+        Cursor cursor = mDatabase.query(LOAN_TABLE, null, LOAN_DUE_DATE + " =? ", selectionArgs, null, null, null);
+        ArrayList<Loan> loans = new ArrayList<>();
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+
+                int id = cursor.getInt(0);
+                String title = cursor.getString(1);
+                String details = cursor.getString(2);
+                double amount = cursor.getDouble(3);
+                float interest = cursor.getFloat(4);
+                int borrowed = cursor.getInt(5);
+                String dueDate = cursor.getString(6);
+                Log.v("Loans", dueDate);
+                int color = cursor.getInt(7);
+                String dateCreated = cursor.getString(8);
+                Loan loan = new Loan(id, title, details, amount, interest, dateCreated, dueDate, borrowed);
+                loan.setmLoanPayments(getLoanPayment(loan));
+                if (!loan.isPaid()) {
+                    loan.setmLoanColor(color);
+                    loans.add(loan);
+                }
+            }
+            cursor.close();
+        }
+        mDatabase.close();
+        return loans;
+    }
+
+    public ArrayList<Loan> getNotificationLoans(String expiringDate) {
+
+        String[] selectionArgs = {expiringDate, String.valueOf(0)};
+
+        Cursor cursor = mDatabase.query(LOAN_TABLE, null, LOAN_DUE_DATE + " =? AND " + IS_NOTIFICATION + " =? ", selectionArgs, null, null, null);
+        ArrayList<Loan> loans = new ArrayList<>();
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+
+                int id = cursor.getInt(0);
+                String title = cursor.getString(1);
+                String details = cursor.getString(2);
+                double amount = cursor.getDouble(3);
+                float interest = cursor.getFloat(4);
+                int borrowed = cursor.getInt(5);
+                String dueDate = cursor.getString(6);
+                Log.v("Loans", dueDate);
+                int color = cursor.getInt(7);
+                String dateCreated = cursor.getString(8);
+                boolean isNotified = cursor.getInt(9) == 1;
+                Loan loan = new Loan(id, title, details, amount, interest, dateCreated, dueDate, borrowed);
+                loan.setmLoanPayments(getLoanPayment(loan));
+                if (!loan.isPaid() && !isNotified) {
+                    loan.setmLoanColor(color);
+                    loans.add(loan);
+                }
+            }
+            cursor.close();
+        }
+        mDatabase.close();
+        return loans;
+    }
+
+    public void updateNotificationLoad(int loanId) {
+        mContentValues = new ContentValues();
+        mContentValues.put(IS_NOTIFICATION, 1);
+        mDatabase.update(LOAN_TABLE, mContentValues, LOAN_ID + "=?", new String[]{String.valueOf(loanId)});
+    }
 
     public ArrayList<Loan> getLoans(int type) {
 
@@ -353,7 +426,7 @@ public class Y2KDatabase {
         mContentValues.put(BUDGET_TOTAL, Double.parseDouble(decimalFormat.format(amount)));
         mContentValues.put(BUDGET_IN_EX, isIncome ? IS_INCOME : IS_EXPENDITURE);
         mContentValues.put(BUDGET_DUE_DATE, dueDate);
-        mContentValues.put(BUDGET_COMPLETED, isCompleted ? 0 : 1);
+        mContentValues.put(BUDGET_COMPLETED, !isCompleted ? 0 : 1);
         mContentValues.put(BUDGET_CREATED_AT, dueDate);
         mContentValues.put(BUDGET_COLOR, color);
         long successful = mDatabase.insert(BUDGET, null, mContentValues);
@@ -402,10 +475,10 @@ public class Y2KDatabase {
         return budgets;
     }
 
-    public ArrayList<Budget> getBudgets(int type,String dueDate) {
+    public ArrayList<Budget> getBudgets(int type, String dueDate) {
         ArrayList<Budget> budgets = new ArrayList<>();
-        String selectionArgs[] = {String.valueOf(type)};
-        Cursor cursor = mDatabase.query(BUDGET, null, BUDGET_IN_EX + "=?", selectionArgs, null, null, null);
+        String selectionArgs[] = {String.valueOf(type), dueDate};
+        Cursor cursor = mDatabase.query(BUDGET, null, BUDGET_IN_EX + " =? AND " + BUDGET_DUE_DATE + " =?", selectionArgs, null, null, null);
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 int budgetId = cursor.getInt(cursor.getColumnIndex(BUDGET_ID));
@@ -487,7 +560,7 @@ public class Y2KDatabase {
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 int id = cursor.getInt(cursor.getColumnIndex(IN_EX_ID));
-                Log.v("Category ID Monthly", ""+id);
+                Log.v("Category ID Monthly", "" + id);
                 String title = cursor.getString(cursor.getColumnIndex(IN_EX_TITLE));
                 String details = cursor.getString(cursor.getColumnIndex(IN_EX_DETAILS));
                 double amount = cursor.getDouble(cursor.getColumnIndex(IN_EX_AMOUNT));
@@ -514,7 +587,7 @@ public class Y2KDatabase {
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 int id = cursor.getInt(cursor.getColumnIndex(IN_EX_ID));
-                Log.v("Category ID Weekly", ""+id);
+                Log.v("Category ID Weekly", "" + id);
                 String title = cursor.getString(cursor.getColumnIndex(IN_EX_TITLE));
                 String details = cursor.getString(cursor.getColumnIndex(IN_EX_DETAILS));
                 double amount = cursor.getDouble(cursor.getColumnIndex(IN_EX_AMOUNT));
@@ -532,6 +605,12 @@ public class Y2KDatabase {
         }
         mDatabase.close();
         return incomeExpenditures;
+    }
+
+    public boolean setBudgetCompleted(int budgetId) {
+        mContentValues = new ContentValues();
+        mContentValues.put(BUDGET_COMPLETED, 1);
+        return mDatabase.update(BUDGET, mContentValues, BUDGET_ID + " =? ", new String[]{String.valueOf(budgetId)}) > 0;
     }
 
 }
