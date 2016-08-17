@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
@@ -181,12 +182,12 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
             ColoredSnakBar.get(snackbar, R.color.colorAccentDashBoard).show();
             Utilities.shakeView(mLoanName);
             mLoanName.requestFocus();
-        } else if (loanAmount.isEmpty()) {
+        } else if (loanAmount.isEmpty() ||(loanAmount.length() == 1 && loanAmount.equals("."))) {
             Snackbar snackbar = Snackbar.make(mLoanAmount, R.string.enter_loan_amount, Snackbar.LENGTH_LONG);
             ColoredSnakBar.get(snackbar, R.color.colorAccentDashBoard).show();
             Utilities.shakeView(mLoanAmount);
             mLoanAmount.requestFocus();
-        } else if (loanInterest.isEmpty()) {
+        } else if (loanInterest.isEmpty()  || (loanInterest.length() == 1 && loanInterest.equals("."))) {
             Snackbar snackbar = Snackbar.make(mLoanInterest, R.string.enter_loan_interest, Snackbar.LENGTH_LONG);
             ColoredSnakBar.get(snackbar, R.color.colorAccentDashBoard).show();
             Utilities.shakeView(mLoanInterest);

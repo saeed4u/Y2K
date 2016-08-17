@@ -141,18 +141,22 @@ public class LoanDetailActivity extends ItemDetailActivity {
 
                             @Override
                             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                double amountLeft = -1;
-                                mTextInputLayout.setErrorEnabled(true);
-                                if (!s.toString().isEmpty()) {
-                                    amountLeft = (mLoan.getmLoanAmount() + mLoan.getmLoanInterest()) - Double.parseDouble(s.toString());
-                                    if (amountLeft < 0) {
-                                        mTextInputLayout.setError(getString(R.string.amount_entered_exceeds, mStateManager.getCurrency(), mLoan.getAmountOwing()));
-                                    } else {
-                                        amount[0] = Double.parseDouble(s.toString());
-                                        mTextInputLayout.setErrorEnabled(false);
+                                try {
+                                    double amountLeft = -1;
+                                    mTextInputLayout.setErrorEnabled(true);
+                                    if (!s.toString().isEmpty()) {
+                                        amountLeft = (mLoan.getmLoanAmount() + mLoan.getmLoanInterest()) - Double.parseDouble(s.toString());
+                                        if (amountLeft < 0) {
+                                            mTextInputLayout.setError(getString(R.string.amount_entered_exceeds, mStateManager.getCurrency(), mLoan.getAmountOwing()));
+                                        } else {
+                                            amount[0] = Double.parseDouble(s.toString());
+                                            mTextInputLayout.setErrorEnabled(false);
+                                        }
                                     }
+                                    okayButton.setEnabled(!s.toString().isEmpty() && amountLeft >= 0);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-                                okayButton.setEnabled(!s.toString().isEmpty() && amountLeft >= 0);
                             }
 
                             @Override

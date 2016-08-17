@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -157,7 +158,7 @@ public class AddIncome extends AppCompatActivity implements DatePickerDialog.OnD
             Utilities.shakeView(mName);
             Snackbar snackbar = Snackbar.make(mName, R.string.enter_income_name, Snackbar.LENGTH_LONG);
             ColoredSnakBar.get(snackbar, R.color.colorAccentDashBoard).show();
-        } else if (amount.isEmpty()) {
+        } else if (amount.isEmpty() || (amount.length() == 1 && amount.equals("."))) {
             Utilities.shakeView(mAmount);
             Snackbar snackbar = Snackbar.make(mAmount, R.string.enter_income_amount, Snackbar.LENGTH_LONG);
             ColoredSnakBar.get(snackbar, R.color.colorAccentDashBoard).show();

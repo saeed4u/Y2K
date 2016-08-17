@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -53,7 +54,7 @@ public class AddBudgetItemActivity extends AppCompatActivity {
                         Utilities.shakeView(mBudgetItemName);
                         Snackbar snackbar = Snackbar.make(mBudgetItemName, R.string.enter_name_of_budget_item, Snackbar.LENGTH_LONG);
                         ColoredSnakBar.get(snackbar, R.color.colorAccentDashBoard).show();
-                    } else if (budgetItemAmount.isEmpty()) {
+                    } else if (budgetItemAmount.isEmpty()  || (budgetItemAmount.length() == 1 && budgetItemAmount.equals("."))) {
                         Utilities.shakeView(mBudgetItemAmount);
                         Snackbar snackbar = Snackbar.make(mBudgetItemAmount, R.string.enter_amount_budget_item, Snackbar.LENGTH_LONG);
                         ColoredSnakBar.get(snackbar, R.color.colorAccentDashBoard).show();
