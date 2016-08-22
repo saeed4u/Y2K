@@ -32,6 +32,7 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import org.apache.commons.lang.WordUtils;
 import org.honorato.multistatetogglebutton.MultiStateToggleButton;
 import org.honorato.multistatetogglebutton.ToggleButton;
 
@@ -184,38 +185,34 @@ public class DashBoardFragment extends Fragment implements OnChartValueSelectedL
         int year = calendar.get(Calendar.YEAR);
         final boolean weekly = mStateManager.getQueryType().equalsIgnoreCase("weekly");
         mY2KDatabase = new Y2KDatabase(mMainActivity);
-        ArrayList<Category> categories = mY2KDatabase.getCategories(mMultiStateToggleButton.getValue() == 0 ? Constants.INCOME_CAT : Constants.EXPENDITURE_CAT);
-        if (!categories.isEmpty()) {
-            mChart.setVisibility(View.VISIBLE);
-            mAmountDashboardText.setVisibility(View.VISIBLE);
-            mNoIncomeExpense.setVisibility(View.GONE);
-            HashMap<Category, ArrayList<IncomeExpenditure>> categoryArrayListHashMap = new HashMap<>();
-            for (Category category : categories) {
-                if (category.getmCatId() > 1) {
-                    Log.v("Category Name", "" + category.getmCatId());
-                    mY2KDatabase = new Y2KDatabase(mMainActivity);
-                    if (mMultiStateToggleButton.getValue() == 0) {
-                        Log.v("Category Name", "" + category.getmCatId());
-                        categoryArrayListHashMap.put(category, weekly ? mY2KDatabase.getTotalWeekly(Constants.IS_INCOME, week, year, category.getmCatId())
-                                : mY2KDatabase.getTotalMonthly(Constants.IS_INCOME, month, year, category.getmCatId()));
-                    } else {
-                        categoryArrayListHashMap.put(category, weekly ? mY2KDatabase.getTotalWeekly(Constants.IS_EXPENDITURE, week, year, category.getmCatId())
-                                : mY2KDatabase.getTotalMonthly(Constants.IS_EXPENDITURE, month, year, category.getmCatId()));
-                    }
-                }
+        ArrayList<Category> categories = mY2KDatabase.getCategoriesForDashboard(mMultiStateToggleButton.getValue() == 0 ? Constants.INCOME_CAT : Constants.EXPENDITURE_CAT);
+        mChart.setVisibility(View.VISIBLE);
+        mAmountDashboardText.setVisibility(View.VISIBLE);
+        mNoIncomeExpense.setVisibility(View.GONE);
+        HashMap<Category, ArrayList<IncomeExpenditure>> categoryArrayListHashMap = new HashMap<>();
+        for (Category category : categories) {
+            Log.v("Category Name", "" + category.getmCatId());
+            mY2KDatabase = new Y2KDatabase(mMainActivity);
+            if (mMultiStateToggleButton.getValue() == 0) {
+                Log.v("Category Name", "" + category.getmCatId());
+                categoryArrayListHashMap.put(category, weekly ? mY2KDatabase.getTotalWeekly(Constants.IS_INCOME, week, year, category.getmCatId())
+                        : mY2KDatabase.getTotalMonthly(Constants.IS_INCOME, month, year, category.getmCatId()));
+            } else {
+                categoryArrayListHashMap.put(category, weekly ? mY2KDatabase.getTotalWeekly(Constants.IS_EXPENDITURE, week, year, category.getmCatId())
+                        : mY2KDatabase.getTotalMonthly(Constants.IS_EXPENDITURE, month, year, category.getmCatId()));
             }
-            setData(categoryArrayListHashMap);
-        } else {
-            mChart.setVisibility(View.GONE);
-            mAmountDashboardText.setVisibility(View.GONE);
-            mNoIncomeExpense.setVisibility(View.VISIBLE);
         }
+        setData(categoryArrayListHashMap);
+
     }
+
+    private boolean isEmpty = true;
 
     private double getCategoryTotal(ArrayList<IncomeExpenditure> incomeExpenditures) {
         double total = 0.0;
         for (IncomeExpenditure incomeExpenditure : incomeExpenditures) {
             total += incomeExpenditure.getmAmount();
+            isEmpty = false;
         }
         return total;
     }
@@ -229,8 +226,18 @@ public class DashBoardFragment extends Fragment implements OnChartValueSelectedL
         for (Category category : categories) {
             Log.v("Category category", "" + category.getmCatId());
             Log.v("Category Value", "Value " + getCategoryTotal(inCategoryArrayListHashMap.get(category)));
-            entries.add(new PieEntry((float) getCategoryTotal(inCategoryArrayListHashMap.get(category)), category.getmCatName()));
+            entries.add(new PieEntry((float) getCategoryTotal(inCategoryArrayListHashMap.get(category)), WordUtils.capitalize(category.getmCatName())));
             colors.add(category.getmCatColor());
+        }
+
+        if (isEmpty) {
+            mChart.setVisibility(View.GONE);
+            mAmountDashboardText.setVisibility(View.GONE);
+            mNoIncomeExpense.setVisibility(View.VISIBLE);
+        } else {
+            mChart.setVisibility(View.VISIBLE);
+            mAmountDashboardText.setVisibility(View.VISIBLE);
+            mNoIncomeExpense.setVisibility(View.GONE);
         }
 
         PieDataSet dataSet = new PieDataSet(entries, mMultiStateToggleButton.getValue() == 0 ? "Income" : "Expenditure");

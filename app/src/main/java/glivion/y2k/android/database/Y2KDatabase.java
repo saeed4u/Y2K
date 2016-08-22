@@ -125,7 +125,7 @@ public class Y2KDatabase {
                 String title = cursor.getString(1);
                 String details = cursor.getString(2);
                 double amount = cursor.getDouble(3);
-                float interest = cursor.getFloat(4);
+                double interest = cursor.getFloat(4);
                 int borrowed = cursor.getInt(5);
                 int color = cursor.getInt(7);
                 String dateCreated = cursor.getString(8);
@@ -153,7 +153,7 @@ public class Y2KDatabase {
                 String title = cursor.getString(1);
                 String details = cursor.getString(2);
                 double amount = cursor.getDouble(3);
-                float interest = cursor.getFloat(4);
+                double interest = cursor.getDouble(4);
                 int borrowed = cursor.getInt(5);
                 String dueDate = cursor.getString(6);
                 Log.v("Loans", dueDate);
@@ -185,7 +185,7 @@ public class Y2KDatabase {
                 String title = cursor.getString(1);
                 String details = cursor.getString(2);
                 double amount = cursor.getDouble(3);
-                float interest = cursor.getFloat(4);
+                double interest = cursor.getFloat(4);
                 int borrowed = cursor.getInt(5);
                 String dueDate = cursor.getString(6);
                 Log.v("Loans", dueDate);
@@ -224,7 +224,7 @@ public class Y2KDatabase {
                 String title = cursor.getString(1);
                 String details = cursor.getString(2);
                 double amount = cursor.getDouble(3);
-                float interest = cursor.getFloat(4);
+                double interest = cursor.getFloat(4);
                 int borrowed = cursor.getInt(5);
                 String dueDate = cursor.getString(6);
                 Log.v("Loans", dueDate);
@@ -261,12 +261,12 @@ public class Y2KDatabase {
         return loanPayments;
     }
 
-    public boolean addCategory(String categoryName, int catType, int catColor) {
+    public long addCategory(String categoryName, int catType, int catColor) {
         mContentValues = new ContentValues();
         mContentValues.put(CAT_NAME, categoryName);
         mContentValues.put(CAT_COLOR, catColor);
         mContentValues.put(CAT_TYPE, catType);
-        boolean successful = mDatabase.insert(CAT, null, mContentValues) > 0;
+        long successful = mDatabase.insert(CAT, null, mContentValues);
         mDatabase.close();
         return successful;
     }
@@ -299,8 +299,34 @@ public class Y2KDatabase {
         return categories;
     }
 
+
     public ArrayList<Category> getCategories(int type) {
         ArrayList<Category> categories = new ArrayList<>();
+        String selectionArgs[] = {String.valueOf(type)};
+        Cursor cursor = mDatabase.query(CAT, null, CAT_TYPE + "=?", selectionArgs, null, null, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(cursor.getColumnIndex(CAT_ID));
+                int catType = cursor.getInt(cursor.getColumnIndex(CAT_TYPE));
+                String name = cursor.getString(cursor.getColumnIndex(CAT_NAME));
+                int color = cursor.getInt(cursor.getColumnIndex(CAT_COLOR));
+                CategoryType categoryType;
+                if (catType == 0) {
+                    categoryType = new CategoryType(catType, "Income Categories");
+                } else {
+                    categoryType = new CategoryType(catType, "Expenditure Categories");
+                }
+                categories.add(new Category(id, name, catType, color).setmCategoryType(categoryType));
+            }
+            cursor.close();
+        }
+        mDatabase.close();
+        return categories;
+    }
+
+    public ArrayList<Category> getCategoriesForDashboard(int type) {
+        ArrayList<Category> categories = new ArrayList<>();
+        categories.add(findCategory(1));
         String selectionArgs[] = {String.valueOf(type)};
         Cursor cursor = mDatabase.query(CAT, null, CAT_TYPE + "=?", selectionArgs, null, null, null);
         if (cursor != null) {

@@ -1,5 +1,6 @@
 package glivion.y2k.android.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -59,8 +60,12 @@ public class AddCategory extends AppCompatActivity {
                             @Override
                             public void run() {
                                 Y2KDatabase y2KDatabase = new Y2KDatabase(AddCategory.this);
-                                if (y2KDatabase.addCategory(WordUtils.capitalize(catName.getText().toString()), type, colorSeekBar.getColor())) {
-                                    setResult(RESULT_OK);
+                                long categoryID = y2KDatabase.addCategory(WordUtils.capitalize(catName.getText().toString()), type, colorSeekBar.getColor());
+                                if (categoryID > 0) {
+                                    y2KDatabase = new Y2KDatabase(AddCategory.this);
+                                    Intent intent = new Intent();
+                                    intent.putExtra("category", y2KDatabase.findCategory((int) categoryID));
+                                    setResult(RESULT_OK, intent);
                                 } else {
                                     setResult(RESULT_CANCELED);
                                 }

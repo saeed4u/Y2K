@@ -1,6 +1,7 @@
 package glivion.y2k.android.ui;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.pnikosis.materialishprogress.ProgressWheel;
+
 import glivion.y2k.R;
 
 /**
@@ -22,6 +25,7 @@ public class TipDetail extends AppCompatActivity {
     WebView webView;
     Toolbar toolbar;
     String link, title, desc;
+    private ProgressWheel mLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +34,7 @@ public class TipDetail extends AppCompatActivity {
 
         webView = (WebView) findViewById(R.id.webview);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        webView.setWebViewClient(new MywebView());
+        webView.setWebViewClient(new MyWebView());
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -40,6 +44,7 @@ public class TipDetail extends AppCompatActivity {
         toolbar.setTitle(title);
         getSupportActionBar().setTitle(title);
 
+        mLoader = (ProgressWheel) findViewById(R.id.loader);
         link = getIntent().getStringExtra("link");
         Log.e("Link", link);
         if (link != null) {
@@ -57,11 +62,24 @@ public class TipDetail extends AppCompatActivity {
 
     }
 
-    private class MywebView extends WebViewClient {
+    private class MyWebView extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             view.loadUrl(url);
             return true;
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            mLoader.setVisibility(View.GONE);
+            view.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+            mLoader.setVisibility(View.VISIBLE);
         }
     }
 

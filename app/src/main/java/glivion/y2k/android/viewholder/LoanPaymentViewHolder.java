@@ -5,6 +5,7 @@ import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,8 +32,9 @@ public class LoanPaymentViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(LoanPayment loanPayment) throws ParseException {
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
         Y2KStateManager mStateManager = new Y2KStateManager(mAmountPaid.getContext());
-        mAmountPaid.setText(mStateManager.getCurrency() + "" + loanPayment.getmAmountPaid());
+        mAmountPaid.setText(mStateManager.getCurrency() + decimalFormat.format(loanPayment.getmAmountPaid()));
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Date dateCreated = format.parse(loanPayment.getmDatePaid());
@@ -40,6 +42,7 @@ public class LoanPaymentViewHolder extends RecyclerView.ViewHolder {
                 DateUtils.FORMAT_ABBREV_ALL).toString();
 
         mDateCreated.setText(relativeTime);
+
 
     }
 }

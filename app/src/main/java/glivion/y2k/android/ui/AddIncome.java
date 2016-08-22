@@ -1,21 +1,23 @@
 package glivion.y2k.android.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.kennyc.bottomsheet.BottomSheet;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
@@ -54,6 +56,8 @@ public class AddIncome extends AppCompatActivity implements DatePickerDialog.OnD
     private int mMonthNumber;
     private int mWeekNumber;
     private int mYear;
+
+    private static final int ADD_CATEGORY = 100;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -120,9 +124,35 @@ public class AddIncome extends AppCompatActivity implements DatePickerDialog.OnD
         mSelectedDate.setText(loanDate);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ADD_CATEGORY) {
+            if (resultCode == RESULT_OK) {
+                Category category = data.getParcelableExtra("category");
+                mCatId = category.getmCatId();
+                mDefaultCategory.setBackgroundColor(category.getmCatColor());
+                mDefaultCategory.setText(WordUtils.capitalize(category.getmCatName()));
+                mY2KDatabase = new Y2KDatabase(this);
+                mCategories = mY2KDatabase.getCategories(isFromIncome ? Constants.INCOME_CAT : Constants.EXPENDITURE_CAT);
+            }
+        }
+    }
+
     public void showCategories(View view) {
         if (mCategories.size() == Constants.NUMBER_OF_DEFAULT) {
-            Toast.makeText(this, getString(R.string.you_have_not_added, isFromIncome ? "income" : "expenditure"), Toast.LENGTH_LONG).show();
+            new MaterialDialog.Builder(AddIncome.this).title(R.string.app_name).content(getString(R.string.you_have_not_added, isFromIncome ? "income" : "expenditure"))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Intent intent = new Intent(AddIncome.this, AddCategory.class);
+                            intent.putExtra(Constants.CAT_TYPE, isFromIncome ? Constants.INCOME_CAT : Constants.EXPENDITURE_CAT);
+                            startActivityForResult(intent, ADD_CATEGORY);
+                        }
+                    })
+                    .positiveText("Yes")
+                    .negativeText("No, use default")
+                    .show();
         } else {
             final BottomSheet bottomSheet;
             View v = getLayoutInflater().inflate(R.layout.category_bottom_sheet, null);

@@ -32,7 +32,7 @@
     <string name="no_payment_has_been_made_for_this_loan">No payment has been made for this loan.</string>
     <string name="payment_amount">Payment Amount</string>
     <string name="add_payment">Add Payment</string>
-    <string name="enter_loan_name">Please enter loan name for identification purposes</string>
+    <string name="enter_loan_name">Please enter the loan name</string>
     <string name="enter_loan_amount">Please enter the loan amount</string>
     <string name="enter_loan_interest">Please enter the loan interest</string>
     <string name="select_loan_due_date">Please select loan due date</string>
@@ -76,7 +76,7 @@
     <string name="total_income">Total %s</string>
     <string name="pay_date_">Pay Date</string>
     <string name="budget_date">Budget Date</string>
-    <string name="you_have_not_added">You have not added any %s category. You can add a couple in settings</string>
+    <string name="you_have_not_added">You have not added any %s category. Would you like to add one?</string>
     <string name="income_budget">Income</string>
     <string name="expenditure_budget">Expenditure</string>
     <string name="add_budget">Add Budget</string>
@@ -98,4 +98,5 @@
     <string name="done">Done</string>
     <string name="south_africa">South African rand</string>
     <string name="add_an_income_or_expense_to_see_chart">Add an Income or Expense to see chart.</string>
+    <string name="currency_converter">Currency Converter</string>
 </resources>

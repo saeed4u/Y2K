@@ -2,6 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+    <item
+        android:id="@+id/currency_converter"
+        android:icon="@drawable/ic_currency_converter"
+        android:title="@string/currency_converter"
+        app:showAsAction="always" />
+
     <item
         android:id="@+id/tips"
         android:icon="@drawable/ic_tip"
@@ -12,5 +19,5 @@
         android:id="@+id/settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/settings"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 </menu>

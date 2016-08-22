@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
@@ -27,6 +26,7 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -182,12 +182,12 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
             ColoredSnakBar.get(snackbar, R.color.colorAccentDashBoard).show();
             Utilities.shakeView(mLoanName);
             mLoanName.requestFocus();
-        } else if (loanAmount.isEmpty() ||(loanAmount.length() == 1 && loanAmount.equals("."))) {
+        } else if (loanAmount.isEmpty() || (loanAmount.length() == 1 && loanAmount.equals("."))) {
             Snackbar snackbar = Snackbar.make(mLoanAmount, R.string.enter_loan_amount, Snackbar.LENGTH_LONG);
             ColoredSnakBar.get(snackbar, R.color.colorAccentDashBoard).show();
             Utilities.shakeView(mLoanAmount);
             mLoanAmount.requestFocus();
-        } else if (loanInterest.isEmpty()  || (loanInterest.length() == 1 && loanInterest.equals("."))) {
+        } else if (loanInterest.isEmpty() || (loanInterest.length() == 1 && loanInterest.equals("."))) {
             Snackbar snackbar = Snackbar.make(mLoanInterest, R.string.enter_loan_interest, Snackbar.LENGTH_LONG);
             ColoredSnakBar.get(snackbar, R.color.colorAccentDashBoard).show();
             Utilities.shakeView(mLoanInterest);
@@ -197,7 +197,14 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
             ColoredSnakBar.get(snackbar, R.color.colorAccentDashBoard).show();
             Utilities.shakeView(mDueDateTime);
         } else {
-            new SaveLoan().execute(loanName, loanDetails, loanAmount, loanInterest);
+
+            BigDecimal loanAmountBig = new BigDecimal(loanAmount);
+            loanAmountBig = loanAmountBig.setScale(2, BigDecimal.ROUND_FLOOR);
+
+            BigDecimal loanInterestBig = new BigDecimal(loanInterest);
+            loanInterestBig = loanInterestBig.setScale(2, BigDecimal.ROUND_FLOOR);
+
+            new SaveLoan().execute(loanName, loanDetails, ""+loanAmountBig.doubleValue(), ""+loanInterestBig.doubleValue());
         }
 
     }

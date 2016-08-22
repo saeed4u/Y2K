@@ -27,6 +27,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.apache.commons.lang.WordUtils;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -61,6 +62,8 @@ public class LoanDetailActivity extends ItemDetailActivity {
     private Toolbar mToolbar;
     private View mLoanDueDateLayout;
 
+    private double mAmountEntered;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +75,7 @@ public class LoanDetailActivity extends ItemDetailActivity {
 
         mLoan = getIntent().getParcelableExtra("loan");
 
+        Log.v("Amount Left Loan ", "" + mLoan.getmAmountLeft());
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancel(mLoan.getmLoanId());
@@ -105,7 +109,6 @@ public class LoanDetailActivity extends ItemDetailActivity {
                         return;
                     }
 
-                    final double[] amount = new double[1];
                     MaterialDialog dialog = new MaterialDialog.Builder(LoanDetailActivity.this)
                             .customView(R.layout.add_payment, false)
                             .title("Add Payment for \"" + mLoan.getmLoanTitle() + "\"")
@@ -115,8 +118,12 @@ public class LoanDetailActivity extends ItemDetailActivity {
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     String dateCreated = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
                                     mDatabase = new Y2KDatabase(LoanDetailActivity.this);
-                                    if (mDatabase.addPayment(mLoan.getmLoanId(), amount[0], dateCreated)) {
-                                        LoanPayment loanPayment = new LoanPayment(-1, dateCreated, amount[0], dateCreated);
+
+                                    BigDecimal bigDecimal = new BigDecimal(mAmountEntered);
+                                    bigDecimal = bigDecimal.setScale(2, BigDecimal.ROUND_FLOOR);
+
+                                    if (mDatabase.addPayment(mLoan.getmLoanId(), bigDecimal.doubleValue(), dateCreated)) {
+                                        LoanPayment loanPayment = new LoanPayment(-1, dateCreated, bigDecimal.doubleValue(), dateCreated);
                                         mLoan.addPayment(loanPayment);
                                         //mLoanPaymentArrayList.add(loanPayment);
                                         mLoanPaymentAdapter.notifyDataSetChanged();
@@ -145,11 +152,21 @@ public class LoanDetailActivity extends ItemDetailActivity {
                                     double amountLeft = -1;
                                     mTextInputLayout.setErrorEnabled(true);
                                     if (!s.toString().isEmpty()) {
-                                        amountLeft = (mLoan.getmLoanAmount() + mLoan.getmLoanInterest()) - Double.parseDouble(s.toString());
+
+
+                                        String amountLeftString = String.format(Locale.getDefault(), "%.2f", mLoan.getAmountOwing());
+
+                                        Log.v("Amount Left = ", amountLeftString);
+                                        amountLeft = Double.parseDouble(amountLeftString) - Double.parseDouble(s.toString());
+
+                                        Log.v("Amount Left Entered ", "" + amountLeft);
+                                        Log.v("Amount Entered = ", s.toString());
+
                                         if (amountLeft < 0) {
                                             mTextInputLayout.setError(getString(R.string.amount_entered_exceeds, mStateManager.getCurrency(), mLoan.getAmountOwing()));
+                                            mTextInputLayout.setErrorEnabled(true);
                                         } else {
-                                            amount[0] = Double.parseDouble(s.toString());
+                                            mAmountEntered = Double.parseDouble(s.toString());
                                             mTextInputLayout.setErrorEnabled(false);
                                         }
                                     }
