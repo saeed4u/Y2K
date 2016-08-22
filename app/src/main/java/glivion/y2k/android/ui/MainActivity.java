@@ -195,6 +195,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.tips:
                 showTips();
                 break;
+            case R.id.currency_converter:
+                showCurrencyConverter();
+                break;
         }
         return true;
     }
@@ -217,10 +220,15 @@ public class MainActivity extends AppCompatActivity {
                         .negativeText(R.string.no)
                         .show();
             }
-        }else{
+        } else {
             Intent intent = new Intent(this, TipsActivity.class);
             startActivity(intent);
         }
+    }
+
+    private void showCurrencyConverter() {
+        Intent intent = new Intent(this, CurrencyConverter.class);
+        startActivity(intent);
     }
 
     private void showSettingsActivity() {

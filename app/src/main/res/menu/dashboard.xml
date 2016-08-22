@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/currency_converter"
-        android:icon="@drawable/ic_currency_converter"
+        android:icon="@drawable/ic_currency"
         android:title="@string/currency_converter"
         app:showAsAction="always" />
 

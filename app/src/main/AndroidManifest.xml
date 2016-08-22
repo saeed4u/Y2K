@@ -83,11 +83,15 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
 
+        <activity
+            android:name=".android.ui.CurrencyConverter"
+            android:windowSoftInputMode="adjustResize" />
+
         <service android:name=".android.service.NotificationService" />
         <receiver android:name=".android.service.BootCompleted">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </receiver>
 

@@ -99,4 +99,5 @@
     <string name="south_africa">South African rand</string>
     <string name="add_an_income_or_expense_to_see_chart">Add an Income or Expense to see chart.</string>
     <string name="currency_converter">Currency Converter</string>
+    <string name="enter_amount">Enter Amount</string>
 </resources>
