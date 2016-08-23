@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -24,11 +25,20 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import glivion.y2k.R;
 import glivion.y2k.android.model.IncomeExpenditure;
 import glivion.y2k.android.service.NotificationService;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by saeedissah on 5/17/16.
@@ -40,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_WRITE_PERMISSION = 100;
     private int mSelectedPosition = 0;
+
+    private static final String[] CURRENCIES = {"GHS", "USD", "GBP", "EUR", "NGN", "ZAR", "XOF"};
 
     private void startNotificationService() {
         Log.v("Called", "Called Start notification");
@@ -63,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
         startNotificationService();
 
+        scheduleCurrencyUpdate();
 
         mToolbar.setTitle(R.string.dashboard);
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -234,5 +247,57 @@ public class MainActivity extends AppCompatActivity {
     private void showSettingsActivity() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+    }
+
+    private void scheduleCurrencyUpdate() {
+        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                File testDirectory = new File(Environment.getExternalStorageDirectory() + "/Y2K/Currency");
+                if (!testDirectory.exists()) {
+                    try {
+                        if (testDirectory.mkdir()) {
+                            System.out.println("Directory created");
+                        } else {
+                            System.out.println("Directory is not created");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                for (String currency : CURRENCIES) {
+                    String url = buildQuotesUrl(currency);
+                    OkHttpClient okHttpClient = new OkHttpClient();
+                    try {
+                        Request request = new Request.Builder().url(url).get().build();
+                        Response response = okHttpClient.newCall(request).execute();
+                        String responseString = response.body().string();
+                        Log.v("Response String", responseString);
+                        File file = new File(testDirectory, currency + ".txt");
+                        FileWriter fileWriter = new FileWriter(file);
+                        fileWriter.write(responseString);
+                        fileWriter.flush();
+                        fileWriter.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }, 0, 24, TimeUnit.HOURS);
+    }
+
+    private String buildQuotesUrl(String currency) {
+        StringBuilder stringBuilder = new StringBuilder("http://web-services.oanda.com/rates/api/v1/rates/" + currency + ".json?api_key=K83avZQzOUZ5diF3poOzlitD&");
+        for (String currency_ : CURRENCIES) {
+            if (!currency_.equals(currency)) {
+                stringBuilder.append("quote=").append(currency_).append("&");
+            }
+        }
+        stringBuilder.replace(stringBuilder.length() - 1, stringBuilder.length(), "");
+        String url = stringBuilder.toString();
+        Log.v("URL", url);
+        return url;
     }
 }

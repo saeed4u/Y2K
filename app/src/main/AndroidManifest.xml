@@ -85,7 +85,7 @@
 
         <activity
             android:name=".android.ui.CurrencyConverter"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="stateHidden" />
 
         <service android:name=".android.service.NotificationService" />
         <receiver android:name=".android.service.BootCompleted">

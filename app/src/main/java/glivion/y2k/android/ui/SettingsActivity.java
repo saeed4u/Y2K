@@ -43,7 +43,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCurrencies = new HashMap<>();
-        mCurrencies.put(R.id.cedis, "GHC");
+        mCurrencies.put(R.id.cedis, "GHS");
         mCurrencies.put(R.id.dollar, "$");
         mCurrencies.put(R.id.pound_sterling, "£");
         mCurrencies.put(R.id.euro, "€");
